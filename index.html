@@ -18,7 +18,7 @@
 <style>
     html { scroll-behavior: smooth; }
     body { margin: 0; background: #F4EEE1; font-family: 'General Sans', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; }
-    :root { --gold: #D9A441; }
+    :root { --gold: #D9A441; --nav-height: 60px; }
     a { color: #0F362C; }
     a:hover { color: #C9862B; }
     @keyframes wpkb { from { transform: scale(1); } to { transform: scale(1.07); } }
@@ -184,7 +184,7 @@
   </section>
 
   <!-- 01 · The Promise -->
-  <section style="background:#F4EEE1; padding:clamp(72px, 10vw, 130px) var(--gutter); scroll-margin-top:80px;">
+  <section style="background:#F4EEE1; padding:clamp(72px, 10vw, 130px) var(--gutter); scroll-margin-top:var(--nav-height);">
     <div style="max-width:none; margin:0 auto;">
       <div style="display:flex; align-items:center; gap:20px; margin-bottom:clamp(36px, 5vw, 60px);">
         <span style="font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#14241D; white-space:nowrap;">01 · The Promise</span>
@@ -229,251 +229,11 @@
     </div>
   </div>
 
-  <!-- 02 · Best Sellers -->
-  <section id="best-sellers" style="position:relative; background:#0B2A20; padding:clamp(72px, 10vw, 130px) 0; scroll-margin-top:70px;">
+  <!-- 02 · The Menu -->
+  <section id="menu" style="background:#F4EEE1; padding:clamp(72px, 10vw, 130px) 0 clamp(56px, 8vw, 90px); scroll-margin-top:var(--nav-height);">
     <div style="max-width:none; margin:0 auto; padding:0 var(--gutter);">
       <div style="display:flex; align-items:center; gap:20px; margin-bottom:clamp(36px, 5vw, 56px);">
-        <span style="font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#F4EEE1; white-space:nowrap;">02 · Best Sellers</span>
-        <span aria-hidden="true" style="flex:1; height:1px; background:rgba(244,238,225,0.18); transform-origin:left; animation:wpline 1s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 40%;"></span>
-        <span class="wl-drag-hint" style="font-size:10.5px; font-weight:600; letter-spacing:0.24em; text-transform:uppercase; color:rgba(244,238,225,0.55); white-space:nowrap;">← Drag to explore →</span>
-      </div>
-      <h2 style="margin:0 0 clamp(40px, 5vw, 60px); font-family:'Fraunces',Georgia,serif; font-weight:520; font-size:clamp(34px, 5.6vw, 76px); line-height:0.98; letter-spacing:-0.015em; color:#F4EEE1; max-width:14ch;">
-        <span style="display:block; overflow:hidden; padding-bottom:0.08em;"><span style="display:block; animation:wpmask 0.9s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 45%;">The plates the town <em style="font-style:italic;">keeps ordering.</em></span></span>
-      </h2>
-    </div>
-    <div data-gallery="true" style="display:flex; gap:22px; overflow-x:auto; padding:8px var(--gutter) 30px; scroll-snap-type:x proximity; cursor:grab; user-select:none; scrollbar-width:none;">
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <img src="uploads/wideplatehero4.webp" alt="Beef Kare-Kare (Meat &amp; Skin)" loading="lazy" draggable="false" style="width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.06) sepia(0.05) contrast(1.03);">
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Beef Kare-Kare (Meat &amp; Skin)</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱475</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Slow-simmered in rich peanut sauce, bagoong on the side.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <img src="uploads/wideplatehero2.webp" alt="Sizzling Pork Sisig with Egg" loading="lazy" draggable="false" style="width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.06) sepia(0.05) contrast(1.03);">
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Sizzling Pork Sisig with Egg</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱350</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Arrives crackling, crowned with a just-set egg.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <img src="uploads/wideplatehero3.webp" alt="Crispy Pata" loading="lazy" draggable="false" style="width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.06) sepia(0.05) contrast(1.03);">
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Crispy Pata</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱850–1,150</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Shatter-crisp skin, fall-apart tender inside.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <div role="img" aria-label="Photo placeholder: bistek close-up, onion rings, glossy sauce" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
-              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: bistek close-up, onion rings, glossy sauce</span>
-            </div>
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Bistek Tagalog</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱460</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Soy-calamansi beef under sweet onion rings.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <img src="uploads/wideplatehero5.webp" alt="Special Halo-Halo" loading="lazy" draggable="false" style="width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.06) sepia(0.05) contrast(1.03);">
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Special Halo-Halo</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱195</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Piled high, ube on top. Bring a friend.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <div role="img" aria-label="Photo placeholder: tuna kilawin with chilies and calamansi" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
-              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: tuna kilawin with chilies and calamansi</span>
-            </div>
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Spicy Tuna Kilawin</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱345</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Bright, briny, with a slow chili burn.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <div role="img" aria-label="Photo placeholder: dinakdakan plated, side light" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
-              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: dinakdakan plated, side light</span>
-            </div>
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Dinakdakan</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱395</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">The Ilocano classic: creamy, smoky, tangy.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <div role="img" aria-label="Photo placeholder: special talong, overhead shot" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
-              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: special talong, overhead shot</span>
-            </div>
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Wideplate Special Talong</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱200</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">The house eggplant everyone asks about.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <div role="img" aria-label="Photo placeholder: stacked wings, glaze sheen" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
-              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: stacked wings, glaze sheen</span>
-            </div>
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Savory Chicken Wings</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱350</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Eight cuts, glazed and gone quickly.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <div role="img" aria-label="Photo placeholder: scallops in shell, melted garlic butter" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
-              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: scallops in shell, melted garlic butter</span>
-            </div>
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Grilled Scallops</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱295</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Butter-garlic, straight off the grill.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <div role="img" aria-label="Photo placeholder: fried rice platter, family-size" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
-              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: fried rice platter, family-size</span>
-            </div>
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Wideplate Special Fried Rice</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱360</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">A meal on its own, built for the table.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <div role="img" aria-label="Photo placeholder: pansit bihon with calamansi halves" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
-              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: pansit bihon with calamansi halves</span>
-            </div>
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Pansit Bihon (Chicken Breast &amp; Liver)</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱295</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Celebration noodles, everyday price.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <div role="img" aria-label="Photo placeholder: bulalo steaming bowl, marrow bone" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
-              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: bulalo steaming bowl, marrow bone</span>
-            </div>
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Beef Bulalo</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱485 / ₱695</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Bone-marrow broth that ends beach-day chills.</p>
-          </div>
-        </article>
-        </div>
-        <div style="flex:0 0 min(76vw, 400px); scroll-snap-align:center; animation:wpcard linear both; animation-timeline:view(inline); animation-range:cover 0% cover 100%;">
-        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
-          <div style="height:min(58vw, 320px); overflow:hidden;">
-            <div role="img" aria-label="Photo placeholder: calamansi iced tea pitcher, condensation" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
-              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: calamansi iced tea pitcher, condensation</span>
-            </div>
-          </div>
-          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
-              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Iced Tea Calamansi</h3>
-              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱95 / ₱220</span>
-            </div>
-            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">House-brewed, by the glass or the pitcher.</p>
-          </div>
-        </article>
-        </div>
-    </div>
-    <div style="max-width:none; margin:clamp(28px, 4vw, 44px) auto 0; padding:0 var(--gutter); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px;">
-      <div style="display:flex; flex-direction:column; gap:6px; max-width:560px;">
-        <h3 style="margin:0; font-family:'Fraunces',serif; font-size:clamp(22px, 3vw, 30px); font-weight:560; font-style:italic; color:#F4EEE1;">Can't decide? Trust the kitchen.</h3>
-        <p style="margin:0; font-size:14.5px; line-height:1.6; color:rgba(244,238,225,0.68);">Tell us how many you are and how hungry, and we'll build the table for you. Kaya niyo 'yan… kaya namin kayo pakainin.</p>
-      </div>
-      <a class="wl-btn-seecombos" href="#combos" style="border:1px solid rgba(244,238,225,0.5); color:#F4EEE1; text-decoration:none; font-size:11.5px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; padding:15px 28px; border-radius:999px; white-space:nowrap; transition:background 0.25s ease, color 0.25s ease;">See the Feast Combos</a>
-    </div>
-    <div aria-hidden="true" style="position:absolute; inset:0; pointer-events:none; opacity:0.045; background-image:url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27160%27%20height=%27160%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%270.85%27%20numOctaves=%272%27%20stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect%20width=%27160%27%20height=%27160%27%20filter=%27url(%23n)%27/%3E%3C/svg%3E');"></div>
-  </section>
-
-  <!-- 03 · The Menu -->
-  <section id="menu" style="background:#F4EEE1; padding:clamp(72px, 10vw, 130px) 0 clamp(56px, 8vw, 90px); scroll-margin-top:64px;">
-    <div style="max-width:none; margin:0 auto; padding:0 var(--gutter);">
-      <div style="display:flex; align-items:center; gap:20px; margin-bottom:clamp(36px, 5vw, 56px);">
-        <span style="font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#14241D; white-space:nowrap;">03 · The Menu</span>
+        <span style="font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#14241D; white-space:nowrap;">02 · The Menu</span>
         <span aria-hidden="true" style="flex:1; height:1px; background:rgba(20,36,29,0.18); transform-origin:left; animation:wpline 1s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 40%;"></span>
       </div>
       <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:18px;">
@@ -481,7 +241,7 @@
         <p style="margin:0 0 10px; font-size:13px; font-weight:500; letter-spacing:0.04em; color:#57655C;">Tap a category to filter, or scroll the whole spread.</p>
       </div>
     </div>
-    <div style="position:sticky; top:52px; z-index:40; margin-top:30px; background:rgba(244,238,225,0.94); backdrop-filter:blur(10px); border-top:1px solid rgba(20,36,29,0.12); border-bottom:1px solid rgba(20,36,29,0.12);">
+    <div style="position:sticky; top:var(--nav-height); z-index:40; margin-top:30px; background:rgba(244,238,225,0.94); backdrop-filter:blur(10px); border-top:1px solid rgba(20,36,29,0.12); border-bottom:1px solid rgba(20,36,29,0.12);">
       <div data-chips="true" style="max-width:none; margin:0 auto; padding:12px var(--gutter); display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; cursor:grab; user-select:none;">
           <button class="wl-chip is-active" data-chip="all" style="flex:0 0 auto; padding:10px 17px; border-radius:999px; font-family:'General Sans',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.06em; cursor:pointer; transition:background 0.3s cubic-bezier(0.16,1,0.3,1), color 0.2s ease, border-color 0.2s ease; background:transparent; color:#14241D; border:1px solid rgba(20,36,29,0.3);">All</button>
           <button class="wl-chip" data-chip="adobo" style="flex:0 0 auto; padding:10px 17px; border-radius:999px; font-family:'General Sans',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.06em; cursor:pointer; transition:background 0.3s cubic-bezier(0.16,1,0.3,1), color 0.2s ease, border-color 0.2s ease; background:transparent; color:#14241D; border:1px solid rgba(20,36,29,0.3);">Adobo</button>
@@ -1082,8 +842,248 @@
     </div>
   </section>
 
+  <!-- 03 · Best Sellers -->
+  <section id="best-sellers" style="position:relative; background:#0B2A20; padding:clamp(72px, 10vw, 130px) 0; scroll-margin-top:var(--nav-height);">
+    <div style="max-width:none; margin:0 auto; padding:0 var(--gutter);">
+      <div style="display:flex; align-items:center; gap:20px; margin-bottom:clamp(36px, 5vw, 56px);">
+        <span style="font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#F4EEE1; white-space:nowrap;">03 · Best Sellers</span>
+        <span aria-hidden="true" style="flex:1; height:1px; background:rgba(244,238,225,0.18); transform-origin:left; animation:wpline 1s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 40%;"></span>
+        <span class="wl-drag-hint" style="font-size:10.5px; font-weight:600; letter-spacing:0.24em; text-transform:uppercase; color:rgba(244,238,225,0.55); white-space:nowrap;">← Drag to explore →</span>
+      </div>
+      <h2 style="margin:0 0 clamp(40px, 5vw, 60px); font-family:'Fraunces',Georgia,serif; font-weight:520; font-size:clamp(34px, 5.6vw, 76px); line-height:0.98; letter-spacing:-0.015em; color:#F4EEE1; max-width:14ch;">
+        <span style="display:block; overflow:hidden; padding-bottom:0.08em;"><span style="display:block; animation:wpmask 0.9s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 45%;">The plates the town <em style="font-style:italic;">keeps ordering.</em></span></span>
+      </h2>
+    </div>
+    <div data-gallery="true" style="display:flex; gap:22px; overflow-x:auto; padding:8px var(--gutter) 30px; scroll-snap-type:x proximity; cursor:grab; user-select:none; scrollbar-width:none;">
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <img src="uploads/wideplatehero4.webp" alt="Beef Kare-Kare (Meat &amp; Skin)" loading="lazy" draggable="false" style="width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.06) sepia(0.05) contrast(1.03);">
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Beef Kare-Kare (Meat &amp; Skin)</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱475</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Slow-simmered in rich peanut sauce, bagoong on the side.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <img src="uploads/wideplatehero2.webp" alt="Sizzling Pork Sisig with Egg" loading="lazy" draggable="false" style="width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.06) sepia(0.05) contrast(1.03);">
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Sizzling Pork Sisig with Egg</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱350</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Arrives crackling, crowned with a just-set egg.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <img src="uploads/wideplatehero3.webp" alt="Crispy Pata" loading="lazy" draggable="false" style="width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.06) sepia(0.05) contrast(1.03);">
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Crispy Pata</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱850–1,150</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Shatter-crisp skin, fall-apart tender inside.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <div role="img" aria-label="Photo placeholder: bistek close-up, onion rings, glossy sauce" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
+              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: bistek close-up, onion rings, glossy sauce</span>
+            </div>
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Bistek Tagalog</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱460</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Soy-calamansi beef under sweet onion rings.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <img src="uploads/wideplatehero5.webp" alt="Special Halo-Halo" loading="lazy" draggable="false" style="width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.06) sepia(0.05) contrast(1.03);">
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Special Halo-Halo</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱195</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Piled high, ube on top. Bring a friend.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <div role="img" aria-label="Photo placeholder: tuna kilawin with chilies and calamansi" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
+              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: tuna kilawin with chilies and calamansi</span>
+            </div>
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Spicy Tuna Kilawin</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱345</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Bright, briny, with a slow chili burn.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <div role="img" aria-label="Photo placeholder: dinakdakan plated, side light" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
+              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: dinakdakan plated, side light</span>
+            </div>
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Dinakdakan</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱395</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">The Ilocano classic: creamy, smoky, tangy.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <div role="img" aria-label="Photo placeholder: special talong, overhead shot" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
+              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: special talong, overhead shot</span>
+            </div>
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Wideplate Special Talong</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱200</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">The house eggplant everyone asks about.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <div role="img" aria-label="Photo placeholder: stacked wings, glaze sheen" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
+              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: stacked wings, glaze sheen</span>
+            </div>
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Savory Chicken Wings</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱350</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Eight cuts, glazed and gone quickly.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <div role="img" aria-label="Photo placeholder: scallops in shell, melted garlic butter" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
+              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: scallops in shell, melted garlic butter</span>
+            </div>
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Grilled Scallops</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱295</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Butter-garlic, straight off the grill.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <div role="img" aria-label="Photo placeholder: fried rice platter, family-size" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
+              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: fried rice platter, family-size</span>
+            </div>
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Wideplate Special Fried Rice</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱360</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">A meal on its own, built for the table.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <div role="img" aria-label="Photo placeholder: pansit bihon with calamansi halves" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
+              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: pansit bihon with calamansi halves</span>
+            </div>
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Pansit Bihon (Chicken Breast &amp; Liver)</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱295</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Celebration noodles, everyday price.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <div role="img" aria-label="Photo placeholder: bulalo steaming bowl, marrow bone" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
+              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: bulalo steaming bowl, marrow bone</span>
+            </div>
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Beef Bulalo</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱485 / ₱695</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">Bone-marrow broth that ends beach-day chills.</p>
+          </div>
+        </article>
+        </div>
+        <div style="flex:0 0 min(76vw, 400px); height:calc(min(58vw, 320px) + 176px); scroll-snap-align:center;">
+        <article class="wl-dish" style="height:100%; background:#0F362C; border:1px solid rgba(244,238,225,0.14); display:flex; flex-direction:column; overflow:hidden; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease;">
+          <div style="height:min(58vw, 320px); overflow:hidden;">
+            <div role="img" aria-label="Photo placeholder: calamansi iced tea pitcher, condensation" style="width:100%; height:100%; box-sizing:border-box; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:16px;">
+              <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.65); text-align:center;">photo: calamansi iced tea pitcher, condensation</span>
+            </div>
+          </div>
+          <div style="padding:20px 22px 24px; display:flex; flex-direction:column; gap:9px; flex:1; border-top:1px solid rgba(244,238,225,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;">
+              <h3 style="margin:0; font-family:'Fraunces',serif; font-size:24px; font-weight:560; line-height:1.15; color:#F4EEE1;">Iced Tea Calamansi</h3>
+              <span style="font-size:15px; font-weight:600; color:rgba(244,238,225,0.9); white-space:nowrap; font-variant-numeric:tabular-nums;">₱95 / ₱220</span>
+            </div>
+            <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(244,238,225,0.62);">House-brewed, by the glass or the pitcher.</p>
+          </div>
+        </article>
+        </div>
+    </div>
+    <div style="max-width:none; margin:clamp(28px, 4vw, 44px) auto 0; padding:0 var(--gutter); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px;">
+      <div style="display:flex; flex-direction:column; gap:6px; max-width:560px;">
+        <h3 style="margin:0; font-family:'Fraunces',serif; font-size:clamp(22px, 3vw, 30px); font-weight:560; font-style:italic; color:#F4EEE1;">Can't decide? Trust the kitchen.</h3>
+        <p style="margin:0; font-size:14.5px; line-height:1.6; color:rgba(244,238,225,0.68);">Tell us how many you are and how hungry, and we'll build the table for you. Kaya niyo 'yan… kaya namin kayo pakainin.</p>
+      </div>
+      <a class="wl-btn-seecombos" href="#combos" style="border:1px solid rgba(244,238,225,0.5); color:#F4EEE1; text-decoration:none; font-size:11.5px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; padding:15px 28px; border-radius:999px; white-space:nowrap; transition:background 0.25s ease, color 0.25s ease;">See the Feast Combos</a>
+    </div>
+    <div aria-hidden="true" style="position:absolute; inset:0; pointer-events:none; opacity:0.045; background-image:url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27160%27%20height=%27160%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%270.85%27%20numOctaves=%272%27%20stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect%20width=%27160%27%20height=%27160%27%20filter=%27url(%23n)%27/%3E%3C/svg%3E');"></div>
+  </section>
+
   <!-- 04 · Feast Combos -->
-  <section id="combos" style="position: relative; padding: clamp(72px, 10vw, 130px) var(--gutter); scroll-margin-top: 80px; background-color: #0B2A20">
+  <section id="combos" style="position: relative; padding: clamp(72px, 10vw, 130px) var(--gutter); scroll-margin-top: var(--nav-height); background-color: #0B2A20">
     <div style="max-width:none; margin:0 auto; position:relative; z-index:1;">
       <div style="display:flex; align-items:center; gap:20px; margin-bottom:clamp(36px, 5vw, 56px);">
         <span style="font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#F4EEE1; white-space:nowrap;">04 · Feast Combos</span>
@@ -1206,7 +1206,7 @@
   </section>
 
   <!-- 05 · Our Story -->
-  <section id="story" style="background:#F4EEE1; padding:clamp(72px, 10vw, 130px) var(--gutter); scroll-margin-top:80px;">
+  <section id="story" style="background:#F4EEE1; padding:clamp(72px, 10vw, 130px) var(--gutter); scroll-margin-top:var(--nav-height);">
     <div style="max-width:none; margin:0 auto;">
       <div style="display:flex; align-items:center; gap:20px; margin-bottom:clamp(36px, 5vw, 60px);">
         <span style="font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#14241D; white-space:nowrap;">05 · Our Story</span>
@@ -1263,7 +1263,7 @@
   </section>
 
   <!-- 06 · Visit Us -->
-  <section id="visit" style="position:relative; background:#0B2A20; padding:clamp(72px, 10vw, 130px) var(--gutter); scroll-margin-top:80px;">
+  <section id="visit" style="position:relative; background:#0B2A20; padding:clamp(72px, 10vw, 130px) var(--gutter); scroll-margin-top:var(--nav-height);">
     <div style="max-width:none; margin:0 auto; position:relative; z-index:1;">
       <div style="display:flex; align-items:center; gap:20px; margin-bottom:clamp(36px, 5vw, 56px);">
         <span style="font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#F4EEE1; white-space:nowrap;">06 · Visit</span>

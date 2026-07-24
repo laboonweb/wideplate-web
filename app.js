@@ -5,6 +5,24 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
+  /* ---- Live --nav-height for anchor scroll offsets ----
+     The fixed nav condenses (padding 18->8, i.e. -20px total) after scrolling
+     past the hero. Anchor jumps happen when the visitor is already scrolled, so
+     we want the CONDENSED height. Measure the real navbar; subtract the condense
+     delta only while near the top (where it's still expanded). */
+  (function navHeight() {
+    var bar = $('header > div');
+    if (!bar) return;
+    function set() {
+      var h = bar.offsetHeight;
+      var condensed = window.scrollY > 170 ? h : Math.max(44, h - 20);
+      document.documentElement.style.setProperty('--nav-height', condensed + 'px');
+    }
+    set();
+    window.addEventListener('resize', set);
+    window.addEventListener('load', set);
+  })();
+
   /* ---- Hero slideshow ---- */
   (function hero() {
     var slides = $$('.wl-slide');
