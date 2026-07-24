@@ -5,46 +5,26 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
-  /* ---- Live layout vars: --nav-height + --app-height ----
-     --nav-height (anchor scroll offsets): the fixed nav condenses (padding
-     18->8, i.e. -20px total) after scrolling past the hero. Anchor jumps happen
-     when the visitor is already scrolled, so we want the CONDENSED height.
-     Measure the real navbar; subtract the condense delta only near the top.
-     --app-height (hero + Visit viewport fill): the REAL visible viewport height
-     via visualViewport, which tracks the mobile toolbar collapsing/expanding
-     live. 100dvh alone doesn't match the visible area on iOS Safari / in-app
-     browsers, which let the next section peek below the hero. */
-  (function layoutVars() {
+  /* ---- Live --nav-height for anchor scroll offsets ----
+     The fixed nav condenses (padding 18->8, i.e. -20px total) after scrolling
+     past the hero. Anchor jumps happen when the visitor is already scrolled, so
+     we want the CONDENSED height. Measure the real navbar; subtract the condense
+     delta only while near the top (where it's still expanded).
+     NOTE: hero/Visit viewport-fill is pure CSS (100lvh) on purpose — do NOT
+     reintroduce a JS-measured viewport height here; a height that changes with
+     the collapsing mobile toolbar resizes the hero mid-scroll (image "zoom",
+     text shift, cream peek). That bug already shipped once. */
+  (function navHeight() {
     var bar = $('header > div');
-    var lastVH = 0;
-    function setNav() {
-      if (!bar) return;
+    if (!bar) return;
+    function set() {
       var h = bar.offsetHeight;
       var condensed = window.scrollY > 170 ? h : Math.max(44, h - 20);
       document.documentElement.style.setProperty('--nav-height', condensed + 'px');
     }
-    function setAppHeight() {
-      // Bias LARGE: take the tallest of every viewport reading so the hero is
-      // never shorter than the visible area (which is what let the next section
-      // peek). innerHeight/clientHeight report the large layout viewport on iOS
-      // Safari; visualViewport.height matches the WKWebView bounds in in-app
-      // browsers. The max covers all of them.
-      var vv = window.visualViewport;
-      var vh = Math.round(Math.max(
-        window.innerHeight || 0,
-        document.documentElement.clientHeight || 0,
-        vv ? vv.height : 0
-      ));
-      if (!vh || vh === lastVH) return; // diff-guard: toolbar resizes are noisy
-      lastVH = vh;
-      document.documentElement.style.setProperty('--app-height', vh + 'px');
-    }
-    function set() { setNav(); setAppHeight(); }
     set();
     window.addEventListener('resize', set);
-    window.addEventListener('orientationchange', set);
     window.addEventListener('load', set);
-    if (window.visualViewport) window.visualViewport.addEventListener('resize', setAppHeight);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
   })();
 
