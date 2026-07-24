@@ -5,22 +5,37 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
-  /* ---- Live --nav-height for anchor scroll offsets ----
-     The fixed nav condenses (padding 18->8, i.e. -20px total) after scrolling
-     past the hero. Anchor jumps happen when the visitor is already scrolled, so
-     we want the CONDENSED height. Measure the real navbar; subtract the condense
-     delta only while near the top (where it's still expanded). */
-  (function navHeight() {
+  /* ---- Live layout vars: --nav-height + --app-height ----
+     --nav-height (anchor scroll offsets): the fixed nav condenses (padding
+     18->8, i.e. -20px total) after scrolling past the hero. Anchor jumps happen
+     when the visitor is already scrolled, so we want the CONDENSED height.
+     Measure the real navbar; subtract the condense delta only near the top.
+     --app-height (hero + Visit viewport fill): the REAL visible viewport height
+     via visualViewport, which tracks the mobile toolbar collapsing/expanding
+     live. 100dvh alone doesn't match the visible area on iOS Safari / in-app
+     browsers, which let the next section peek below the hero. */
+  (function layoutVars() {
     var bar = $('header > div');
-    if (!bar) return;
-    function set() {
+    var lastVH = 0;
+    function setNav() {
+      if (!bar) return;
       var h = bar.offsetHeight;
       var condensed = window.scrollY > 170 ? h : Math.max(44, h - 20);
       document.documentElement.style.setProperty('--nav-height', condensed + 'px');
     }
+    function setAppHeight() {
+      var vh = Math.round(window.visualViewport ? window.visualViewport.height : window.innerHeight);
+      if (vh === lastVH) return; // diff-guard: toolbar-animation resizes are noisy
+      lastVH = vh;
+      document.documentElement.style.setProperty('--app-height', vh + 'px');
+    }
+    function set() { setNav(); setAppHeight(); }
     set();
     window.addEventListener('resize', set);
+    window.addEventListener('orientationchange', set);
     window.addEventListener('load', set);
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', setAppHeight);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
   })();
 
   /* ---- Hero slideshow ---- */
