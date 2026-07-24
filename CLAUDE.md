@@ -1,0 +1,294 @@
+# CLAUDE.md — Studio Build Guide
+
+**This file is read at the start of every session. Follow it before defaulting to generic habits.**
+
+It is the distilled, hard-won playbook for building motion-forward marketing
+websites for Philippine SMBs. Most rules here exist because ignoring them
+already cost real time, tokens, and patience on past projects. Treat them as
+defaults, not suggestions. If a rule genuinely doesn't fit the site in front of
+you, say so out loud and confirm — don't silently override.
+
+The current era: motion-heavy sites, built fast (Fable 5 can produce a full
+comprehensive build in days). Speed is the opportunity. Discipline is what keeps
+speed from shipping broken. This file is the discipline.
+
+---
+
+## 0. First 3 things every new session
+
+1. **Confirm the folder.** Multiple projects live on this machine (web builds
+   AND unrelated Roblox projects). Before running anything, verify you're in the
+   correct project root. Cross-workspace confusion has happened for real.
+2. **List the actual repo structure and read the key files in full** before
+   editing — don't assume file names, line numbers, or "what's already done"
+   from notes. The repo is the source of truth. If a handoff doc conflicts with
+   the code, trust the code.
+3. **Check git state** (`git log`, `git status`) so you know what's actually
+   pushed/live before assuming anything is or isn't done.
+
+---
+
+## 1. Default stack & architecture (deliberate, not a limitation)
+
+- **Vanilla HTML / CSS / JS. No framework.** This is a repeated, deliberate
+  choice for marketing sites: fast on slow PH mobile connections, no build
+  tooling, no dependency churn.
+- **Only propose React/Vue/etc. on a real scope change** — cart state, live
+  reservations/bookings, a CMS admin panel, real auth. Marketing polish and
+  animation are NOT reasons to migrate. Don't suggest it otherwise.
+- **Page model:** multi-page (`index.html`, `about.html`, ...) for content-rich
+  marketing sites; single-page with anchor sections (`#work`, `#services`,
+  `#contact`) when the content is one continuous pitch. Pick per project and
+  don't assume routes/directories exist that don't — check.
+- Keep one canonical `styles.css` / `main.js`. If pulling in a Claude Design
+  export, **reuse the existing stylesheet — never let a second, drifting copy of
+  the design system get bundled inline.**
+
+---
+
+## 2. Deployment & git discipline
+
+- **Hosting: Vercel, static, auto-deploy from the main branch.**
+  **Pushing = publishing live.** There is no separate deploy step. Be
+  deliberate: only push when a change is genuinely ready.
+- Local testing: `npx serve` / `python -m http.server`, tested at localhost.
+- **Real-device testing uses the live Vercel URL directly.** Do not use
+  localtunnel-style tunnels — they gave 503s and flakiness that misrepresented
+  real performance.
+- Vercel serves `folder/index.html` paths automatically (e.g. `/casestudy`), so
+  no `vercel.json` rewrite is needed just for that. Only add `vercel.json`
+  (e.g. `cleanUrls`) when there's a concrete reason, and verify internal links
+  match the path style you chose.
+
+---
+
+## 3. Motion & animation — the section that earns its keep
+
+Motion is the product differentiator. It is also where every expensive bug on
+past projects lived. Build motion that survives real hardware, or don't ship it.
+
+### The core split
+- **Desktop can keep heavy scroll-pinned / scroll-scrubbed effects.**
+- **Phone and tablet get a lighter pattern by default:** a one-shot reveal that
+  plays once when scrolled into view (via `IntersectionObserver`), never replays
+  on scroll-up, resets only on full reload. Continuous scroll-scrub repeatedly
+  lost to real mobile/tablet hardware — after multiple rounds of legitimate perf
+  work, the reliable answer was to change the behavior on mobile, not keep
+  chasing the jitter.
+- If you're going to reduce or swap a motion feature on a platform, **say so and
+  confirm the tradeoff first.** Silently removing an effect someone asked for is
+  the single worst move in this playbook.
+
+### Non-negotiable animation rules
+- **Gate every `requestAnimationFrame` loop with `IntersectionObserver`.** A loop
+  with no visibility gating runs 60fps forever, burns CPU, and physically heats
+  the phone. Confirm the stop-flag is actually set to false and any teardown is
+  actually invoked — declaring cleanup that's never called is a real bug that
+  already shipped once.
+- **Add `will-change: transform, opacity`** to elements you animate. Without it,
+  transform/opacity writes aren't guaranteed compositor-only, so repaint cost
+  scales with screen size — larger screens (big phones, tablets) struggle where
+  small ones look fine, independent of refresh rate.
+- **Animate `transform` (e.g. `scaleX()`), never layout properties like `width`
+  / `height` / `top` / `left`** in a loop — those force reflow every frame.
+- **Cache layout reads.** Don't query DOM geometry (`getBoundingClientRect`,
+  offsets) every frame. Read once, reuse; re-read only on resize.
+- **Use `visualViewport.height`, not `innerHeight`,** for viewport height during
+  scroll — mobile browser toolbars collapse/expand and change `innerHeight`
+  *live* while scrolling. BUT keep cheap viewport-height tracking separate from
+  expensive DOM geometry reads; conflating them reintroduces the reflow you were
+  fixing.
+- **Never write a style unconditionally every frame** (e.g. `el.style.color = x`
+  regardless of whether it changed). Diff first, write only on change. Add an
+  epsilon check to skip work when scroll position barely moved.
+
+### Carousels / Coverflow-style showcases
+- If the design is a horizontal Coverflow (active item centered/large, neighbors
+  scaled/faded at the sides, elastic snap): **keep it horizontal at every
+  viewport, including mobile.** Do not let it flip vertical on narrow screens.
+  Orientation-switching on scroll components is exactly the mess that ate days.
+- **Decide tap-vs-drag at `pointerup` using the pointerdown-time target.**
+  `setPointerCapture()` (needed for drag/swipe) retargets the synthesized
+  `click` event to the capturing element — so a `click` handler on something
+  else can *structurally never fire*. Don't wait for `click`; resolve intent at
+  `pointerup`.
+
+### 3D / heavy libraries (Three.js etc.)
+- **Load from CDN and a local `vendor/` fallback simultaneously from time zero,
+  race them, first to resolve wins, cancel the loser.** A CDN can *stall* — no
+  `onload`, no `onerror` — for 30–120s+ on a bad mobile connection, so a fallback
+  wired only to `onerror` never fires and strands first-time visitors. The race
+  is the fix. Guard against double-init with a single `loaded` flag.
+- Move heavy libs off blocking `<script>` tags; load async.
+- **Always ship a real reduced-motion / no-WebGL fallback** (CSS-only where
+  possible) that is a complete experience, not a sad placeholder — some visitors
+  only ever see it (`prefers-reduced-motion`, no-WebGL devices).
+- Respect `prefers-reduced-motion` everywhere motion exists (curtains, petals,
+  reveals): swap to a simple fade, don't just disable.
+
+---
+
+## 4. Testing discipline — trust real devices over green checkmarks
+
+This is not paranoia. Emulated/headless results have diverged from real-device
+behavior multiple times on past projects, for a *different* underlying reason
+each time (toolbar simulation, GPU paint cost, sustained CPU load).
+
+- **Treat "all tests pass" from emulated/headless testing as unconfirmed until
+  verified on real hardware.** When it matters, ask for real-device confirmation
+  rather than declaring victory.
+- **Test toolbar-reduced viewport heights, not just full-height.** Mobile
+  Safari/Chrome show the address bar on initial load, shrinking real usable
+  height by ~100–120px vs. a full-height emulator screenshot. That gap is where
+  clipping/overlap bugs hide (nav overlap, hero overflow).
+- **Real-device width matrix** to cover: 360, 375, 390, 412, 428, 480, 768,
+  1024, 1440, plus landscape. Re-check the tightest widths (iPhone SE-class,
+  375px portrait) before adding anything to a hero — margins there can be ~3px.
+- **Android is not "tested" until tested on an actual Android device.** iPhone +
+  emulation passing is not Android confirmation. Say so honestly.
+- **Before calling something a code bug, rule out the cheap explanations:**
+  stale cache, wrong browser, viewing an old deployed version.
+- **When you see a device-specific pattern, verify the hardware fact before
+  theorizing.** ("The jittery ones must be ProMotion" was wrong — one of them was
+  a 60Hz iPad.) Confirm the device actually has the feature you're blaming.
+
+---
+
+## 5. Loading & performance for PH mobile
+
+Slow connections are the target environment. Weight and load behavior matter.
+
+- Compress images hard (a hero PNG going 85KB → 25KB is normal); serve them at
+  roughly display size, not oversized.
+- Lazy-load below-the-fold images and audio.
+- Async font loading with `font-display: swap`.
+- Keep a loading screen honest — a small minimum display time on light subpages
+  (~500ms) reads as an intentional beat instead of a flicker; don't fake a long
+  load.
+- Re-measure page weight after adding features — old numbers go stale fast. Don't
+  quote a weight you haven't re-checked.
+
+---
+
+## 6. Browser storage
+
+- **`sessionStorage` / `localStorage` work fine on deployed real sites.** The
+  "don't use browser storage" rule applies ONLY to the Claude.ai in-chat artifact
+  preview sandbox — never to a live Vercel site. Do not strip working storage
+  because of that misremembered rule.
+- **Persist state continuously (throttled, e.g. every 2s), not only on
+  `pagehide`** — `pagehide` doesn't reliably fire. For cross-page resume blocked
+  by iOS autoplay policy, add a "first tap anywhere resumes from saved position"
+  fallback.
+- If a data list (playlist, config) must be duplicated across files for load-order
+  reasons, **document every duplication point and update all of them on any
+  edit** — silent drift between copies is a nasty maintenance bug.
+
+---
+
+## 7. Brand assets & licensing — this is for real clients
+
+- **Check the license before using any asset.** Fonts especially: a
+  "personal use only" font needs a commercial license or a substitute for a
+  paying client's site. Confirm, don't assume.
+- **Never AI-redraw a client's real logo or mascot.** AI redraws repeatedly
+  failed to match real pose/proportions. Extract the real asset instead (crop /
+  background-remove the client's actual file, e.g. via Python/PIL).
+- **Prefer styled live text over a flat raster for wordmarks** where the brand
+  font is available — live text with proper outline/shadow reads sharper than a
+  flattened PNG of the whole logo.
+- **No raw Unicode emoji in production UI.** Build a custom SVG icon matching the
+  site's existing illustrated style (outline weight, flat fill). Emoji look
+  inconsistent next to hand-drawn iconography.
+- **Keep functional brand colors even when off-palette.** A Messenger-blue
+  "Order via Messenger" button or Facebook-blue (`#1877F2`) hover is a *signal*,
+  not a palette violation — don't recolor it to the site's theme.
+- **Once a brand decision is made, it's locked** (accent colors, type, motif).
+  Don't re-litigate or offer "alternatives" to settled brand choices; check the
+  current CSS variables rather than assuming values. If a brand rule has a
+  specific reason behind it, respect the reason even if the rule looks arbitrary.
+
+---
+
+## 8. Copy & positioning rules
+
+- **Never imply a business is "invisible online" or has no presence.** Many
+  clients have real Facebook followings — that framing insults them. The real
+  argument is **platform risk and ownership**: a following can vanish with an
+  algorithm or policy change; a website is something the business actually owns.
+- **Don't overpromise outcomes.** Never guarantee search rankings, traffic, or
+  sales. Describe capability (fast to load, easy to find, made to stay), not
+  guaranteed results.
+- Plain, confident, specific language. No filler, no AI-sounding phrasing.
+- **House style: no em dashes in visible site copy.** (Adjust per brand, but this
+  is the default.)
+- Let visitors self-identify their pain point (a "not sure where to start?"
+  self-select list) rather than telling them what their problem is — you can't
+  know in advance which one applies.
+- Verify content against the real source of truth (the client's actual menu,
+  Facebook page, hours). Watch for naming traps — the same item at two prices in
+  two contexts must be labeled distinctly, not deduplicated.
+
+---
+
+## 9. Pre-pitch content checklist (spec builds)
+
+Before a spec site is pitch-ready, these are the usual real gaps — flag them,
+don't ship placeholder as if it's final:
+
+- [ ] **Real photos** of the actual business/product (not Unsplash stock) —
+      usually the single highest-priority gap.
+- [ ] **Real reviews/testimonials** (or an explicit internal note that they're
+      examples).
+- [ ] **Final client-specific copy** on About/FAQ/secondary pages (not generic
+      placeholder).
+- [ ] **Real Android device pass.**
+- [ ] **Domain** decided, and ownership resolved (does the dev buy it, or the
+      client once signed, so they own it outright?).
+- [ ] Contact path actually works (form endpoint verified, or a working deep
+      link / mailto).
+
+---
+
+## 10. How to work with me (collaboration contract)
+
+- **Give me ready-to-paste prompts** for Claude Code / Claude Design when I ask
+  for a fix or build — not vague "you could try..." suggestions.
+- **Be explicit about confidence.** Say clearly when a diagnosis is *speculative*
+  vs. *confirmed by actually reading the code.* Don't blur that line. The best
+  fixes here came from reading the real code, not pattern-matching symptoms.
+- **When something's ambiguous, give me 2–3 concrete options,** not an open-ended
+  question.
+- **When I ask "thoughts?", give real itemized critique** — catch fabricated-
+  sounding names, inconsistent dates, unresolved placeholders. Don't just
+  validate.
+- **Don't make silent scope-reducing decisions.** Removing or changing a feature
+  I asked for, even with sound technical reasoning, must be confirmed with me
+  first.
+- I'm cost-conscious about tokens and have hit limits — batch multiple bugs into
+  one prompt, and don't burn a build redoing something that already exists (ask
+  if I still have the earlier version first).
+- Client-facing address convention: **Ma'am/Sir**, optionally with first name
+  ("Sir Mark," "Ma'am Liza") once known, following their lead if they go casual.
+
+---
+
+## 11. Per-project block — FILL THIS IN for each new site
+
+> Copy this into a project-specific note or keep it at the bottom of the
+> project's own CLAUDE.md. Don't leave it blank and don't assume defaults.
+
+- **Business name / real details:** (name, address, phone, hours, socials —
+  verified against source of truth)
+- **Live URL / repo / local path:**
+- **Deploy branch:**
+- **Brand:** colors (current CSS vars), fonts (+ license status), motif
+- **Locked decisions** (don't re-litigate):
+- **Open / unresolved items:**
+- **Known device gotchas / tight-margin widths:**
+- **Content still needed before pitch:**
+
+---
+
+*This guide is a living document. When a new build teaches an expensive lesson,
+add it here so it's never re-learned the hard way.*
