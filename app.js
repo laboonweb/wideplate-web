@@ -5,6 +5,10 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
+  /* Gate for pre-reveal hidden states: without this class (no JS), every
+     section renders fully visible with no reveal styling. */
+  document.documentElement.classList.add('js');
+
   /* ---- Live --nav-height for anchor scroll offsets ----
      The fixed nav condenses (padding 18->8, i.e. -20px total) after scrolling
      past the hero. Anchor jumps happen when the visitor is already scrolled, so
@@ -172,6 +176,77 @@
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
     $$('.wl-navclose').forEach(function (a) { a.addEventListener('click', close); });
+  })();
+
+  /* ---- One-time scroll reveals ----
+     Each [data-reveal] section gets .is-in on FIRST entry and is unobserved
+     immediately, so reveals play exactly once per page load and never replay
+     on scroll-up (hard refresh resets). All visuals live in CSS; this only
+     flips the class. Count-up numbers ([data-countup]) start when their
+     section fires. */
+  (function reveals() {
+    var els = $$('[data-reveal]');
+    if (!els.length) return;
+    function countUp(el) {
+      var target = parseFloat(el.getAttribute('data-target'));
+      var dec = +(el.getAttribute('data-decimals') || 0);
+      if (reduced) { el.textContent = target.toFixed(dec); return; }
+      var t0 = performance.now(), dur = 1300;
+      el.textContent = (0).toFixed(dec);
+      requestAnimationFrame(function tick(now) {
+        var p = Math.min(1, (now - t0) / dur);
+        var e = 1 - Math.pow(1 - p, 3); // ease-out cubic
+        el.textContent = (target * e).toFixed(dec);
+        if (p < 1) requestAnimationFrame(tick); // finite: ends at p=1
+      });
+    }
+    function fire(el) {
+      el.classList.add('is-in');
+      $$('[data-countup]', el).forEach(countUp);
+    }
+    if (!('IntersectionObserver' in window)) { els.forEach(fire); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { io.unobserve(en.target); fire(en.target); }
+      });
+    }, { threshold: 0.01, rootMargin: '0px 0px -12% 0px' });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+
+  /* ---- Reviews: 3 groups of 3, hero-carousel pattern retargeted ----
+     Same mechanics as hero(): timed auto-advance + 1.2s opacity crossfade
+     (CSS transition on .wl-revgroup) + clickable indicator bars + no
+     auto-advance under prefers-reduced-motion (bars still allow manual
+     access to all 9 reviews). 7s cadence vs the hero's 6s. Rotation starts
+     when the block first becomes visible, then runs forever. */
+  (function reviews() {
+    var stack = $('.wl-revstack');
+    var groups = $$('.wl-revgroup');
+    var bars = $$('.wl-revbar');
+    if (!stack || groups.length < 2) return;
+    var n = groups.length, cur = 0, timer = null;
+    function paint(i) {
+      cur = i;
+      groups.forEach(function (g, k) {
+        g.style.opacity = k === i ? '1' : '0';
+        g.setAttribute('aria-hidden', k === i ? 'false' : 'true');
+      });
+      bars.forEach(function (b, k) { b.classList.toggle('is-on', k === i); });
+    }
+    function next() { paint((cur + 1) % n); }
+    function start() { if (timer) clearInterval(timer); if (!reduced) timer = setInterval(next, 7000); }
+    bars.forEach(function (b) {
+      b.addEventListener('click', function () { paint(+b.getAttribute('data-revbar')); start(); });
+    });
+    paint(0);
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) {
+        for (var i = 0; i < es.length; i++) {
+          if (es[i].isIntersecting) { io.disconnect(); start(); return; }
+        }
+      }, { threshold: 0.15 });
+      io.observe(stack);
+    } else { start(); }
   })();
 
   /* ---- Magnetic buttons (desktop pointer only) ---- */
