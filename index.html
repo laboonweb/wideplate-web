@@ -19,13 +19,15 @@
     html { scroll-behavior: smooth; overflow-x: hidden; overscroll-behavior-y: none; background: #081F17; }
     body { margin: 0; background: #F4EEE1; font-family: 'General Sans', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; overscroll-behavior-y: none; }
     :root { --gold: #D9A441; --nav-height: 60px; }
-    /* Hero fills exactly the real visible viewport. The nav is position:fixed
-       (an overlay, not in flow) so nothing is subtracted here — the hero's own
-       top padding clears it. --app-height is JS-measured (visualViewport) and
-       is the source of truth; 100svh/100dvh is only the pre-JS first-paint
-       fallback. Fixes the next-section sliver on iOS Safari / in-app browsers
-       where 100dvh alone doesn't match the real visible height. */
-    #top { min-height: 100svh; min-height: var(--app-height, 100dvh); }
+    /* Hero must never be SHORTER than the visible viewport, or the next
+       (cream) section peeks below it on load. iOS Safari + WKWebView in-app
+       browsers (Telegram/FB) under-report the visible height mid-load, so we
+       bias LARGE: 100lvh (largest viewport, toolbar retracted) as the CSS
+       floor, and --app-height = the MAX of every viewport-height reading in JS
+       as the source of truth. A hero that's a touch too tall just tucks its
+       bottom padding behind the toolbar — never a peek. Nav is position:fixed
+       (overlay) so nothing is subtracted; the hero's top padding clears it. */
+    #top { min-height: 100vh; min-height: 100lvh; min-height: var(--app-height, 100lvh); }
     a { color: #0F362C; }
     a:hover { color: #C9862B; }
     @keyframes wpkb { from { transform: scale(1); } to { transform: scale(1.07); } }
@@ -64,7 +66,7 @@
     /* Visit: fill the viewport below the sticky nav on desktop so the footer
        doesn't peek when landing on #visit (same pattern as the hero). */
     @media (min-width: 901px) {
-      .wl-visit { min-height: calc(100dvh - var(--nav-height)); min-height: calc(var(--app-height, 100dvh) - var(--nav-height)); box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; }
+      .wl-visit { min-height: calc(100lvh - var(--nav-height)); min-height: calc(var(--app-height, 100lvh) - var(--nav-height)); box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; }
     }
     @media (max-width: 600px) {
       .wl-herowrap { padding-top: 104px !important; padding-bottom: 82px !important; }

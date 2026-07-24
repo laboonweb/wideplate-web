@@ -24,8 +24,18 @@
       document.documentElement.style.setProperty('--nav-height', condensed + 'px');
     }
     function setAppHeight() {
-      var vh = Math.round(window.visualViewport ? window.visualViewport.height : window.innerHeight);
-      if (vh === lastVH) return; // diff-guard: toolbar-animation resizes are noisy
+      // Bias LARGE: take the tallest of every viewport reading so the hero is
+      // never shorter than the visible area (which is what let the next section
+      // peek). innerHeight/clientHeight report the large layout viewport on iOS
+      // Safari; visualViewport.height matches the WKWebView bounds in in-app
+      // browsers. The max covers all of them.
+      var vv = window.visualViewport;
+      var vh = Math.round(Math.max(
+        window.innerHeight || 0,
+        document.documentElement.clientHeight || 0,
+        vv ? vv.height : 0
+      ));
+      if (!vh || vh === lastVH) return; // diff-guard: toolbar resizes are noisy
       lastVH = vh;
       document.documentElement.style.setProperty('--app-height', vh + 'px');
     }
@@ -36,6 +46,29 @@
     window.addEventListener('load', set);
     if (window.visualViewport) window.visualViewport.addEventListener('resize', setAppHeight);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
+
+    /* Real-device diagnostic: load the site with ?debug=1 to see the raw
+       viewport numbers on-screen (invisible to normal visitors). Remove once
+       the hero fill is confirmed. */
+    if (/[?&]debug=1/.test(location.search)) {
+      var box = document.createElement('pre');
+      box.style.cssText = 'position:fixed;top:0;left:0;z-index:99999;margin:0;padding:6px 8px;font:11px/1.4 monospace;color:#0f0;background:rgba(0,0,0,0.82);pointer-events:none;white-space:pre;';
+      document.body.appendChild(box);
+      function dbg() {
+        var top = $('#top'), vv = window.visualViewport;
+        box.textContent =
+          'innerHeight   ' + window.innerHeight + '\n' +
+          'clientHeight  ' + document.documentElement.clientHeight + '\n' +
+          'visualVP.h    ' + (vv ? Math.round(vv.height) : 'n/a') + '\n' +
+          '--app-height  ' + getComputedStyle(document.documentElement).getPropertyValue('--app-height').trim() + '\n' +
+          'hero rect.h   ' + (top ? Math.round(top.getBoundingClientRect().height) : 'n/a') + '\n' +
+          'scrollY       ' + Math.round(window.scrollY);
+      }
+      dbg();
+      window.addEventListener('resize', dbg);
+      window.addEventListener('scroll', dbg, { passive: true });
+      if (window.visualViewport) window.visualViewport.addEventListener('resize', dbg);
+    }
   })();
 
   /* ---- Hero slideshow ---- */
