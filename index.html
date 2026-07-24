@@ -16,8 +16,8 @@
 <link rel="preload" as="image" href="uploads/wideplatehero1.webp" media="(min-width: 701px)" fetchpriority="high">
 <link rel="preload" as="image" href="uploads/wideplateheromobile1.webp" media="(max-width: 700px)" fetchpriority="high">
 <style>
-    html { scroll-behavior: smooth; }
-    body { margin: 0; background: #F4EEE1; font-family: 'General Sans', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; }
+    html { scroll-behavior: smooth; overflow-x: hidden; overscroll-behavior-y: none; background: #081F17; }
+    body { margin: 0; background: #F4EEE1; font-family: 'General Sans', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; overscroll-behavior-y: none; }
     :root { --gold: #D9A441; --nav-height: 60px; }
     a { color: #0F362C; }
     a:hover { color: #C9862B; }
@@ -54,9 +54,30 @@
       .wl-storypin { position: static !important; top: auto !important; }
       .wl-herowrap { padding-top: 118px !important; padding-bottom: 56px !important; }
     }
+    /* Visit: fill the viewport below the sticky nav on desktop so the footer
+       doesn't peek when landing on #visit (same pattern as the hero). */
+    @media (min-width: 901px) {
+      .wl-visit { min-height: calc(100dvh - var(--nav-height)); box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; }
+    }
     @media (max-width: 600px) {
-      .wl-herowrap { padding-top: 104px !important; }
+      .wl-herowrap { padding-top: 104px !important; padding-bottom: 82px !important; }
       .wl-drag-hint { display: none !important; }
+      /* Hero headline: keep the signature 3-line stagger but shrink it so it
+         reads comfortably and stops dominating the phone screen. */
+      .wl-hero-h1 { font-size: clamp(33px, 9vw, 46px) !important; }
+      /* Stronger bottom-up scrim: mobile crops sit tighter to the food, so
+         text needs more protection against all 5 rotating photos. */
+      .wl-hero-scrim { background: linear-gradient(to top, rgba(11,42,32,0.96) 0%, rgba(11,42,32,0.78) 26%, rgba(11,42,32,0.35) 55%, rgba(11,42,32,0) 82%) !important; }
+      /* Badge row: wrap predictably into two clean lines, drop the divider. */
+      .wl-hero-badge { font-size: 10px; letter-spacing: 0.2em; gap: 6px 12px; }
+      .wl-badge-sep { display: none !important; }
+      /* Slide indicators: smaller and centered on mobile. */
+      .wl-bars { left: 0 !important; right: 0 !important; justify-content: center !important; }
+      .wl-bars .wl-bar { width: 34px !important; }
+      .wl-bars .wl-bar > span { width: 22px !important; }
+      /* Footer: center the whole content block on phones (desktop untouched). */
+      .wl-foot-cols { justify-items: center !important; }
+      .wl-foot-col { align-items: center !important; text-align: center !important; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -102,7 +123,7 @@
         <a class="wl-navclose" href="#combos" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Combos</a>
         <a class="wl-navclose" href="#story" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Our Story</a>
         <a class="wl-navclose" href="#visit" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Visit</a>
-        <a class="wl-navclose" href="https://www.google.com/maps/dir/?api=1&amp;destination=Wideplate%20Restaurant%2C%20Concepcion%20St%2C%20San%20Antonio%2C%20Zambales" target="_blank" rel="noopener" style="color:var(--gold); text-decoration:none; font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; padding:14px 2px;">Get Directions ↗</a>
+        <a class="wl-navclose" href="https://www.google.com/maps/dir/?api=1&amp;destination=Wideplate%20Restaurant%2C%20Concepcion%20St%2C%20San%20Antonio%2C%20Zambales" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; color:var(--gold); text-decoration:none; font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; padding:14px 2px;">Get Directions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:0.85em; height:0.85em;"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></a>
         <a href="tel:+639669659995" style="color:var(--gold); text-decoration:none; font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; padding:14px 2px;">Call 0966 965 9995</a>
       </div>
     </nav>
@@ -140,10 +161,10 @@
           <img src="uploads/wideplatehero5.webp" alt="Special halo-halo, calamansi iced tea, and ripe mango shake" loading="lazy" fetchpriority="low" draggable="false" style="width:100%; height:100%; object-fit:cover; object-position:center; display:block; transform-origin:50% 45%; filter:saturate(1.06) sepia(0.05) contrast(1.03) brightness(0.92); animation:wpkb 28s ease-in-out infinite alternate;">
         </picture>
       </div>
-    <div aria-hidden="true" style="position:absolute; inset:0; background:linear-gradient(to top right, rgba(11,42,32,0.92) 0%, rgba(11,42,32,0.55) 38%, rgba(11,42,32,0) 74%), radial-gradient(120% 90% at 50% 45%, rgba(0,0,0,0) 55%, rgba(8,31,23,0.35) 100%); animation:wpfadein 1.1s ease both;"></div>
+    <div class="wl-hero-scrim" aria-hidden="true" style="position:absolute; inset:0; background:linear-gradient(to top right, rgba(11,42,32,0.92) 0%, rgba(11,42,32,0.55) 38%, rgba(11,42,32,0) 74%), radial-gradient(120% 90% at 50% 45%, rgba(0,0,0,0) 55%, rgba(8,31,23,0.35) 100%); animation:wpfadein 1.1s ease both;"></div>
     <div class="wl-herowrap" style="position:relative; width:100%; max-width:none; margin:0 auto; padding:150px var(--gutter) 72px; display:flex; flex-direction:column; align-items:flex-start; gap:26px;">
-      <p style="margin:0; display:flex; align-items:center; gap:12px; color:#F4EEE1; font-size:11px; font-weight:600; letter-spacing:0.26em; text-transform:uppercase; animation:wpfadein 0.9s ease 0.5s both;"><span style="color:var(--gold);">4.8 ★</span> 198 Google Reviews<span aria-hidden="true" style="width:36px; height:1px; background:rgba(244,238,225,0.4);"></span>Open until 9PM</p>
-      <h1 style="margin:0; font-family:'Fraunces',Georgia,serif; font-weight:560; font-size:clamp(48px, 9.6vw, 136px); line-height:0.95; color:#F4EEE1; letter-spacing:-0.015em; max-width:11ch;">
+      <p class="wl-hero-badge" style="margin:0; display:flex; flex-wrap:wrap; align-items:center; gap:12px; color:#F4EEE1; font-size:11px; font-weight:600; letter-spacing:0.26em; text-transform:uppercase; animation:wpfadein 0.9s ease 0.5s both;"><span style="display:inline-flex; align-items:center; gap:8px; white-space:nowrap;"><span style="color:var(--gold); display:inline-flex; align-items:center; gap:5px;">4.8 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:0.95em; height:0.95em;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>198 Google Reviews</span><span class="wl-badge-sep" aria-hidden="true" style="width:36px; height:1px; background:rgba(244,238,225,0.4);"></span><span style="white-space:nowrap;">Open until 9PM</span></p>
+      <h1 class="wl-hero-h1" style="margin:0; font-family:'Fraunces',Georgia,serif; font-weight:560; font-size:clamp(48px, 9.6vw, 136px); line-height:0.95; color:#F4EEE1; letter-spacing:-0.015em; max-width:11ch;">
         <span style="display:block; overflow:hidden; padding-bottom:0.06em;"><span style="display:block; animation:wpintro 0.9s cubic-bezier(0.16,1,0.3,1) 0.08s both;">Where Every</span></span>
         <span style="display:block; overflow:hidden; padding-bottom:0.06em;"><span style="display:block; animation:wpintro 0.9s cubic-bezier(0.16,1,0.3,1) 0.2s both;">Plate Is</span></span>
         <span style="display:block; overflow:hidden; padding-bottom:0.08em;"><span style="display:block; font-style:italic; animation:wpintro 0.9s cubic-bezier(0.16,1,0.3,1) 0.32s both;">a Feast.</span></span>
@@ -154,7 +175,7 @@
         <a class="wl-btn-outline-light" data-magnet="true" href="https://www.google.com/maps/dir/?api=1&amp;destination=Wideplate%20Restaurant%2C%20Concepcion%20St%2C%20San%20Antonio%2C%20Zambales" target="_blank" rel="noopener" style="border:1px solid rgba(244,238,225,0.6); color:#F4EEE1; text-decoration:none; font-size:12.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; padding:17px 32px; border-radius:999px; transition:background 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1);">Get Directions</a>
       </div>
     </div>
-    <div style="position:absolute; right:24px; bottom:30px; z-index:2; display:flex; gap:4px;">
+    <div class="wl-bars" style="position:absolute; right:24px; bottom:30px; z-index:2; display:flex; gap:4px;">
         <button class="wl-bar" data-bar="0" aria-label="Show slide 1: Feast spread on banana leaf: crispy pata, sizzling sisig, kare-kare, bulalo, and halo-halo" style="width:44px; height:32px; background:none; border:0; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0;">
           <span style="position:relative; display:block; width:36px; height:2px; background:rgba(244,238,225,0.28); overflow:hidden;">
             <span class="wl-bar-fill" style="position:absolute; inset:0; transform:scaleX(0); transform-origin:left; background:var(--gold);"></span>
@@ -848,7 +869,7 @@
       <div style="display:flex; align-items:center; gap:20px; margin-bottom:clamp(36px, 5vw, 56px);">
         <span style="font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#F4EEE1; white-space:nowrap;">03 · Best Sellers</span>
         <span aria-hidden="true" style="flex:1; height:1px; background:rgba(244,238,225,0.18); transform-origin:left; animation:wpline 1s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 40%;"></span>
-        <span class="wl-drag-hint" style="font-size:10.5px; font-weight:600; letter-spacing:0.24em; text-transform:uppercase; color:rgba(244,238,225,0.55); white-space:nowrap;">← Drag to explore →</span>
+        <span class="wl-drag-hint" style="display:inline-flex; align-items:center; gap:8px; font-size:10.5px; font-weight:600; letter-spacing:0.24em; text-transform:uppercase; color:rgba(244,238,225,0.55); white-space:nowrap;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:1.15em; height:1.15em;"><path d="M14 7l-5 5 5 5"/></svg>Drag to explore<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:1.15em; height:1.15em;"><path d="M10 7l5 5-5 5"/></svg></span>
       </div>
       <h2 style="margin:0 0 clamp(40px, 5vw, 60px); font-family:'Fraunces',Georgia,serif; font-weight:520; font-size:clamp(34px, 5.6vw, 76px); line-height:0.98; letter-spacing:-0.015em; color:#F4EEE1; max-width:14ch;">
         <span style="display:block; overflow:hidden; padding-bottom:0.08em;"><span style="display:block; animation:wpmask 0.9s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 45%;">The plates the town <em style="font-style:italic;">keeps ordering.</em></span></span>
@@ -1238,23 +1259,23 @@
     <div style="max-width:none; margin:0 auto; border-top:1px solid rgba(20,36,29,0.16); padding-top:clamp(48px, 7vw, 80px); display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:clamp(36px, 6vw, 80px); align-items:start;">
       <div style="display:flex; flex-direction:column; gap:8px;">
         <p style="margin:0; font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#14241D;">Word of Mouth</p>
-        <p style="margin:0; font-family:'Fraunces',serif; font-weight:560; font-size:clamp(96px, 16vw, 200px); line-height:0.9; color:#14241D; font-variant-numeric:tabular-nums;">4.8<span style="color:var(--gold); font-size:0.35em; vertical-align:0.9em;">★</span></p>
+        <p style="margin:0; font-family:'Fraunces',serif; font-weight:560; font-size:clamp(96px, 16vw, 200px); line-height:0.9; color:#14241D; font-variant-numeric:tabular-nums;">4.8<span style="color:var(--gold); font-size:0.35em; vertical-align:0.72em; margin-left:0.06em;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:1em; height:1em;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span></p>
         <p style="margin:0; font-size:13.5px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#57655C;">from 198 Google reviews</p>
         <a class="wl-btn-fb" href="https://facebook.com/wideplaterestaurant" target="_blank" rel="noopener" style="margin-top:20px; align-self:flex-start; border:1px solid #0F362C; color:#0F362C; text-decoration:none; font-size:11.5px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; padding:14px 26px; border-radius:999px; transition:background 0.25s ease, color 0.25s ease;">Follow us on Facebook</a>
       </div>
       <div style="display:flex; flex-direction:column;">
           <figure style="margin:0; padding:26px 0; border-top:1px solid rgba(20,36,29,0.16); display:flex; flex-direction:column; gap:10px; animation:wprise 0.8s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 35%;">
-            <span aria-label="Rated 5 out of 5 stars" style="font-size:13px; letter-spacing:4px; color:var(--gold);">★★★★★</span>
+            <span aria-label="Rated 5 out of 5 stars" style="display:inline-flex; align-items:center; gap:3px; color:var(--gold);"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>
             <blockquote style="margin:0; font-family:'Fraunces',serif; font-style:italic; font-size:clamp(19px, 2.4vw, 24px); line-height:1.45; color:#14241D;">"The crispy pata was perfectly cooked: incredibly crispy on the outside with tender, juicy meat inside. The kare-kare was another standout. The peanut sauce was thick, savory, and perfectly paired with the tender meat and vegetables."</blockquote>
             <figcaption style="display:flex; align-items:baseline; gap:14px; font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#57655C;">Ruby Asinas · Google review</figcaption>
           </figure>
           <figure style="margin:0; padding:26px 0; border-top:1px solid rgba(20,36,29,0.16); display:flex; flex-direction:column; gap:10px; animation:wprise 0.8s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 35%;">
-            <span aria-label="Rated 5 out of 5 stars" style="font-size:13px; letter-spacing:4px; color:var(--gold);">★★★★★</span>
+            <span aria-label="Rated 5 out of 5 stars" style="display:inline-flex; align-items:center; gap:3px; color:var(--gold);"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>
             <blockquote style="margin:0; font-family:'Fraunces',serif; font-style:italic; font-size:clamp(19px, 2.4vw, 24px); line-height:1.45; color:#14241D;">"A clean, modern-looking place with a relaxed, casual atmosphere. Good food, a clean and modern space, and a generally positive dining experience. Certainly a reliable place to eat when visiting San Antonio."</blockquote>
             <figcaption style="display:flex; align-items:baseline; gap:14px; font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#57655C;">Anna Krzak · Google review</figcaption>
           </figure>
           <figure style="margin:0; padding:26px 0; border-top:1px solid rgba(20,36,29,0.16); display:flex; flex-direction:column; gap:10px; animation:wprise 0.8s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 35%;">
-            <span aria-label="Rated 5 out of 5 stars" style="font-size:13px; letter-spacing:4px; color:var(--gold);">★★★★★</span>
+            <span aria-label="Rated 5 out of 5 stars" style="display:inline-flex; align-items:center; gap:3px; color:var(--gold);"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:13px; height:13px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>
             <blockquote style="margin:0; font-family:'Fraunces',serif; font-style:italic; font-size:clamp(19px, 2.4vw, 24px); line-height:1.45; color:#14241D;">"The service was excellent, the time for the food to arrive was good, the taste was delicious, and the prices were reasonable. Did I mention the delicious taste of the food?? It deserved to be mentioned twice!"</blockquote>
             <figcaption style="display:flex; align-items:baseline; gap:14px; font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#57655C;">Mitchell Bates · Google review</figcaption>
           </figure>
@@ -1263,7 +1284,7 @@
   </section>
 
   <!-- 06 · Visit Us -->
-  <section id="visit" style="position:relative; background:#0B2A20; padding:clamp(72px, 10vw, 130px) var(--gutter); scroll-margin-top:var(--nav-height);">
+  <section id="visit" class="wl-visit" style="position:relative; background:#0B2A20; padding:clamp(72px, 10vw, 130px) var(--gutter); scroll-margin-top:var(--nav-height);">
     <div style="max-width:none; margin:0 auto; position:relative; z-index:1;">
       <div style="display:flex; align-items:center; gap:20px; margin-bottom:clamp(36px, 5vw, 56px);">
         <span style="font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#F4EEE1; white-space:nowrap;">06 · Visit</span>
@@ -1309,22 +1330,22 @@
           <p style="margin: 0; font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-style: italic; font-size: clamp(14px, 1.8vw, 17px); color: #F4EEE1; text-align: center">Home of your Favorite Filipino Flavors!</p>
         </div>
       </div>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:36px;">
-        <div style="display:flex; flex-direction:column; gap:10px;">
+      <div class="wl-foot-cols" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:36px;">
+        <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">
           <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(244,238,225,0.45);">Visit</p>
           <p style="margin:0; font-size:14px; line-height:1.7; color:rgba(244,238,225,0.8);">Ground Floor, Balay Grace,<br>Concepcion St, Barangay Santiago,<br>San Antonio, Zambales</p>
         </div>
-        <div style="display:flex; flex-direction:column; gap:10px;">
+        <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">
           <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(244,238,225,0.45);">Hours</p>
           <p style="margin:0; font-size:14px; font-weight:600; color:rgba(244,238,225,0.8);">Open until 9PM</p>
           <p style="margin:0; font-size:13.5px; color:rgba(244,238,225,0.6);">Dine-in · Curbside Pickup · Delivery</p>
         </div>
-        <div style="display:flex; flex-direction:column; gap:10px;">
+        <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">
           <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(244,238,225,0.45);">Contact</p>
           <a href="tel:+639669659995" style="font-size:14px; color:rgba(244,238,225,0.8); text-decoration:none; font-variant-numeric:tabular-nums;">0966 965 9995</a>
           <a href="tel:+639669659998" style="font-size:14px; color:rgba(244,238,225,0.8); text-decoration:none; font-variant-numeric:tabular-nums;">0966 965 9998</a>
           <a href="mailto:WideplateRestaurant@gmail.com" style="font-size:14px; color:rgba(244,238,225,0.8); text-decoration:none;">WideplateRestaurant@gmail.com</a>
-          <a href="https://facebook.com/wideplaterestaurant" target="_blank" rel="noopener" style="font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); text-decoration:none;">Facebook ↗</a>
+          <a href="https://facebook.com/wideplaterestaurant" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); text-decoration:none;">Facebook <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:0.85em; height:0.85em;"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></a>
         </div>
       </div>
       <p style="margin:0; padding-top:22px; border-top:1px solid rgba(244,238,225,0.12); font-size:12px; letter-spacing:0.06em; color:rgba(244,238,225,0.4);">© 2026 Wideplate Restaurant · San Antonio, Zambales</p>
