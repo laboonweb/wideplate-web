@@ -249,6 +249,97 @@
     } else { start(); }
   })();
 
+  /* ---- Cookie consent card ----
+     Card is BUILT HERE, not written into the HTML, so index.html and
+     privacy-policy.html cannot drift apart (CLAUDE.md §6). Any page that
+     loads app.js gets it. Choice persists in localStorage, so it shows once
+     and stays gone across pages and future visits.
+     Non-blocking on purpose: no overlay, no focus trap, page stays usable. */
+  (function cookies() {
+    var KEY = 'wp-cookie-consent';
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) { /* storage blocked: ask again */ }
+
+    /* ===== ANALYTICS HOOK =====
+       Nothing is tracked today. When a tracking/analytics script is added,
+       load it from HERE (fires on later visits) and from choose('accepted')
+       below (fires on the visit where consent is first given):
+         if (saved === 'accepted') loadAnalytics();
+       Never load it above this line. */
+
+    if (saved === 'accepted' || saved === 'rejected') return;
+
+    var css = document.createElement('style');
+    css.textContent =
+      ".wl-cookie{position:fixed;left:24px;bottom:calc(24px + env(safe-area-inset-bottom));z-index:70;" +
+      "width:min(380px,calc(100vw - 48px));box-sizing:border-box;padding:20px 22px 22px;border-radius:16px;" +
+      "background:rgba(11,42,32,0.97);backdrop-filter:blur(10px);border:1px solid rgba(244,238,225,0.18);" +
+      "box-shadow:0 20px 50px rgba(4,18,13,0.4);color:#F4EEE1;" +
+      "font-family:'General Sans','Helvetica Neue',sans-serif;" +
+      "opacity:0;transform:translateY(16px);will-change:transform,opacity;" +
+      "transition:opacity .45s ease,transform .45s cubic-bezier(0.16,1,0.3,1)}" +
+      ".wl-cookie.is-in{opacity:1;transform:none}" +
+      ".wl-cookie h2{margin:0 0 8px;font-family:'Fraunces',Georgia,serif;font-weight:560;font-size:19px;letter-spacing:-0.01em}" +
+      ".wl-cookie p{margin:0 0 16px;font-size:13.5px;line-height:1.6;color:rgba(244,238,225,0.82)}" +
+      ".wl-cookie a{color:#D9A441;text-decoration:underline;text-underline-offset:3px}" +
+      ".wl-cookie a:hover{color:#F4EEE1}" +
+      ".wl-cookie-btns{display:flex;gap:10px;flex-wrap:wrap}" +
+      ".wl-cookie button{font-family:inherit;font-size:11.5px;letter-spacing:0.14em;text-transform:uppercase;" +
+      "padding:13px 24px;border-radius:999px;cursor:pointer;transition:background .25s ease,box-shadow .25s ease}" +
+      ".wl-cookie-yes{background:#D9A441;color:#1B1305;border:0;font-weight:700}" +
+      ".wl-cookie-yes:hover{box-shadow:0 14px 38px rgba(217,164,65,0.4)}" +
+      ".wl-cookie-no{background:none;color:#F4EEE1;border:1px solid rgba(244,238,225,0.6);font-weight:600}" +
+      ".wl-cookie-no:hover{background:rgba(244,238,225,0.12)}" +
+      ".wl-cookie :focus-visible{outline:2px solid #D9A441;outline-offset:3px}" +
+      /* On phones the hero's slide indicators are bottom-centre, i.e. exactly
+         under the card. Lift them by the card's measured height while it's up.
+         transform, not bottom, so it stays compositor-only. */
+      ".wl-bars{transition:transform .45s cubic-bezier(0.16,1,0.3,1)}" +
+      "@media (max-width:600px){.wl-cookie{left:16px;right:16px;width:auto;" +
+      "bottom:calc(16px + env(safe-area-inset-bottom))}" +
+      "html.wl-cookie-open .wl-bars{transform:translateY(calc(-1 * (var(--wl-cookie-h,200px) + 14px)))}}";
+    document.head.appendChild(css);
+
+    var card = document.createElement('div');
+    card.className = 'wl-cookie';
+    card.setAttribute('role', 'dialog');
+    card.setAttribute('aria-live', 'polite');
+    card.setAttribute('aria-label', 'Cookie notice');
+    card.innerHTML =
+      '<h2>A quick note</h2>' +
+      '<p>We use cookies to make this site work well for you. Read our ' +
+      '<a href="privacy-policy.html">Privacy Policy</a> to learn more.</p>' +
+      '<div class="wl-cookie-btns">' +
+      '<button type="button" class="wl-cookie-yes">Accept</button>' +
+      '<button type="button" class="wl-cookie-no">Reject</button>' +
+      '</div>';
+    document.body.appendChild(card);
+
+    var root = document.documentElement;
+    function show() {
+      root.style.setProperty('--wl-cookie-h', card.offsetHeight + 'px');
+      root.classList.add('wl-cookie-open');
+      card.classList.add('is-in');
+    }
+    function choose(value) {
+      return function () {
+        try { localStorage.setItem(KEY, value); } catch (e) { /* nothing to persist to */ }
+        /* ANALYTICS HOOK: if (value === 'accepted') loadAnalytics(); */
+        root.classList.remove('wl-cookie-open');
+        if (reduced) { card.remove(); return; }
+        card.classList.remove('is-in');
+        setTimeout(function () { card.remove(); }, 500);
+      };
+    }
+    card.querySelector('.wl-cookie-yes').addEventListener('click', choose('accepted'));
+    card.querySelector('.wl-cookie-no').addEventListener('click', choose('rejected'));
+
+    /* Enter after the hero's load intro settles (last hero element finishes at
+       ~1.75s: 0.85s delay + 0.9s fade) so the two don't compete. */
+    if (reduced) { show(); return; }
+    setTimeout(function () { requestAnimationFrame(show); }, 2200);
+  })();
+
   /* ---- Magnetic buttons (desktop pointer only) ---- */
   (function magnets() {
     if (reduced || window.matchMedia('(pointer: coarse)').matches) return;
