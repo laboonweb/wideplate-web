@@ -70,24 +70,32 @@
   (function drag() {
     $$('[data-gallery], [data-chips]').forEach(function (g) {
       var down = false, startX = 0, startScroll = 0, moved = false;
-      var lastX = 0, lastT = 0, vel = 0, raf = 0;
+      var lastX = 0, lastT = 0, vel = 0, raf = 0, tracking = false, slop = 4;
       function stopInertia() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
       g.addEventListener('pointerdown', function (e) {
-        if (e.pointerType !== 'mouse') return;
         stopInertia();
-        down = true; moved = false; startX = e.clientX; startScroll = g.scrollLeft;
+        // Track EVERY pointer type for tap-vs-swipe, but only mouse gets the
+        // JS drag — touch keeps the browser's native momentum scrolling.
+        tracking = true; moved = false; startX = e.clientX;
+        slop = e.pointerType === 'mouse' ? 4 : 10;
+        if (e.pointerType !== 'mouse') return;
+        down = true; startScroll = g.scrollLeft;
         lastX = e.clientX; lastT = performance.now(); vel = 0;
         g.style.cursor = 'grabbing'; g.style.scrollSnapType = 'none';
       });
       window.addEventListener('pointermove', function (e) {
-        if (!down) return;
+        if (!tracking) return;
         var dx = e.clientX - startX;
-        if (Math.abs(dx) > 4) moved = true;
+        if (Math.abs(dx) > slop) moved = true;
+        if (!down) return;
         g.scrollLeft = startScroll - dx;
         var now = performance.now(), dt = now - lastT;
         if (dt > 0) { vel = (lastX - e.clientX) / dt; lastX = e.clientX; lastT = now; }
       });
+      // Browser claimed the gesture as a scroll/swipe: it was never a tap.
+      g.addEventListener('pointercancel', function () { moved = true; tracking = false; });
       window.addEventListener('pointerup', function () {
+        tracking = false;
         if (!down) return;
         down = false; g.style.cursor = 'grab';
         var v = vel * 16;
@@ -115,11 +123,30 @@
     var chips = $$('.wl-chip');
     var cats = $$('.wl-cat');
     if (!chips.length) return;
-    var filter = 'all', scrollCat = '';
+    var strip = $('[data-chips]');
+    var filter = 'all', scrollCat = '', lastCentered = '';
 
+    /* Keep the highlighted chip visible inside its own strip, tab-bar style.
+       Scrolls ONLY the strip (never scrollIntoView, which would also move the
+       page). Layout is read here on category change, not per frame. */
+    function centerChip(chip) {
+      if (!chip || !strip) return;
+      var max = strip.scrollWidth - strip.clientWidth;
+      if (max <= 0) return;
+      var left = strip.scrollLeft + chip.getBoundingClientRect().left - strip.getBoundingClientRect().left;
+      var target = Math.max(0, Math.min(max, left - (strip.clientWidth - chip.offsetWidth) / 2));
+      if (Math.abs(target - strip.scrollLeft) < 2) return;
+      strip.scrollTo({ left: target, behavior: reduced ? 'auto' : 'smooth' });
+    }
     function updateActive() {
       var activeId = filter === 'all' ? (scrollCat || 'all') : filter;
-      chips.forEach(function (c) { c.classList.toggle('is-active', c.getAttribute('data-chip') === activeId); });
+      var active = null;
+      chips.forEach(function (c) {
+        var on = c.getAttribute('data-chip') === activeId;
+        c.classList.toggle('is-active', on);
+        if (on) active = c;
+      });
+      if (activeId !== lastCentered) { lastCentered = activeId; centerChip(active); }
     }
     function apply() {
       cats.forEach(function (c) {
@@ -132,6 +159,13 @@
         filter = c.getAttribute('data-chip');
         if (filter !== 'all') scrollCat = filter;
         apply();
+        /* Filtering hides up to 13 of 14 categories, so the document can
+           collapse by thousands of px while scrollY stays put — that is what
+           dumped the visitor into Feast Combos. Re-anchor on the category that
+           is now showing. Legacy scrollTo(x, y) so CSS scroll-behavior (and its
+           reduced-motion override) decides smooth vs instant. */
+        var land = $('.wl-cat[data-catsec="' + (filter === 'all' ? scrollCat : filter) + '"]') || cats[0];
+        if (land) window.scrollTo(0, land.getBoundingClientRect().top + window.pageYOffset - 150);
       });
     });
     if ('IntersectionObserver' in window) {
