@@ -28,6 +28,24 @@
      short phone viewport as on a tall desktop one. */
   var REVEAL_TRIGGER = { threshold: 0, rootMargin: '0px 0px -32% 0px' };
 
+  /* Best Sellers ONLY. Fully isolated from REVEAL_TRIGGER above on purpose:
+     Promise, Combos, Story and the rating stat are signed off and must not
+     move when this is tuned. Edit this object, nothing else.
+
+     Its card deal-in was finishing before anyone could watch it, so this adds
+     a real threshold on top of the shared rootMargin: 30% of the section's own
+     height must be inside the trigger box, which puts the section top at
+     roughly 29% of viewport height on desktop (~23% on a phone) when the cards
+     start dealing.
+
+     CEILING, do not exceed: threshold is the fraction of THE SECTION visible,
+     and the trigger box is only 68% of viewport height. Measured live, the
+     section is 1213px against a 935px viewport, so the ratio cannot pass 0.52
+     on desktop and roughly 0.45 on a phone. Anything at or above that never
+     fires and the cards stay invisible forever. 0.3 keeps headroom on both.
+     Raising rootMargin's inset lowers this ceiling further. */
+  var BEST_SELLERS_TRIGGER = { threshold: 0.3, rootMargin: '0px 0px -32% 0px' };
+
   /* ---- Live --nav-height for anchor scroll offsets ----
      The fixed nav condenses (padding 18->8, i.e. -20px total) after scrolling
      past the hero. Anchor jumps happen when the visitor is already scrolled, so
@@ -301,24 +319,20 @@
       $$('[data-countup]', el).forEach(countUp);
     }
     if (!('IntersectionObserver' in window)) { els.forEach(fire); return; }
-    /* A section can ask to fire LATER than the shared trigger by giving
-       data-reveal a threshold: data-reveal="0.2" means "wait until 20% of this
-       section's own height is inside the trigger box". threshold is a
-       per-observer setting, not per-element, so each distinct value needs its
-       own observer. Keep these values well under (viewport / section height)
-       or the ratio can never be reached and the section never reveals. */
-    var obs = {};
-    function observerFor(t) {
-      if (!obs[t]) {
-        obs[t] = new IntersectionObserver(function (entries) {
-          entries.forEach(function (en) {
-            if (en.isIntersecting) { obs[t].unobserve(en.target); fire(en.target); }
-          });
-        }, { threshold: +t, rootMargin: REVEAL_TRIGGER.rootMargin });
-      }
-      return obs[t];
+    /* Two observers, because threshold is a per-observer setting: the shared
+       one for every section whose timing is signed off, and a separate one
+       for Best Sellers so tuning it cannot move the others. */
+    function watcher(config) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { io.unobserve(en.target); fire(en.target); }
+        });
+      }, config);
+      return io;
     }
-    els.forEach(function (el) { observerFor(el.getAttribute('data-reveal') || 0).observe(el); });
+    var ioShared = watcher(REVEAL_TRIGGER);
+    var ioBest = watcher(BEST_SELLERS_TRIGGER);
+    els.forEach(function (el) { (el.id === 'best-sellers' ? ioBest : ioShared).observe(el); });
   })();
 
   /* ---- Reviews: 3 groups of 3, hero-carousel pattern retargeted ----
