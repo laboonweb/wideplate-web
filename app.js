@@ -9,6 +9,25 @@
      section renders fully visible with no reveal styling. */
   document.documentElement.classList.add('js');
 
+  /* ---- Shared trigger point for every one-time reveal ----
+     ONE config for all [data-reveal] sections (Promise, Menu, Best Sellers,
+     Combos, Story, Visit, the rating stat). Tune reveal timing here, not
+     per section.
+
+     The gate is the rootMargin, NOT the threshold, and that is deliberate:
+     threshold is the fraction of THE ELEMENT that is visible, and these
+     sections are much taller than the viewport (#menu runs several thousand
+     px). A 6000px section in an 800px viewport tops out around a ratio of
+     0.13, so a "35% visible" threshold would never be reached and those
+     reveals would never fire at all.
+
+     -32% on the bottom pulls the trigger line up to 68% of the viewport
+     height: a section starts revealing only once its top edge has scrolled
+     roughly two thirds of the way up the screen, so the visitor is looking
+     at it when it plays. Height-independent, so it behaves the same on a
+     short phone viewport as on a tall desktop one. */
+  var REVEAL_TRIGGER = { threshold: 0, rootMargin: '0px 0px -32% 0px' };
+
   /* ---- Live --nav-height for anchor scroll offsets ----
      The fixed nav condenses (padding 18->8, i.e. -20px total) after scrolling
      past the hero. Anchor jumps happen when the visitor is already scrolled, so
@@ -266,7 +285,9 @@
       var target = parseFloat(el.getAttribute('data-target'));
       var dec = +(el.getAttribute('data-decimals') || 0);
       if (reduced) { el.textContent = target.toFixed(dec); return; }
-      var t0 = performance.now(), dur = 1300;
+      // Round 6: 1300 -> 1560 (x1.2), matching the star-draw's 1.5s -> 1.8s in
+      // index.html so the two still land together.
+      var t0 = performance.now(), dur = 1560;
       el.textContent = (0).toFixed(dec);
       requestAnimationFrame(function tick(now) {
         var p = Math.min(1, (now - t0) / dur);
@@ -284,7 +305,7 @@
       entries.forEach(function (en) {
         if (en.isIntersecting) { io.unobserve(en.target); fire(en.target); }
       });
-    }, { threshold: 0.01, rootMargin: '0px 0px -12% 0px' });
+    }, REVEAL_TRIGGER);
     els.forEach(function (el) { io.observe(el); });
   })();
 
