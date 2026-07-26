@@ -301,12 +301,24 @@
       $$('[data-countup]', el).forEach(countUp);
     }
     if (!('IntersectionObserver' in window)) { els.forEach(fire); return; }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) { io.unobserve(en.target); fire(en.target); }
-      });
-    }, REVEAL_TRIGGER);
-    els.forEach(function (el) { io.observe(el); });
+    /* A section can ask to fire LATER than the shared trigger by giving
+       data-reveal a threshold: data-reveal="0.2" means "wait until 20% of this
+       section's own height is inside the trigger box". threshold is a
+       per-observer setting, not per-element, so each distinct value needs its
+       own observer. Keep these values well under (viewport / section height)
+       or the ratio can never be reached and the section never reveals. */
+    var obs = {};
+    function observerFor(t) {
+      if (!obs[t]) {
+        obs[t] = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) { obs[t].unobserve(en.target); fire(en.target); }
+          });
+        }, { threshold: +t, rootMargin: REVEAL_TRIGGER.rootMargin });
+      }
+      return obs[t];
+    }
+    els.forEach(function (el) { observerFor(el.getAttribute('data-reveal') || 0).observe(el); });
   })();
 
   /* ---- Reviews: 3 groups of 3, hero-carousel pattern retargeted ----
