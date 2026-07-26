@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<!--
+  NOTE TO THE SITE OWNER: answers marked <!- - CONFIRM WITH CLIENT - -> below are
+  safe, non-specific placeholders. They are NOT fabricated details, but they have
+  not been verified with Wideplate either. Confirm each one before launch.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frequently Asked Questions · Wideplate Restaurant</title>
+<meta name="description" content="Hours, location, parking, delivery, service charge, and group dining at Wideplate Restaurant in San Antonio, Zambales.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%230B2A20'/%3E%3Ctext%20x='16'%20y='24'%20font-family='Georgia,serif'%20font-size='21'%20font-weight='700'%20fill='%23D9A441'%20text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&amp;display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&amp;display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&amp;display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&amp;display=swap"><link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&amp;display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&amp;display=swap"></noscript>
+<!-- Stamp .js before first paint. app.js also does this, but it is deferred, so
+     without this the answers would paint open for a frame and then collapse. -->
+<script>document.documentElement.classList.add('js');</script>
+<style>
+    /* Same simple structure as privacy-policy.html (no "01 ·" editorial
+       numbering, no scroll motion) but warmer: this is a helpful content page,
+       not a legal document. Full site palette and type. */
+    :root { --gold: #D9A441; --gold-ink: #A96C14; --gutter: clamp(24px, 4vw, 96px); }
+    html { background: #081F17; }
+    body { margin: 0; background: #F4EEE1; color: #14241D; font-family: 'General Sans', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #0F362C; }
+    a:hover { color: #C9862B; }
+    .wl-pp-head { background: #0B2A20; border-bottom: 1px solid rgba(244,238,225,0.14); padding: 18px var(--gutter); display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .wl-pp-mark { text-decoration: none; color: #F4EEE1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .wl-pp-mark b { font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-weight: 700; font-size: 19px; letter-spacing: 0.13em; line-height: 1; white-space: nowrap; }
+    .wl-pp-mark i { display: flex; align-items: center; gap: 7px; width: 100%; font-style: normal; }
+    .wl-pp-mark i span:first-child, .wl-pp-mark i span:last-child { flex: 1; height: 1px; background: rgba(244,238,225,0.6); }
+    .wl-pp-mark i em { font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-style: normal; font-size: 7.5px; font-weight: 400; letter-spacing: 0.34em; line-height: 1; }
+    .wl-pp-back { margin-left: auto; color: rgba(244,238,225,0.8); text-decoration: none; font-size: 11.5px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.2s ease; }
+    .wl-pp-back:hover { color: var(--gold); }
+    main { max-width: 760px; margin: 0 auto; padding: clamp(56px, 8vw, 96px) var(--gutter) clamp(64px, 9vw, 110px); }
+    main h1 { margin: 0 0 14px; font-family: 'Fraunces', Georgia, serif; font-weight: 560; font-size: clamp(36px, 6vw, 60px); line-height: 1.05; letter-spacing: -0.015em; }
+    .wl-faq-intro { margin: 0 0 clamp(36px, 5vw, 54px); font-size: 16.5px; line-height: 1.7; color: rgba(20,36,29,0.72); max-width: 56ch; }
+
+    /* ---- Accordion ---- */
+    .wl-faq-group { margin: 0 0 clamp(40px, 6vw, 64px); }
+    .wl-faq-group h2 { margin: 0 0 6px; font-family: 'Fraunces', Georgia, serif; font-weight: 560; font-size: clamp(22px, 3vw, 30px); line-height: 1.2; letter-spacing: -0.01em; }
+    .wl-faq-group > span { display: block; width: 44px; height: 2px; background: var(--gold); margin-bottom: 14px; }
+    .wl-faq-item { border-top: 1px solid rgba(20,36,29,0.16); transition: background 0.3s ease; }
+    .wl-faq-group .wl-faq-item:last-of-type { border-bottom: 1px solid rgba(20,36,29,0.16); }
+    .wl-faq-item.is-open { background: rgba(217,164,65,0.08); }
+    .wl-faq-item h3 { margin: 0; font-size: inherit; font-weight: inherit; }
+    .wl-faq-q { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: 100%; box-sizing: border-box; margin: 0; padding: 20px 4px; background: none; border: 0; text-align: left; cursor: pointer; font-family: 'General Sans', 'Helvetica Neue', sans-serif; font-size: 16.5px; font-weight: 600; line-height: 1.45; letter-spacing: 0.005em; color: #14241D; transition: color 0.2s ease; }
+    .wl-faq-q:hover { color: var(--gold-ink); }
+    .wl-faq-q:focus-visible { outline: 2px solid var(--gold-ink); outline-offset: -3px; }
+    /* Plus that loses its vertical stroke when open. Transform only, no layout. */
+    .wl-faq-icon { position: relative; flex: 0 0 auto; width: 14px; height: 14px; color: rgba(20,36,29,0.5); transition: color 0.25s ease; }
+    .wl-faq-icon::before, .wl-faq-icon::after { content: ''; position: absolute; background: currentColor; will-change: transform; transition: transform 0.34s cubic-bezier(0.16,1,0.3,1); }
+    .wl-faq-icon::before { left: 0; right: 0; top: 6.25px; height: 1.5px; }
+    .wl-faq-icon::after { top: 0; bottom: 0; left: 6.25px; width: 1.5px; }
+    .wl-faq-item.is-open .wl-faq-icon { color: var(--gold-ink); }
+    .wl-faq-item.is-open .wl-faq-icon::after { transform: scaleY(0); }
+    /* 0fr -> 1fr grid row animates to the content's real height with no
+       max-height guessing. visibility keeps collapsed answers out of the tab
+       order and out of screen readers; it flips instantly open, delayed shut. */
+    .wl-faq-a { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows 0.34s cubic-bezier(0.16,1,0.3,1), visibility 0s linear 0.34s; }
+    .wl-faq-a > div { overflow: hidden; }
+    .wl-faq-item.is-open .wl-faq-a { grid-template-rows: 1fr; visibility: visible; transition: grid-template-rows 0.34s cubic-bezier(0.16,1,0.3,1), visibility 0s; }
+    .wl-faq-a p { margin: 0 0 18px; padding-right: 32px; font-size: 15.5px; line-height: 1.75; color: rgba(20,36,29,0.82); }
+    .wl-faq-a p:first-child { padding-top: 2px; }
+    .wl-faq-dir { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 20px; padding: 11px 20px; border-radius: 999px; background: var(--gold); color: #1B1305; text-decoration: none; font-size: 11.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; transition: transform 0.25s cubic-bezier(0.16,1,0.3,1); }
+    .wl-faq-dir:hover { color: #1B1305; transform: translateY(-2px); }
+    .wl-faq-tel { color: #0F362C; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(15,54,44,0.3); font-variant-numeric: tabular-nums; }
+    /* No JS: every answer is open and readable, nothing is trapped behind a
+       button that cannot toggle. */
+    html:not(.js) .wl-faq-a { grid-template-rows: 1fr; visibility: visible; }
+    html:not(.js) .wl-faq-icon { display: none; }
+
+    /* Footer is the SAME markup as index.html's footer so it inherits the same
+       responsive behaviour. Keep the two in sync when either one changes. */
+    .wl-navlink:hover { color: var(--gold) !important; }
+    @media (max-width: 600px) {
+      .wl-foot-cols { justify-items: center !important; }
+      .wl-foot-col { align-items: center !important; text-align: center !important; }
+      .wl-faq-a p { padding-right: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; animation-delay: 0s !important; transition-delay: 0s !important; }
+    }
+</style>
+<script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="wl-pp-head">
+    <a class="wl-pp-mark" href="index.html" aria-label="Wideplate Restaurant home">
+      <b>WIDEPLATE</b>
+      <i><span aria-hidden="true"></span><em>RESTAURANT</em><span aria-hidden="true"></span></i>
+    </a>
+    <a class="wl-pp-back" href="index.html">Back to site</a>
+  </header>
+
+  <main>
+    <h1>Frequently Asked Questions</h1>
+    <p class="wl-faq-intro">Everything people usually ask us before they drive over. If your question isn't here, give us a call and we'll answer it straight.</p>
+
+    <section class="wl-faq-group">
+      <h2>Visiting Us</h2>
+      <span aria-hidden="true"></span>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a1"><span>What are your hours?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a1"><div>
+          <!-- CONFIRM WITH CLIENT -->
+          <p>We're open until 9PM. Give us a call to confirm today's opening time, especially on holidays.</p>
+        </div></div>
+      </div>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a2"><span>Where are you located?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a2"><div>
+          <p>Ground Floor, Balay Grace, R. Concepcion St, Barangay Santiago, San Antonio, Zambales.</p>
+          <a class="wl-faq-dir" href="https://www.google.com/maps/dir/?api=1&amp;destination=Wideplate%20Restaurant%2C%20R.%20Concepcion%20St%2C%20San%20Antonio%2C%20Zambales" target="_blank" rel="noopener">Get Directions</a>
+        </div></div>
+      </div>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a3"><span>Are you close to Pundaquit, Anawangin, or the coves?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a3"><div>
+          <p>We're right in San Antonio, the gateway town for island-hopping to Pundaquit, Anawangin, and Capones. It's a great stop before or after a beach day.</p>
+        </div></div>
+      </div>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a4"><span>Is parking available?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a4"><div>
+          <p>Yes. We have a free on-site parking lot plus free street parking, and there's usually plenty of space.</p>
+        </div></div>
+      </div>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a5"><span>Are you wheelchair accessible?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a5"><div>
+          <p>Yes. We have a wheelchair accessible entrance and a wheelchair accessible restroom.</p>
+        </div></div>
+      </div>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a6"><span>Are pets allowed inside?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a6"><div>
+          <p>Yes. Pets are welcome inside the restaurant.</p>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="wl-faq-group">
+      <h2>Ordering &amp; Delivery</h2>
+      <span aria-hidden="true"></span>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a7"><span>Do you take reservations?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a7"><div>
+          <!-- CONFIRM WITH CLIENT -->
+          <p>For groups or peak times, we recommend calling ahead: <a class="wl-faq-tel" href="tel:+639669659995">0966 965 9995</a> or <a class="wl-faq-tel" href="tel:+639669659998">0966 965 9998</a>.</p>
+        </div></div>
+      </div>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a8"><span>Do you offer delivery?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a8"><div>
+          <p>Yes. We deliver across San Antonio, Zambales. Contact us to confirm delivery to your area.</p>
+        </div></div>
+      </div>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a9"><span>Do you offer curbside pickup?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a9"><div>
+          <p>Yes. Dine-in, curbside pickup, and delivery are all available.</p>
+        </div></div>
+      </div>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a10"><span>What payment methods do you accept?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a10"><div>
+          <!-- CONFIRM WITH CLIENT -->
+          <p>Contact us to confirm accepted payment methods for your visit.</p>
+        </div></div>
+      </div>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a11"><span>Is there a service charge?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a11"><div>
+          <p>A 5% service charge applies to all dine-in orders.</p>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="wl-faq-group">
+      <h2>Food &amp; Groups</h2>
+      <span aria-hidden="true"></span>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a12"><span>Do you have vegetable dishes?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a12"><div>
+          <p>Yes. Vegetable Kare-Kare and Sizzling Tofu Sisig are both on the menu. Give us a call if you have specific dietary questions and we'll help you find the right dish.</p>
+        </div></div>
+      </div>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a13"><span>Can you accommodate large groups or celebrations?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a13"><div>
+          <p>Absolutely. Our Feast Combos are built for exactly that, from family tables to barkada beach-day crews. We love hosting celebrations, big and small.</p>
+        </div></div>
+      </div>
+
+      <div class="wl-faq-item">
+        <h3><button class="wl-faq-q" aria-expanded="false" aria-controls="faq-a14"><span>Do you have vegetarian or vegan-certified options?</span><span class="wl-faq-icon" aria-hidden="true"></span></button></h3>
+        <div class="wl-faq-a" id="faq-a14"><div>
+          <!-- CONFIRM WITH CLIENT -->
+          <p>We have plant-forward dishes like Vegetable Kare-Kare. Please call ahead to discuss specific dietary needs, as some sauces may contain fish-based ingredients common in Filipino cooking.</p>
+        </div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="position:relative; background:#081F17; padding:clamp(56px, 8vw, 90px) var(--gutter) 40px;">
+    <div style="max-width:1280px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(36px, 5vw, 56px); position:relative; z-index:1;">
+      <div style="display:flex; justify-content:center; border-bottom:1px solid rgba(244,238,225,0.14); padding-bottom:clamp(28px, 4vw, 44px);">
+        <div style="display:flex; flex-direction:column; align-items:center; gap:14px; max-width:640px; width:100%;">
+          <p style="margin:0; font-family:'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-weight:700; font-size:clamp(40px, 6vw, 68px); letter-spacing:0.12em; line-height:1; color:#F4EEE1; text-align:center;">WIDEPLATE</p>
+          <div style="display:flex; align-items:center; gap:12px; width:100%; max-width:480px;">
+            <span aria-hidden="true" style="flex:1; height:1px; background:rgba(244,238,225,0.6);"></span>
+            <span style="font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-size: clamp(11px, 1.4vw, 14px); font-weight: 400; letter-spacing: 0.42em; line-height: 1; color: #F4EEE1">RESTAURANT</span>
+            <span aria-hidden="true" style="flex:1; height:1px; background:rgba(244,238,225,0.6);"></span>
+          </div>
+          <p style="margin: 0; font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-style: italic; font-size: clamp(14px, 1.8vw, 17px); color: #F4EEE1; text-align: center">Home of your Favorite Filipino Flavors!</p>
+        </div>
+      </div>
+      <div class="wl-foot-cols" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:36px;">
+        <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">
+          <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(244,238,225,0.45);">Visit</p>
+          <p style="margin:0; font-size:14px; line-height:1.7; color:rgba(244,238,225,0.8);">Ground Floor, Balay Grace,<br>R. Concepcion St, Barangay Santiago,<br>San Antonio, Zambales</p>
+        </div>
+        <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">
+          <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(244,238,225,0.45);">Hours</p>
+          <p style="margin:0; font-size:14px; font-weight:600; color:rgba(244,238,225,0.8);">Open until 9PM</p>
+          <p style="margin:0; font-size:13.5px; color:rgba(244,238,225,0.6);">Dine-in · Curbside Pickup · Delivery</p>
+        </div>
+        <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">
+          <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(244,238,225,0.45);">Contact</p>
+          <a href="tel:+639669659995" style="font-size:14px; color:rgba(244,238,225,0.8); text-decoration:none; font-variant-numeric:tabular-nums;">0966 965 9995</a>
+          <a href="tel:+639669659998" style="font-size:14px; color:rgba(244,238,225,0.8); text-decoration:none; font-variant-numeric:tabular-nums;">0966 965 9998</a>
+          <a href="mailto:WideplateRestaurant@gmail.com" style="font-size:14px; color:rgba(244,238,225,0.8); text-decoration:none;">WideplateRestaurant@gmail.com</a>
+          <a href="https://facebook.com/wideplaterestaurant" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); text-decoration:none;">Facebook <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:0.85em; height:0.85em;"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></a>
+        </div>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px 20px; padding-top:22px; border-top:1px solid rgba(244,238,225,0.12);">
+        <p style="margin:0; font-size:12px; letter-spacing:0.06em; color:rgba(244,238,225,0.4);">© 2026 Wideplate Restaurant · San Antonio, Zambales</p>
+        <a class="wl-navlink" href="index.html" style="color:rgba(244,238,225,0.6); text-decoration:none; font-size:12px; letter-spacing:0.06em; transition:color 0.2s ease;">Home</a>
+        <a class="wl-navlink" href="privacy-policy.html" style="color:rgba(244,238,225,0.6); text-decoration:none; font-size:12px; letter-spacing:0.06em; transition:color 0.2s ease;">Privacy Policy</a>
+      </div>
+    </div>
+    <div aria-hidden="true" style="position:absolute; inset:0; pointer-events:none; opacity:0.045; background-image:url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27160%27%20height=%27160%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%270.85%27%20numOctaves=%272%27%20stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect%20width=%27160%27%20height=%27160%27%20filter=%27url(%23n)%27/%3E%3C/svg%3E');"></div>
+  </footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What are your hours?",
+      "acceptedAnswer": { "@type": "Answer", "text": "We're open until 9PM. Give us a call to confirm today's opening time, especially on holidays." }
+    },
+    {
+      "@type": "Question",
+      "name": "Where are you located?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Ground Floor, Balay Grace, R. Concepcion St, Barangay Santiago, San Antonio, Zambales." }
+    },
+    {
+      "@type": "Question",
+      "name": "Are you close to Pundaquit, Anawangin, or the coves?",
+      "acceptedAnswer": { "@type": "Answer", "text": "We're right in San Antonio, the gateway town for island-hopping to Pundaquit, Anawangin, and Capones. It's a great stop before or after a beach day." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is parking available?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. We have a free on-site parking lot plus free street parking, and there's usually plenty of space." }
+    },
+    {
+      "@type": "Question",
+      "name": "Are you wheelchair accessible?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. We have a wheelchair accessible entrance and a wheelchair accessible restroom." }
+    },
+    {
+      "@type": "Question",
+      "name": "Are pets allowed inside?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Pets are welcome inside the restaurant." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you take reservations?",
+      "acceptedAnswer": { "@type": "Answer", "text": "For groups or peak times, we recommend calling ahead: 0966 965 9995 or 0966 965 9998." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer delivery?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. We deliver across San Antonio, Zambales. Contact us to confirm delivery to your area." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer curbside pickup?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Dine-in, curbside pickup, and delivery are all available." }
+    },
+    {
+      "@type": "Question",
+      "name": "What payment methods do you accept?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Contact us to confirm accepted payment methods for your visit." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a service charge?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A 5% service charge applies to all dine-in orders." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you have vegetable dishes?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Vegetable Kare-Kare and Sizzling Tofu Sisig are both on the menu. Give us a call if you have specific dietary questions and we'll help you find the right dish." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can you accommodate large groups or celebrations?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Our Feast Combos are built for exactly that, from family tables to barkada beach-day crews. We love hosting celebrations, big and small." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you have vegetarian or vegan-certified options?",
+      "acceptedAnswer": { "@type": "Answer", "text": "We have plant-forward dishes like Vegetable Kare-Kare. Please call ahead to discuss specific dietary needs, as some sauces may contain fish-based ingredients common in Filipino cooking." }
+    }
+  ]
+}
+</script>
+</body>
+</html>

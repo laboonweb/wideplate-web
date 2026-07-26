@@ -199,6 +199,20 @@
     });
   })();
 
+  /* ---- FAQ accordion (faq.html) ----
+     Native <button> supplies focus, Enter and Space for free; the height
+     animation is pure CSS (grid 0fr -> 1fr), so this only flips a class and
+     keeps aria-expanded honest. Items toggle independently. */
+  (function faq() {
+    $$('.wl-faq-item').forEach(function (item) {
+      var btn = $('.wl-faq-q', item);
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        btn.setAttribute('aria-expanded', item.classList.toggle('is-open') ? 'true' : 'false');
+      });
+    });
+  })();
+
   /* ---- Mobile nav ---- */
   (function nav() {
     var toggle = $('[data-navtoggle]');
