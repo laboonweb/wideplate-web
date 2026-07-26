@@ -64,6 +64,13 @@
     .wl-mob { display: none; }
     .wl-mobpanel { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1); }
     .wl-mobpanel.open { max-height: 60vh; }
+    /* Six desktop nav items since Gallery was added: the bar overflows just
+       above 900px, so hand over to the hamburger 100px earlier. Nav only, the
+       900px block below keeps owning everything else. */
+    @media (max-width: 1000px) {
+      .wl-desk { display: none !important; }
+      .wl-mob { display: flex !important; }
+    }
     @media (max-width: 900px) {
       .wl-desk { display: none !important; }
       .wl-mob { display: flex !important; }
@@ -226,11 +233,12 @@
           <span aria-hidden="true" style="flex:1; height:1px; background:rgba(244,238,225,0.6);"></span>
         </span>
       </a>
-      <nav class="wl-desk" aria-label="Sections" style="display:flex; gap:26px;">
+      <nav class="wl-desk" aria-label="Sections" style="display:flex; gap:clamp(16px, 2.2vw, 26px);">
         <a class="wl-navlink" href="#menu" style="color:rgba(244,238,225,0.8); text-decoration:none; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; transition:color 0.2s ease;">Menu</a>
         <a class="wl-navlink" href="#best-sellers" style="color:rgba(244,238,225,0.8); text-decoration:none; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; transition:color 0.2s ease;">Best Sellers</a>
         <a class="wl-navlink" href="#combos" style="color:rgba(244,238,225,0.8); text-decoration:none; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; transition:color 0.2s ease;">Combos</a>
         <a class="wl-navlink" href="#story" style="color:rgba(244,238,225,0.8); text-decoration:none; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; transition:color 0.2s ease;">Our Story</a>
+        <a class="wl-navlink" href="gallery.html" style="color:rgba(244,238,225,0.8); text-decoration:none; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; transition:color 0.2s ease;">Gallery</a>
         <a class="wl-navlink" href="#visit" style="color:rgba(244,238,225,0.8); text-decoration:none; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; transition:color 0.2s ease;">Visit</a>
       </nav>
       <div style="margin-left:auto; display:flex; align-items:center; gap:16px;">
@@ -249,6 +257,7 @@
         <a class="wl-navclose" href="#best-sellers" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Best Sellers</a>
         <a class="wl-navclose" href="#combos" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Combos</a>
         <a class="wl-navclose" href="#story" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Our Story</a>
+        <a class="wl-navclose" href="gallery.html" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Gallery</a>
         <a class="wl-navclose" href="#visit" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Visit</a>
         <a class="wl-navclose" href="https://www.google.com/maps/dir/?api=1&amp;destination=Wideplate%20Restaurant%2C%20R.%20Concepcion%20St%2C%20San%20Antonio%2C%20Zambales" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; color:var(--gold); text-decoration:none; font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; padding:14px 2px;">Get Directions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:0.85em; height:0.85em;"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></a>
         <a href="tel:+639669659995" style="color:var(--gold); text-decoration:none; font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; padding:14px 2px;">Call 0966 965 9995</a>
@@ -1530,6 +1539,7 @@
       </div>
       <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px 20px; padding-top:22px; border-top:1px solid rgba(244,238,225,0.12);">
         <p style="margin:0; font-size:12px; letter-spacing:0.06em; color:rgba(244,238,225,0.4);">© 2026 Wideplate Restaurant · San Antonio, Zambales</p>
+        <a class="wl-navlink" href="gallery.html" style="color:rgba(244,238,225,0.6); text-decoration:none; font-size:12px; letter-spacing:0.06em; transition:color 0.2s ease;">Gallery</a>
         <a class="wl-navlink" href="faq.html" style="color:rgba(244,238,225,0.6); text-decoration:none; font-size:12px; letter-spacing:0.06em; transition:color 0.2s ease;">FAQ</a>
         <a class="wl-navlink" href="privacy-policy.html" style="color:rgba(244,238,225,0.6); text-decoration:none; font-size:12px; letter-spacing:0.06em; transition:color 0.2s ease;">Privacy Policy</a>
       </div>

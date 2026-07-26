@@ -213,6 +213,33 @@
     });
   })();
 
+  /* ---- Gallery lightbox (gallery.html) ----
+     Native <dialog>, so Esc, the backdrop and focus return are free. One
+     delegated listener on the grid covers every tile, including any added
+     later. Opening is triggered by the tile's <button>, which is also what
+     supplies Enter/Space. */
+  (function galleryLightbox() {
+    var grid = $('[data-gallery-grid]');
+    var lb = $('.g-lb');
+    if (!grid || !lb || !lb.showModal) return;
+    var shown = $('img', lb);
+    grid.addEventListener('click', function (e) {
+      var btn = e.target.closest('.g-item button');
+      if (!btn) return;
+      var img = $('img', btn);
+      if (!img) return;
+      shown.src = img.currentSrc || img.src;
+      shown.alt = img.alt;
+      lb.showModal();
+    });
+    /* The photo sits inside .g-lb-inner, which fills the dialog: a click that
+       lands on the dialog OR on that wrapper is a click outside the photo. */
+    lb.addEventListener('click', function (e) {
+      if (e.target === lb || e.target.classList.contains('g-lb-inner') || e.target.closest('.g-lb-x')) lb.close();
+    });
+    lb.addEventListener('close', function () { shown.removeAttribute('src'); });
+  })();
+
   /* ---- Mobile nav ---- */
   (function nav() {
     var toggle = $('[data-navtoggle]');
