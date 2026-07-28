@@ -78,7 +78,16 @@
     /* mobile nav */
     .wl-mob { display: none; }
     .wl-mobpanel { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1); }
-    .wl-mobpanel.open { max-height: 60vh; }
+    /* Was 60vh, which clipped unreachably on short phones: the panel's content
+       is ~430px of fixed-px type, so a 667px-tall iPhone SE got a 400px budget
+       and the "Call 0966 965 9995" CTA was cut off with no way to scroll to it
+       (the base rule's overflow:hidden made it unreachable, not just hidden).
+       dvh instead of vh so browser chrome is accounted for, minus the bar's
+       real height so the panel ends exactly at the bottom of the screen, and
+       overflow-y:auto so content that outgrows the space scrolls instead of
+       disappearing -- that last part is what stops this recurring the next
+       time an item is added to the menu. */
+    .wl-mobpanel.open { max-height: calc(100dvh - var(--nav-bar-h, 60px)); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
     /* Six desktop nav items since Gallery was added: the bar overflows just
        above 900px, so hand over to the hamburger 100px earlier. Nav only, the
        900px block below keeps owning everything else. */

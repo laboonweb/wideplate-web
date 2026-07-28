@@ -102,6 +102,13 @@
       var h = bar.offsetHeight;
       var condensed = window.scrollY > 170 ? h : Math.max(44, h - 20);
       document.documentElement.style.setProperty('--nav-height', condensed + 'px');
+      /* The bar's REAL current height, unlike --nav-height above, which is
+         deliberately the condensed value even while the bar still renders tall
+         at scroll-top. The mobile panel opens directly under the bar and needs
+         the height actually on screen: with the condensed value it would size
+         itself 20px taller than the space below the bar and hang off the
+         bottom of the viewport. Anchor offsets keep using --nav-height. */
+      document.documentElement.style.setProperty('--nav-bar-h', h + 'px');
     }
     set();
     window.addEventListener('resize', set);
