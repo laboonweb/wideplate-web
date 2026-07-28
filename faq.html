@@ -363,11 +363,11 @@
            DUPLICATED IN FOUR FILES ON PURPOSE: index.html, gallery.html, faq.html
            and privacy-policy.html each carry an identical copy of this <style>,
            the <script> under it, and the #wp-ld markup at the top of the page.
-           There is no build step and no shared stylesheet on this site, so an
-           edit to one is an edit to all four.
-           Inline in <head> deliberately: served from an external sheet the page
-           would paint before the loader covered it, which is the exact flash the
-           loader exists to prevent.
+           It stays inline even though css/site.css now exists: an external
+           sheet is fetched, so the page would paint before the loader covered
+           it, which is the exact flash the loader exists to prevent. That is
+           why this one block is duplicated rather than shared — an edit to
+           one is an edit to all four.
            The wordmark is the nav wordmark, scaled up: same type stack, same
            0.13em tracking, same hairline-flanked RESTAURANT line. Keep it that
            way rather than restyling it here. */
@@ -462,7 +462,7 @@
         setTimeout(exit, MAX);
       })();
     </script>
-    <script src="./app.js" defer></script>
+    <script src="./js/app.js" defer></script>
   </head>
   <body>
     <!-- Branded preloader. Decorative, so aria-hidden; it also deletes itself
