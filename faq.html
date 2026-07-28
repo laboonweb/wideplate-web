@@ -76,18 +76,22 @@
         /* Everything below is gated on .wp-loading, which the inline script adds.
            With JS off, or if that script never runs at all, the loader simply
            never appears — it can never seal a visitor behind a green screen. */
-        /* Scroll lock that does NOT remove the scrollbar.
-        The obvious html { overflow: hidden } locks scrolling but also takes the
-        vertical scrollbar away, so the instant the loader exits and the class
-        comes off, the scrollbar returns and claims ~15px: the whole page
-        reflows narrower in one frame, which on the full-bleed hero reads as a
-        jump to the left followed by a shrink. scrollbar-gutter does not help,
-        Chrome reserves nothing while overflow is hidden.
-        Instead overflow-y: scroll keeps the scrollbar track present the whole
-        time, and the lock comes from taking the body out of flow, so the
-        document width never changes. */
+        /* Scroll lock, in two parts, because the obvious single rule breaks
+           something each way round.
+           html { overflow: hidden } locks scrolling but removes the scrollbar, so
+           when the loader exits the scrollbar returns and claims ~15px and the
+           whole page reflows narrower in one frame (on the hero: a jump left and
+           a shrink). scrollbar-gutter does not help; Chrome reserves nothing
+           while overflow is hidden.
+           Taking the body out of flow keeps the width stable but destroys the
+           browser's scroll restoration: with nothing to scroll, a reload from
+           halfway down the page lands back at the top.
+           So: overflow-y: scroll holds the scrollbar track for the whole load,
+           and the body is only taken out of flow AFTER the browser has restored
+           its scroll position, offset by that exact amount (see wp-lock in the
+           controller) so the page does not appear to move either. */
         html.wp-loading { overflow-y: scroll; }
-        html.wp-loading body { position: fixed; inset: 0; width: 100%; overflow: hidden; }
+        html.wp-lock body { position: fixed; left: 0; right: 0; width: 100%; overflow: hidden; }
         html.wp-loading #wp-ld { display: flex; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: #0F362C; will-change: clip-path; }
         /* Hold the page's own load-intro (hero headline mask-rise, scrim fade,
            Ken Burns, slide crossfades) at frame 0 while the loader is up, so it
@@ -153,6 +157,27 @@
         var MIN = still ? 450 : 1400, MAX = still ? 700 : 1700, WIPE = still ? 0 : 500;
         var t0 = Date.now(), done = false;
         root.classList.add('wp-loading');
+        /* Lock only once the browser has restored the scroll position, and
+           hold the page visually still by offsetting the fixed body by that
+           amount. Locking in the <head> instead would capture 0 and throw the
+           restored position away. */
+        var lockY = 0, locked = false;
+        function lock() {
+          if (locked || !d.body) return;
+          locked = true;
+          lockY = window.pageYOffset || d.documentElement.scrollTop || 0;
+          root.classList.add('wp-lock');
+          d.body.style.top = (-lockY) + 'px';
+        }
+        function unlock() {
+          if (!locked) return;
+          locked = false;
+          root.classList.remove('wp-lock');
+          d.body.style.top = '';
+          /* 'instant' matters: a smooth scroll here would visibly slide the
+             page after the loader lifts. */
+          window.scrollTo({ top: lockY, left: 0, behavior: 'instant' });
+        }
         function exit() {
           if (done) return;
           done = true;
@@ -163,6 +188,7 @@
                not be reachable by keyboard or a screen reader afterwards. */
             if (el && el.parentNode) el.parentNode.removeChild(el);
             root.classList.remove('wp-loading');
+            unlock();
             /* app.js holds the scroll reveals until this fires, and dropping
                .wp-loading above un-pauses the hero's intro. Both resume exactly
                as they were, with no change to their own timing or triggers. */
@@ -170,7 +196,8 @@
           }, WIPE);
         }
         function schedule() { setTimeout(exit, Math.max(0, MIN - (Date.now() - t0))); }
-        if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', schedule); else schedule();
+        if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', function () { lock(); schedule(); });
+        else { lock(); schedule(); }
         setTimeout(exit, MAX);
       })();
     </script>
