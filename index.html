@@ -36,6 +36,11 @@
     #top .wl-slide { will-change: opacity; }
     #top .wl-slide img { will-change: transform; }
     a { color: #0F362C; }
+    /* <button> does not inherit font-family, and Chrome's UA default for it is
+       Arial — which is how the six Feast Combos "See what's inside" toggles
+       ended up rendering in Arial instead of General Sans. One rule at the
+       control level, rather than a font-family on each label that needs it. */
+    button { font-family: inherit; }
     a:hover { color: #C9862B; }
     @keyframes wpkb { from { transform: scale(1); } to { transform: scale(1.07); } }
     @keyframes wpintro { from { transform: translateY(112%); } to { transform: translateY(0); } }
@@ -44,7 +49,13 @@
     @keyframes wprise { from { opacity: 0; translate: 0 30px; } to { opacity: 1; translate: 0 0; } }
     @keyframes wpclip { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
     @keyframes wpline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-    @keyframes wpmarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    /* Four copies, shifted by one copy (-25%). With two copies the shift was a
+       full 50% and only ONE copy remained on screen after it: one copy measures
+       ~2535px, so any viewport wider than that ran out of content and showed
+       dead space at the tail. Three copies remain after the shift now, which
+       covers past 7600px. Content count and this percentage are a pair: change
+       one, change the other. */
+    @keyframes wpmarquee { from { transform: translateX(0); } to { transform: translateX(-25%); } }
     @keyframes wpfill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
     @keyframes wpcard { 0% { transform: scale(0.94); opacity: 0.6; } 42% { transform: scale(1); opacity: 1; } 58% { transform: scale(1); opacity: 1; } 100% { transform: scale(0.94); opacity: 0.6; } }
     @keyframes wpnav { to { padding-top: 8px; padding-bottom: 8px; } }
@@ -156,6 +167,17 @@
     .wl-promise.is-in .wl-pillar:nth-child(2) > * { transition-delay: 1.5s; }
     .wl-promise.is-in .wl-pillar:nth-child(3) > * { transition-delay: 1.8s; }
     /* last pillar's closing (bottom) hairline draws with the same choreography */
+    /* Below ~420px the pillar's three inline columns (48-90px number, 1fr
+       title, 150-300px copy, 20px gaps) cannot fit: the 1fr track's automatic
+       minimum is its own min-content, so the row overflowed the gutter and the
+       copy was clipped by the body's overflow-x. Measured 12px past a 360px
+       viewport and 52px past 320px. Number and title share the first row, the
+       copy takes the full width beneath. !important because the grid is
+       declared inline on all three pillars. */
+    @media (max-width: 420px) {
+      .wl-pillar { grid-template-columns: auto minmax(0, 1fr) !important; gap: 6px 14px !important; }
+      .wl-pillar > :last-child { grid-column: 1 / -1; }
+    }
     html.js .wl-pillar:last-child { border-bottom-color: transparent !important; }
     .wl-pillar:last-child::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 1px; background: rgba(20,36,29,0.16); transform: scaleX(0); transform-origin: left; transition: transform 0.84s cubic-bezier(0.16, 1, 0.3, 1); }
     html:not(.js) .wl-pillar:last-child::after { display: none; }
@@ -511,6 +533,16 @@
       <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:#F4EEE1;">CRISPY PATA</span><span style="color:var(--gold); font-size:32px;">·</span>
       <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:transparent; -webkit-text-stroke:1px rgba(244,238,225,0.75);">BULALO</span><span style="color:var(--gold); font-size:32px;">·</span>
       <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:#F4EEE1;">HALO-HALO</span><span style="color:var(--gold); font-size:32px;">·</span>
+      <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:#F4EEE1;">SISIG</span><span style="color:var(--gold); font-size:32px;">·</span>
+      <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:transparent; -webkit-text-stroke:1px rgba(244,238,225,0.75);">KARE-KARE</span><span style="color:var(--gold); font-size:32px;">·</span>
+      <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:#F4EEE1;">CRISPY PATA</span><span style="color:var(--gold); font-size:32px;">·</span>
+      <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:transparent; -webkit-text-stroke:1px rgba(244,238,225,0.75);">BULALO</span><span style="color:var(--gold); font-size:32px;">·</span>
+      <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:#F4EEE1;">HALO-HALO</span><span style="color:var(--gold); font-size:32px;">·</span>
+      <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:#F4EEE1;">SISIG</span><span style="color:var(--gold); font-size:32px;">·</span>
+      <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:transparent; -webkit-text-stroke:1px rgba(244,238,225,0.75);">KARE-KARE</span><span style="color:var(--gold); font-size:32px;">·</span>
+      <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:#F4EEE1;">CRISPY PATA</span><span style="color:var(--gold); font-size:32px;">·</span>
+      <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:transparent; -webkit-text-stroke:1px rgba(244,238,225,0.75);">BULALO</span><span style="color:var(--gold); font-size:32px;">·</span>
+      <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:#F4EEE1;">HALO-HALO</span><span style="color:var(--gold); font-size:32px;">·</span>
     </div>
   </div>
 
@@ -553,7 +585,7 @@
             <span style="font-size:10px; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:#8A6520; white-space:nowrap;">All-Time Favorites</span>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Garlicky Pork Adobo</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -582,7 +614,7 @@
             <span style="font-size:10px; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:#8A6520; white-space:nowrap;">All-Time Favorites</span>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Sizzling Pork Sisig</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -616,7 +648,7 @@
             <span style="font-size:10px; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:#8A6520; white-space:nowrap;">All-Time Favorites</span>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Beef Kare-Kare (Meat &amp; Skin)</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -645,7 +677,7 @@
             <span style="font-size:10px; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:#8A6520; white-space:nowrap;">All-Time Favorites</span>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Pork Sinigang sa Mangga</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -673,7 +705,7 @@
             <h3 style="margin:0; font-family:'Fraunces',serif; font-size:clamp(25px, 3.2vw, 34px); font-weight:560; color:#14241D; white-space:nowrap;">Fried &amp; Grilled</h3>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Crispy Pata</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -731,7 +763,7 @@
             <h3 style="margin:0; font-family:'Fraunces',serif; font-size:clamp(25px, 3.2vw, 34px); font-weight:560; color:#14241D; white-space:nowrap;">Saucy &amp; Creamy</h3>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Pork Binagoongan</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -779,7 +811,7 @@
             <h3 style="margin:0; font-family:'Fraunces',serif; font-size:clamp(25px, 3.2vw, 34px); font-weight:560; color:#14241D; white-space:nowrap;">Soups</h3>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Beef Bulalo</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -807,7 +839,7 @@
             <h3 style="margin:0; font-family:'Fraunces',serif; font-size:clamp(25px, 3.2vw, 34px); font-weight:560; color:#14241D; white-space:nowrap;">Veggies</h3>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Wideplate Special Talong</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -826,7 +858,7 @@
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Chopsuey</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
-              <span style="font-size:14px; font-weight:600; color:#0F362C; white-space:nowrap; text-align:right; font-variant-numeric:tabular-nums;">Chicken ₱295 · Seafood ₱370</span>
+              <span style="font-size:14px; font-weight:600; color:#0F362C; text-align:right; font-variant-numeric:tabular-nums;">Chicken ₱295 · Seafood ₱370</span>
             </div>
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Ginataang Munggo with Pork and Shrimp</span>
@@ -845,7 +877,7 @@
             <h3 style="margin:0; font-family:'Fraunces',serif; font-size:clamp(25px, 3.2vw, 34px); font-weight:560; color:#14241D; white-space:nowrap;">Rice &amp; Fries</h3>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Steamed Rice</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -878,7 +910,7 @@
             <h3 style="margin:0; font-family:'Fraunces',serif; font-size:clamp(25px, 3.2vw, 34px); font-weight:560; color:#14241D; white-space:nowrap;">Noodles &amp; Pasta</h3>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Pansit Bihon (Chicken Breast &amp; Liver)</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -921,7 +953,7 @@
             <h3 style="margin:0; font-family:'Fraunces',serif; font-size:clamp(25px, 3.2vw, 34px); font-weight:560; color:#14241D; white-space:nowrap;">Sakto Solo Meals · Silogs</h3>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Tapsilog</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -954,7 +986,7 @@
             <h3 style="margin:0; font-family:'Fraunces',serif; font-size:clamp(25px, 3.2vw, 34px); font-weight:560; color:#14241D; white-space:nowrap;">Desserts</h3>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Special Halo-Halo</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -997,7 +1029,7 @@
             <h3 style="margin:0; font-family:'Fraunces',serif; font-size:clamp(25px, 3.2vw, 34px); font-weight:560; color:#14241D; white-space:nowrap;">Water, Juices &amp; Soda</h3>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Bottled Water</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -1085,7 +1117,7 @@
             <h3 style="margin:0; font-family:'Fraunces',serif; font-size:clamp(25px, 3.2vw, 34px); font-weight:560; color:#14241D; white-space:nowrap;">Alcoholic Beverages</h3>
             <span aria-hidden="true" style="flex:1; border-bottom:1px solid rgba(20,36,29,0.16);"></span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(310px, 1fr)); column-gap:48px; row-gap:15px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(310px, 100%), 1fr)); column-gap:48px; row-gap:15px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
               <span style="font-size:15px; font-weight:500; color:#14241D; line-height:1.45;">Corona Extra (330ml)</span>
               <span aria-hidden="true" style="flex:1; min-width:24px; border-bottom:1px dotted rgba(20,36,29,0.3); transform:translateY(-4px);"></span>
@@ -1388,7 +1420,7 @@
         <h2 style="margin:0; font-family:'Fraunces',Georgia,serif; font-weight:520; font-size:clamp(34px, 5.6vw, 76px); line-height:0.98; letter-spacing:-0.015em; color:#F4EEE1;">The whole table, <em style="font-style:italic;">sorted.</em></h2>
         <p style="margin:0 0 10px; max-width:420px; font-size:14.5px; line-height:1.6; color:rgba(244,238,225,0.68);">Group platters built for families, barkadas, and beach-day crews headed to the coves. One order, everyone eats well.</p>
       </div>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap:18px;">
         <article class="wl-combo" style="background:rgba(244,238,225,0.04); border:1px solid rgba(244,238,225,0.16); padding:28px 28px 30px; display:flex; flex-direction:column; gap:14px; transition:transform 0.4s cubic-bezier(0.16,1,0.3,1), background 0.3s ease;">
           <p style="margin:0; align-self:flex-start; font-size:10.5px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:rgba(244,238,225,0.65); border:1px solid rgba(244,238,225,0.28); border-radius:999px; padding:6px 13px;">All-Meat</p>
           <h3 style="margin:0; font-family:'Fraunces',serif; font-size:28px; font-weight:560; color:#F4EEE1;">Combo 1</h3>
@@ -1507,7 +1539,7 @@
         <span style="font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#14241D; white-space:nowrap;">05 · Our Story</span>
         <span aria-hidden="true" style="flex:1; height:1px; background:rgba(20,36,29,0.18); transform-origin:left; animation:wpline 1s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 40%;"></span>
       </div>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:clamp(36px, 6vw, 80px); align-items:start;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap:clamp(36px, 6vw, 80px); align-items:start;">
         <div class="wl-storypin" style="position:sticky; top:110px;">
           <div class="wl-storyimg" style="height:min(74vh, 640px); overflow:hidden; box-shadow:-14px 14px 0 0 #0B2A20; animation:wpclip 1.1s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 45%;">
             <img src="uploads/wideplatediningroom.webp" alt="Wideplate dining room: banana-leaf murals, rattan pendant lights, and the wordmark on a wood-slat wall" loading="lazy" style="width:100%; height:100%; object-fit:cover; object-position:center; display:block; filter:saturate(1.06) sepia(0.05) contrast(1.03);">
@@ -1530,7 +1562,7 @@
 
   <!-- Social proof -->
   <section style="background:#F4EEE1; padding:0 var(--gutter) clamp(72px, 10vw, 130px);">
-    <div style="max-width:none; margin:0 auto; border-top:1px solid rgba(20,36,29,0.16); padding-top:clamp(48px, 7vw, 80px); display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:clamp(36px, 6vw, 80px); align-items:start;">
+    <div style="max-width:none; margin:0 auto; border-top:1px solid rgba(20,36,29,0.16); padding-top:clamp(48px, 7vw, 80px); display:grid; grid-template-columns:repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap:clamp(36px, 6vw, 80px); align-items:start;">
       <div class="wl-rate" data-reveal style="display:flex; flex-direction:column; gap:8px;">
         <p style="margin:0; font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#14241D;">Word of Mouth</p>
         <p style="margin:0; font-family:'Fraunces',serif; font-weight:560; font-size:clamp(96px, 16vw, 200px); line-height:0.9; color:#14241D; font-variant-numeric:tabular-nums;"><span data-countup data-target="4.8" data-decimals="1">4.8</span><span class="wl-star-big" style="color:var(--gold); font-size:0.35em; vertical-align:0.72em; margin-left:0.06em;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:1em; height:1em; overflow:visible;"><path pathLength="1" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span></p>
@@ -1607,7 +1639,7 @@
         <span style="font-size:11px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#F4EEE1; white-space:nowrap;">06 · Visit</span>
         <span aria-hidden="true" style="flex:1; height:1px; background:rgba(244,238,225,0.18); transform-origin:left; animation:wpline 1s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 40%;"></span>
       </div>
-      <div class="wl-visit-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:clamp(36px, 6vw, 72px); align-items:stretch;">
+      <div class="wl-visit-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap:clamp(36px, 6vw, 72px); align-items:stretch;">
         <div style="display:flex; flex-direction:column; gap:22px;">
           <h2 style="margin:0; font-family:'Fraunces',Georgia,serif; font-weight:520; font-size:clamp(34px, 5vw, 64px); line-height:1; letter-spacing:-0.015em; color:#F4EEE1;">Find us in <em style="font-style:italic;">San Antonio.</em></h2>
           <p style="margin:0; font-size:16px; line-height:1.7; color:rgba(244,238,225,0.85);">Ground Floor, Balay Grace, R. Concepcion St,<br>Barangay Santiago, San Antonio, Zambales</p>
@@ -1650,7 +1682,7 @@
     <div style="max-width:1280px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(36px, 5vw, 56px); position:relative; z-index:1;">
       <div style="display:flex; justify-content:center; border-bottom:1px solid rgba(244,238,225,0.14); padding-bottom:clamp(28px, 4vw, 44px);">
         <div style="display:flex; flex-direction:column; align-items:center; gap:14px; max-width:640px; width:100%;">
-          <p style="margin:0; font-family:'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-weight:700; font-size:clamp(40px, 6vw, 68px); letter-spacing:0.12em; line-height:1; color:#F4EEE1; text-align:center;">WIDEPLATE</p>
+          <p style="margin:0; font-family:'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-weight:700; font-size:clamp(32px, 6vw, 68px); letter-spacing:0.12em; line-height:1; color:#F4EEE1; text-align:center;">WIDEPLATE</p>
           <div style="display:flex; align-items:center; gap:12px; width:100%; max-width:480px;">
             <span aria-hidden="true" style="flex:1; height:1px; background:rgba(244,238,225,0.6);"></span>
             <span style="font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-size: clamp(11px, 1.4vw, 14px); font-weight: 400; letter-spacing: 0.42em; line-height: 1; color: #F4EEE1">RESTAURANT</span>
@@ -1659,7 +1691,7 @@
           <p style="margin: 0; font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-style: italic; font-size: clamp(14px, 1.8vw, 17px); color: #F4EEE1; text-align: center">Home of your Favorite Filipino Flavors!</p>
         </div>
       </div>
-      <div class="wl-foot-cols" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:36px;">
+      <div class="wl-foot-cols" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap:36px;">
         <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">
           <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(244,238,225,0.45);">Visit</p>
           <p style="margin:0; font-size:14px; line-height:1.7; color:rgba(244,238,225,0.8);">Ground Floor, Balay Grace,<br>R. Concepcion St, Barangay Santiago,<br>San Antonio, Zambales</p>

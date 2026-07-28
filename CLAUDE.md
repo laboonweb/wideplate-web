@@ -290,5 +290,77 @@ don't ship placeholder as if it's final:
 
 ---
 
+## 12. Wideplate — project block
+
+- **Business:** Wideplate Restaurant. Ground Floor, Balay Grace, R. Concepcion
+  St, Barangay Santiago, San Antonio, Zambales. 0966 965 9995 / 0966 965 9998.
+  WideplateRestaurant@gmail.com. facebook.com/wideplaterestaurant.
+  **Hours: open 11AM until 9PM** — this string appears in the footer of all
+  four pages, the hero badge, the Visit pill, the FAQ answer AND the FAQPage
+  JSON-LD. Change one, change all six.
+- **Live / repo:** https://wideplate-web.vercel.app · github.com/laboonweb/wideplate-web
+- **Deploy branch:** `master`. Push = publish. No separate deploy step.
+
+### Type system — CONFIRMED LIVE 2026-07-28, do not re-litigate
+
+Audited by reading `getComputedStyle` on the deployed site, not by assumption.
+Three roles, three faces. They are **not** meant to match:
+
+| Role | Stack | Confirmed |
+|---|---|---|
+| Wordmark / logotype | `'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif` | Nav, footer, preloader, and the `.wl-pp-mark` on all subpages |
+| Display headlines | `'Fraunces',Georgia,serif` | 102 elements: hero H1, every section H2, `.wl-squote`, combo prices, the 4.8 stat |
+| Body / UI | `'General Sans','Helvetica Neue',sans-serif` | Everything else |
+
+- **Fraunces is genuinely in use.** It is NOT dead weight and must not be
+  removed. ~204KB across 3 files is the price of the editorial headline face.
+- **What visitors actually see for the wordmark is Libre Baskerville.**
+  `'New Baskerville FS'` and `'New Baskerville'` are not installed on ordinary
+  machines — measured by canvas text width, the full stack renders identically
+  to Libre Baskerville alone and 44px wider than the default serif. The stack
+  is correct as written; just know the webfont is what ships.
+- **`<button>` does not inherit `font-family`** and Chrome's UA default for it
+  is Arial. This silently put the six Feast Combos "See what's inside" toggles
+  in Arial. Fixed with a single `button { font-family: inherit; }` in
+  `index.html`. Re-check this whenever a new `<button>` gains visible text.
+
+### Locked decisions (don't re-litigate)
+
+- Wordmark is Baskerville, headlines are Fraunces. Settled. See above.
+- Hero height is **pure CSS `100lvh`**. Do NOT swap for `dvh`/`svh`, a JS
+  measurement, or a height-based media query — every one of those resizes the
+  hero mid-scroll as the mobile toolbar collapses, which was the original bug.
+- Reveal triggers live in three isolated configs at the top of `app.js`
+  (`REVEAL_TRIGGER`, `BEST_SELLERS_TRIGGER`, `RATING_TRIGGER`). Tune one
+  without touching the others. Read the comments before raising a `threshold`:
+  these sections are taller than the viewport, so a high threshold can be
+  mathematically unreachable and the section then never reveals at all.
+- The preloader block (CSS + controller + markup) is **duplicated in all four
+  pages**. No build step exists. Edit one, edit all four.
+- `repeat(auto-fit, minmax(Npx, 1fr))` is always written as
+  `minmax(min(Npx, 100%), 1fr)` here. The bare form overflowed the gutter on
+  320px phones.
+- Marquee has **four** content copies and translates `-25%`. The count and the
+  percentage are a pair — with two copies it ran out of content past ~2535px
+  and left dead space on ultra-wide.
+
+### Known gotchas / tight widths
+
+- **320px** is the tightest supported width and where things break first.
+- **Phone landscape (e.g. 667x375): the hero is ~566px of content in a 375px
+  viewport, so it scrolls instead of filling.** Nothing clips or overlaps.
+  Left alone deliberately: the fix wants a `max-height` media query, which is
+  exactly the height-dependent pattern that caused the mid-scroll resize bug.
+- Nav hands over to the hamburger at **≤1000px**; at 1001px the six desktop
+  items clear the gutter by only 24px.
+- Story sticky pin is `static` ≤900px, `sticky` ≥1000px.
+
+### Still needed before pitch
+
+Real gallery photos (all 12 tiles are placeholders), real Our Story owners
+photo, a real Android device pass, and a domain decision.
+
+---
+
 *This guide is a living document. When a new build teaches an expensive lesson,
 add it here so it's never re-learned the hard way.*
