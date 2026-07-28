@@ -192,14 +192,11 @@
       .wl-visit { min-height: calc(100vh - var(--nav-height)); min-height: calc(100lvh - var(--nav-height)); box-sizing: border-box; display: flex; flex-direction: column; }
       .wl-visit-inner { flex: 1 1 auto; display: flex; flex-direction: column; width: 100%; }
       .wl-visit-grid { flex: 1 1 auto; align-content: stretch; }
-      /* NOTE: this block used to also carry
-           .wl-visit h2 { font-size: clamp(40px, 5.6vw, 82px); }
-         which never took effect on the live site — no !important, and the
-         heading's inline font-size outranked it, so Visit's heading has
-         always rendered at clamp(34px, 5vw, 64px) on desktop too. Left
-         disabled while extracting the inline styles, because enabling it
-         would be a visual change (it makes the section ~34px taller), not a
-         refactor. Re-add it if the larger desktop heading is wanted. */
+      /* Visit's heading goes larger on desktop. Authored with the rest of
+         this block but never live, because the heading's inline font-size
+         outranked it; extracting that into a class made it apply, and it is
+         now deliberately kept. Adds ~34px to the section's height. */
+      .wl-visit h2 { font-size: clamp(40px, 5.6vw, 82px); }
     }
     @media (max-width: 600px) {
       .wl-herowrap { padding-top: 104px !important; padding-bottom: 82px !important; }
@@ -210,15 +207,11 @@
       /* Stronger bottom-up scrim: mobile crops sit tighter to the food, so
          text needs more protection against all 5 rotating photos. */
       .wl-hero-scrim { background: linear-gradient(to top, rgba(11,42,32,0.96) 0%, rgba(11,42,32,0.78) 26%, rgba(11,42,32,0.35) 55%, rgba(11,42,32,0) 82%) !important; }
-      /* Badge row: drop the divider so it wraps into two clean lines.
-         NOTE: this block also used to carry
-           .wl-hero-badge { font-size: 10px; letter-spacing: 0.2em; gap: 6px 12px; }
-         which never once took effect on the live site — it has no !important
-         and the badge's inline styles outranked it, so the badge has always
-         rendered at 11px/0.26em on phones. Deliberately NOT enabled while
-         extracting the inline styles, because that would have been a silent
-         visual change to mobile rather than a refactor. Re-add it if the
-         smaller badge is actually wanted. */
+      /* Badge row: wrap predictably into two clean lines, drop the divider.
+         This rule was authored long ago but never took effect, because the
+         badge's inline styles outranked it; extracting them into a class made
+         it live, and it is now deliberately kept. Phones get a 10px badge. */
+      .wl-hero-badge { font-size: 10px; letter-spacing: 0.2em; gap: 6px 12px; }
       .wl-badge-sep { display: none !important; }
       /* Slide indicators: smaller and centered on mobile. */
       .wl-bars { left: 0 !important; right: 0 !important; justify-content: center !important; }
