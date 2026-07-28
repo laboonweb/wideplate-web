@@ -118,11 +118,15 @@
        whole nav, so the two roles get two classes. */
     .wl-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: rgba(11,42,32,0.96); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(244,238,225,0.14); }
     .wl-nav-bar { max-width: none; margin: 0 auto; padding: 18px var(--gutter); display: flex; align-items: center; gap: 32px; animation: wpnav linear both; animation-timeline: scroll(); animation-range: 0px 160px; }
-    .wl-nav-mark { text-decoration: none; color: #F4EEE1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .wl-nav-mark b { font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-weight: 700; font-size: 19px; letter-spacing: 0.13em; line-height: 1; white-space: nowrap; }
-    .wl-nav-sub { display: flex; align-items: center; gap: 7px; width: 100%; }
+    /* Optical exception, deliberate — see CLAUDE.md. The logo's true ratio is
+       0.35, which at this size puts RESTAURANT at 6.65px, below comfortable
+       legibility. The nav keeps 0.395 so RESTAURANT stays readable. Structure
+       is still one knob: change the font-size here and the rest follows. */
+    .wl-nav-mark { text-decoration: none; color: #F4EEE1; display: flex; flex-direction: column; align-items: center; font-size: 19px; gap: 0.257em; }
+    .wl-nav-mark b { font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-weight: 700; font-size: 1em; letter-spacing: 0.13em; margin-right: -0.13em; line-height: 1; white-space: nowrap; }
+    .wl-nav-sub { display: flex; align-items: center; gap: 0.141em; width: 100%; }
     .wl-nav-rule { flex: 1; height: 1px; background: rgba(244,238,225,0.6); }
-    .wl-nav-tag { font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-size: 7.5px; font-weight: 400; letter-spacing: 0.34em; line-height: 1; }
+    .wl-nav-tag { font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-size: 0.395em; font-weight: 400; letter-spacing: 0.785em; margin-right: -0.785em; line-height: 1; }
     .wl-nav-links { display: flex; gap: clamp(16px, 2.2vw, 26px); }
     .wl-nav-a { color: rgba(244,238,225,0.8); text-decoration: none; font-size: 11.5px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.2s ease; }
     .wl-nav-actions { margin-left: auto; display: flex; align-items: center; gap: 16px; }

@@ -25,11 +25,12 @@ button { font-family: inherit; }
 /* ---- Subpage header (gallery / faq / privacy-policy) ----
    index.html has its own richer fixed nav and does not use these. */
 .wl-pp-head { background: #0B2A20; border-bottom: 1px solid rgba(244,238,225,0.14); padding: 18px var(--gutter); display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
-.wl-pp-mark { text-decoration: none; color: #F4EEE1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.wl-pp-mark b { font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-weight: 700; font-size: 19px; letter-spacing: 0.13em; line-height: 1; white-space: nowrap; }
-.wl-pp-mark i { display: flex; align-items: center; gap: 7px; width: 100%; font-style: normal; }
+/* Same lockup and the same deliberate 0.395 optical exception as the nav. */
+.wl-pp-mark { text-decoration: none; color: #F4EEE1; display: flex; flex-direction: column; align-items: center; font-size: 19px; gap: 0.257em; }
+.wl-pp-mark b { font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-weight: 700; font-size: 1em; letter-spacing: 0.13em; margin-right: -0.13em; line-height: 1; white-space: nowrap; }
+.wl-pp-mark i { display: flex; align-items: center; gap: 0.141em; width: 100%; font-style: normal; }
 .wl-pp-mark i span:first-child, .wl-pp-mark i span:last-child { flex: 1; height: 1px; background: rgba(244,238,225,0.6); }
-.wl-pp-mark i em { font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-style: normal; font-size: 7.5px; font-weight: 400; letter-spacing: 0.34em; line-height: 1; }
+.wl-pp-mark i em { font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-style: normal; font-size: 0.395em; font-weight: 400; letter-spacing: 0.785em; margin-right: -0.785em; line-height: 1; }
 .wl-pp-back { margin-left: auto; color: rgba(244,238,225,0.8); text-decoration: none; font-size: 11.5px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.2s ease; }
 .wl-pp-back:hover { color: var(--gold); }
 

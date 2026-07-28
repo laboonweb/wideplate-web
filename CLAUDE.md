@@ -345,6 +345,15 @@ glyph; what is matched is the ratio (0.35) and the width proportion (0.635),
 which are font-independent. RESTAURANT's tracking of `0.785em` is the value
 that hits 0.635 with our stack; it is not the logo's own tracking.
 
+**Nav and subpage marks carry a deliberate optical exception: ratio 0.395,
+not 0.35.** At their 19px WIDEPLATE the true ratio puts RESTAURANT at 6.65px,
+below comfortable legibility, so they hold it at 7.5px instead. This was a
+decision, not an oversight — do not "fix" it to 0.35. The alternative was
+growing the nav wordmark to 26px, which measured out at nav bar 72 -> 78px and
+the mark 158 -> 216px, overflowing the nav's gutter at 1001px (9px -> -49px)
+and forcing the hamburger breakpoint up. Preloader and footer use the true
+0.35. Tracking is standardised at 0.785em everywhere including the exception.
+
 **Never size RESTAURANT with its own `clamp()`.** Each lockup carries ONE size
 (the WIDEPLATE size) on the shared parent, and RESTAURANT, the gaps and the
 rule spacing all derive from it in `em`. Parallel clamps with different `vw`
