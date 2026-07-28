@@ -40,7 +40,18 @@
     /* Everything below is gated on .wp-loading, which the inline script adds.
        With JS off, or if that script never runs at all, the loader simply
        never appears — it can never seal a visitor behind a green screen. */
-    html.wp-loading, html.wp-loading body { overflow: hidden; }
+    /* Scroll lock that does NOT remove the scrollbar.
+    The obvious html { overflow: hidden } locks scrolling but also takes the
+    vertical scrollbar away, so the instant the loader exits and the class
+    comes off, the scrollbar returns and claims ~15px: the whole page
+    reflows narrower in one frame, which on the full-bleed hero reads as a
+    jump to the left followed by a shrink. scrollbar-gutter does not help,
+    Chrome reserves nothing while overflow is hidden.
+    Instead overflow-y: scroll keeps the scrollbar track present the whole
+    time, and the lock comes from taking the body out of flow, so the
+    document width never changes. */
+    html.wp-loading { overflow-y: scroll; }
+    html.wp-loading body { position: fixed; inset: 0; width: 100%; overflow: hidden; }
     html.wp-loading #wp-ld { display: flex; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: #0F362C; will-change: clip-path; }
     /* Hold the page's own load-intro (hero headline mask-rise, scrim fade,
        Ken Burns, slide crossfades) at frame 0 while the loader is up, so it
