@@ -364,9 +364,10 @@
       $$('[data-countup]', el).forEach(countUp);
     }
     if (!('IntersectionObserver' in window)) { els.forEach(fire); return; }
-    /* Two observers, because threshold is a per-observer setting: the shared
-       one for every section whose timing is signed off, and a separate one
-       for Best Sellers so tuning it cannot move the others. */
+    /* Three observers, because threshold and rootMargin are per-observer
+       settings: the shared one for every section whose timing is signed off,
+       and one each for Best Sellers and the rating stat so tuning either
+       cannot move the others. */
     function watcher(config) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (en) {
@@ -385,6 +386,50 @@
       io.observe(el);
     });
   });
+
+  /* ---- Hero slides 2-5: off the critical path ----
+     All five slides are stacked at inset:0 in the viewport, so loading="lazy"
+     never deferred anything: the browser fetched roughly 600KB of images that
+     nobody can see for at least six seconds, competing with the fonts and the
+     one image that IS on screen. Their URLs now sit in data-src/data-srcset
+     and are promoted here, in DOM order, once the preloader has lifted, so
+     slide 2 heads the queue with a full rotation interval to arrive.
+     Slide 1 is deliberately untouched and still preloaded: it is the hero.
+     Source before img matters — <picture> must see the mobile srcset before
+     the img gets a src, or the desktop file gets fetched first.
+     No-JS visitors are unaffected: they only ever saw slide 1 anyway, since
+     the rotation itself is JS. */
+  afterLoader(function heroSlides() {
+    $$('#top .wl-slide [data-srcset], #top .wl-slide [data-src]').forEach(function (el) {
+      var set = el.getAttribute('data-srcset');
+      if (set) { el.srcset = set; el.removeAttribute('data-srcset'); }
+      var url = el.getAttribute('data-src');
+      if (url) { el.src = url; el.removeAttribute('data-src'); }
+    });
+  });
+
+  /* ---- Map facade ----
+     The Visit section ships a styled panel instead of the Google embed; the
+     real iframe is built here on the first tap, from the URL held in the
+     button's data-map so the address stays in the HTML with the rest of the
+     content. Until then the page makes no request to Google at all.
+     Focus is moved to the iframe afterwards: the button that had focus is
+     being removed, and without this a keyboard visitor would be dropped back
+     to the top of the document. */
+  (function mapFacade() {
+    var btn = $('.wl-map-load');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var box = btn.parentNode, f = document.createElement('iframe');
+      f.src = btn.getAttribute('data-map');
+      f.title = 'Map to Wideplate Restaurant';
+      f.setAttribute('loading', 'eager'); // the visitor just asked for it
+      f.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; border:0; filter:saturate(0.9);';
+      f.addEventListener('load', function () { f.focus(); }, { once: true });
+      box.appendChild(f);
+      btn.remove();
+    });
+  })();
 
   /* ---- Reviews: 3 groups of 3, hero-carousel pattern retargeted ----
      Same mechanics as hero(): timed auto-advance + 1.2s opacity crossfade

@@ -126,10 +126,10 @@
     @keyframes wpld-wipe { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 100% 0); } }
     #wp-ld.is-out .wp-ld-mark { animation: wpld-lift 0.5s cubic-bezier(0.65, 0, 0.35, 1) both; }
     @keyframes wpld-lift { to { transform: translateY(-14px); opacity: 0; } }
-    .wp-ld-mark { display: flex; flex-direction: column; align-items: center; gap: clamp(10px, 1.6vw, 16px); width: min(76vw, 540px); color: #F4EEE1; will-change: transform, opacity; }
+    .wp-ld-mark { display: flex; flex-direction: column; align-items: center; gap: clamp(8px, 1.3vw, 13px); width: auto; max-width: min(88vw, 620px); color: #F4EEE1; will-change: transform, opacity; }
     /* Negative right margin cancels the trailing letter-space so the word is
        optically centred, not centred-plus-one-gap. */
-    .wp-ld-name { display: flex; justify-content: center; margin-right: -0.13em; font-family: 'New Baskerville FS', 'New Baskerville', 'Libre Baskerville', Baskerville, Georgia, serif; font-weight: 700; font-size: clamp(32px, 8.4vw, 76px); letter-spacing: 0.13em; line-height: 1; }
+    .wp-ld-name { display: flex; justify-content: center; margin-right: -0.13em; font-family: 'New Baskerville FS', 'New Baskerville', 'Libre Baskerville', Baskerville, Georgia, serif; font-weight: 700; font-size: clamp(26px, 6.9vw, 62px); letter-spacing: 0.13em; line-height: 1; }
     .wp-ld-name > span { display: block; overflow: hidden; padding-bottom: 0.1em; }
     .wp-ld-name i { display: block; font-style: normal; animation: wpld-rise 0.62s cubic-bezier(0.16, 1, 0.3, 1) both; }
     @keyframes wpld-rise { from { transform: translateY(108%); } to { transform: none; } }
@@ -142,15 +142,15 @@
     .wp-ld-name > span:nth-child(7) i { animation-delay: 0.302s; }
     .wp-ld-name > span:nth-child(8) i { animation-delay: 0.344s; }
     .wp-ld-name > span:nth-child(9) i { animation-delay: 0.386s; }
-    .wp-ld-sub { display: flex; align-items: center; gap: 12px; width: 100%; }
+    .wp-ld-sub { display: flex; align-items: center; gap: 10px; width: 100%; }
     .wp-ld-rule { flex: 1; height: 1px; background: rgba(244, 238, 225, 0.6); transform-origin: center; animation: wpld-draw 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both; }
     @keyframes wpld-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
     /* letter-spacing is a layout property, so this one reflows a 3-element
        flex row for 0.55s. Fine here and nowhere else: it runs once, on a
        static screen, with no scroll loop attached. */
-    .wp-ld-tag { font-family: 'New Baskerville FS', 'New Baskerville', 'Libre Baskerville', Baskerville, Georgia, serif; font-size: clamp(9px, 1.5vw, 13px); font-weight: 400; letter-spacing: 0.34em; line-height: 1; white-space: nowrap; animation: wpld-tag 0.55s ease 0.56s both; }
+    .wp-ld-tag { font-family: 'New Baskerville FS', 'New Baskerville', 'Libre Baskerville', Baskerville, Georgia, serif; font-size: clamp(7.5px, 1.2vw, 10.5px); font-weight: 400; letter-spacing: 0.34em; line-height: 1; white-space: nowrap; animation: wpld-tag 0.55s ease 0.56s both; }
     @keyframes wpld-tag { from { opacity: 0; letter-spacing: 0.62em; } to { opacity: 1; letter-spacing: 0.34em; } }
-    .wp-ld-bar { display: block; width: 100%; max-width: 260px; height: 2px; background: rgba(244, 238, 225, 0.16); overflow: hidden; }
+    .wp-ld-bar { display: block; width: 42%; height: 2px; background: rgba(244, 238, 225, 0.16); overflow: hidden; }
     .wp-ld-bar i { display: block; width: 100%; height: 100%; background: #D9A441; transform-origin: left; animation: wpld-fill 1.15s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both; }
     @keyframes wpld-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
     @media (prefers-reduced-motion: reduce) {
