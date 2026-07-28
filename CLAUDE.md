@@ -324,6 +324,33 @@ Three roles, three faces. They are **not** meant to match:
   in Arial. Fixed with a single `button { font-family: inherit; }` in
   `index.html`. Re-check this whenever a new `<button>` gains visible text.
 
+### Wordmark lockup — measured off the official logo 2026-07-29
+
+Reference: `uploads/wideplatewordmarkfb.png` (the Facebook profile logo).
+Measured by pixel analysis, not by eye:
+
+| Property | Reference |
+|---|---|
+| WIDEPLATE cap height | 60px (x 109-639, width 531) |
+| RESTAURANT cap height | 21px (x 201-537, width 337) |
+| **Font-size ratio** | **0.35** (cap heights, and cap-height-per-em is identical for both weights) |
+| RESTAURANT ink width / WIDEPLATE ink width | 0.635 |
+| Gap, WIDEPLATE baseline to RESTAURANT top | 20px = 0.257em of the WIDEPLATE size |
+| Hairline rules | start and end flush with WIDEPLATE's own width |
+
+**The logo's face is narrower than ours.** Solving for the tracking that would
+reproduce the reference's WIDEPLATE width returned 0 — Libre Baskerville is
+already wider at zero tracking. So the lockup cannot be matched glyph for
+glyph; what is matched is the ratio (0.35) and the width proportion (0.635),
+which are font-independent. RESTAURANT's tracking of `0.785em` is the value
+that hits 0.635 with our stack; it is not the logo's own tracking.
+
+**Never size RESTAURANT with its own `clamp()`.** Each lockup carries ONE size
+(the WIDEPLATE size) on the shared parent, and RESTAURANT, the gaps and the
+rule spacing all derive from it in `em`. Parallel clamps with different `vw`
+coefficients is what made the ratio drift from 0.169 to 0.395 across the site
+depending on viewport width.
+
 ### Locked decisions (don't re-litigate)
 
 - Wordmark is Baskerville, headlines are Fraunces. Settled. See above.

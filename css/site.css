@@ -37,11 +37,16 @@ button { font-family: inherit; }
 .wl-foot { position: relative; background: #081F17; padding: clamp(56px, 8vw, 90px) var(--gutter) 40px; }
 .wl-foot-inner { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: clamp(36px, 5vw, 56px); position: relative; z-index: 1; }
 .wl-foot-top { display: flex; justify-content: center; border-bottom: 1px solid rgba(244,238,225,0.14); padding-bottom: clamp(28px, 4vw, 44px); }
-.wl-foot-brand { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 640px; width: 100%; }
-.wl-foot-mark { margin: 0; font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-weight: 700; font-size: clamp(32px, 6vw, 68px); letter-spacing: 0.12em; line-height: 1; color: #F4EEE1; text-align: center; }
-.wl-foot-sub { display: flex; align-items: center; gap: 12px; width: 100%; max-width: 480px; }
+/* One size knob for the whole footer lockup: the WIDEPLATE size lives here
+   and RESTAURANT, the gaps and the rule spacing all derive from it in em, so
+   the proportions measured off the official logo hold at every width.
+   width: auto so the hairline rules end flush with the wordmark, as they do
+   in the logo, instead of being capped at their own max-width. */
+.wl-foot-brand { display: flex; flex-direction: column; align-items: center; font-size: clamp(32px, 6vw, 68px); gap: 0.257em; max-width: min(88vw, 640px); width: auto; }
+.wl-foot-mark { margin: 0 -0.13em 0 0; font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-weight: 700; font-size: 1em; letter-spacing: 0.13em; line-height: 1; color: #F4EEE1; text-align: center; }
+.wl-foot-sub { display: flex; align-items: center; gap: 0.141em; width: 100%; }
 .wl-foot-rule { flex: 1; height: 1px; background: rgba(244,238,225,0.6); }
-.wl-foot-tag { font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-size: clamp(11px, 1.4vw, 14px); font-weight: 400; letter-spacing: 0.42em; line-height: 1; color: #F4EEE1; }
+.wl-foot-tag { font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-size: 0.35em; font-weight: 400; letter-spacing: 0.785em; margin-right: -0.785em; line-height: 1; color: #F4EEE1; }
 .wl-foot-tagline { margin: 0; font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-style: italic; font-size: clamp(14px, 1.8vw, 17px); color: #F4EEE1; text-align: center; }
 .wl-foot-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 36px; }
 .wl-foot-col { display: flex; flex-direction: column; gap: 10px; }
