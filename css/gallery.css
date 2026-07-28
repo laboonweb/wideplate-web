@@ -1,0 +1,57 @@
+/* ===== Gallery — page-specific =====
+   Same palette and type as the marketing page; base, header and footer come
+   from site.css. */
+
+:root { --g-gap: clamp(10px, 1.4vw, 18px); }
+
+main { max-width: 1280px; margin: 0 auto; padding: clamp(48px, 7vw, 84px) var(--gutter) clamp(64px, 9vw, 110px); }
+.g-kicker { display: flex; align-items: center; gap: 20px; margin: 0 0 clamp(20px, 3vw, 30px); }
+.g-kicker span:first-child { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: #14241D; white-space: nowrap; }
+.g-kicker span:last-child { flex: 1; height: 1px; background: rgba(20,36,29,0.18); }
+main h1 { margin: 0 0 14px; font-family: 'Fraunces', Georgia, serif; font-weight: 520; font-size: clamp(36px, 6vw, 64px); line-height: 1.02; letter-spacing: -0.015em; }
+main h1 em { font-style: italic; }
+.g-lede { margin: 0 0 clamp(36px, 5vw, 56px); max-width: 56ch; font-size: 16.5px; line-height: 1.75; color: #3C4A43; }
+
+/* ---- Masonry: CSS multi-column ----
+   Chosen over grid + JS row-span measuring because it needs no JS at all,
+   and over `grid-template-rows: masonry` because Safari support is not
+   there yet. Reading order runs down each column, which is fine for a
+   photo wall with no narrative order. */
+.g-grid { column-count: 2; column-gap: var(--g-gap); }
+@media (min-width: 700px)  { .g-grid { column-count: 3; } }
+@media (min-width: 1100px) { .g-grid { column-count: 4; } }
+
+.g-item { position: relative; break-inside: avoid; margin: 0 0 var(--g-gap); background: #123B2F; overflow: hidden; }
+/* The <button> wrapper is what makes a tile keyboard-openable: focus, Enter
+   and Space all come free from the element, so the lightbox needs no key
+   handling of its own. */
+.g-item button { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.g-item img { width: 100%; height: auto; display: block; opacity: 0; transition: opacity 0.5s ease; filter: saturate(1.06) sepia(0.05) contrast(1.03); }
+.g-item.is-on img { opacity: 1; }
+/* Shimmer sweep. transform-only so it stays on the compositor; it sits
+   under the image and is switched off the moment the photo lands. */
+.g-item::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(100deg, rgba(244,238,225,0) 30%, rgba(244,238,225,0.11) 50%, rgba(244,238,225,0) 70%); transform: translateX(-100%); will-change: transform; animation: gshim 1.9s cubic-bezier(0.4,0,0.2,1) infinite; }
+.g-item.is-on::after { animation: none; opacity: 0; }
+@keyframes gshim { to { transform: translateX(100%); } }
+/* Placeholder tiles: skeleton stays up, labelled with the shot that belongs
+   there. Delete .is-ph and drop in an <img> to go live. */
+.g-item.is-ph { display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; background-image: repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); }
+.g-item.is-ph span { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 11px; line-height: 1.55; color: rgba(244,238,225,0.68); text-align: center; }
+
+/* ---- Lightbox: native <dialog> ----
+   Esc, focus handling and the backdrop come free from the element. */
+.g-lb { border: 0; margin: 0; padding: 0; background: none; max-width: 100vw; max-height: 100vh; width: 100%; height: 100%; overflow: hidden; }
+.g-lb::backdrop { background: rgba(8,31,23,0.94); }
+.g-lb-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: clamp(16px, 4vw, 56px); box-sizing: border-box; }
+.g-lb img { max-width: 100%; max-height: 100%; width: auto; height: auto; display: block; box-shadow: 0 30px 80px rgba(4,18,13,0.5); }
+.g-lb-x { position: fixed; top: 14px; right: 14px; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; background: rgba(11,42,32,0.85); border: 1px solid rgba(244,238,225,0.28); border-radius: 999px; color: #F4EEE1; cursor: pointer; transition: background 0.25s ease, color 0.25s ease; }
+.g-lb-x:hover { background: var(--gold); color: #1B1305; }
+.g-lb :focus-visible, .g-item button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.g-lb[open] { animation: gfade 0.28s ease both; }
+@keyframes gfade { from { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Keep the skeleton block, drop the sweep. */
+  .g-item::after { animation: none; background: rgba(244,238,225,0.045); transform: none; }
+  .g-lb[open] { animation: none; }
+}
