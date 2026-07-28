@@ -96,9 +96,124 @@
       .g-lb[open] { animation: none; }
     }
 </style>
+<style>
+    /* ===== Branded preloader =====
+       DUPLICATED IN FOUR FILES ON PURPOSE: index.html, gallery.html, faq.html
+       and privacy-policy.html each carry an identical copy of this <style>,
+       the <script> under it, and the #wp-ld markup at the top of the page.
+       There is no build step and no shared stylesheet on this site, so an
+       edit to one is an edit to all four.
+       Inline in <head> deliberately: served from an external sheet the page
+       would paint before the loader covered it, which is the exact flash the
+       loader exists to prevent.
+       The wordmark is the nav wordmark, scaled up: same type stack, same
+       0.13em tracking, same hairline-flanked RESTAURANT line. Keep it that
+       way rather than restyling it here. */
+    #wp-ld { display: none; }
+    /* Everything below is gated on .wp-loading, which the inline script adds.
+       With JS off, or if that script never runs at all, the loader simply
+       never appears — it can never seal a visitor behind a green screen. */
+    html.wp-loading, html.wp-loading body { overflow: hidden; }
+    html.wp-loading #wp-ld { display: flex; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: #0F362C; will-change: clip-path; }
+    /* Hold the page's own load-intro (hero headline mask-rise, scrim fade,
+       Ken Burns, slide crossfades) at frame 0 while the loader is up, so it
+       plays for someone who is actually looking at it. A paused animation
+       does not advance, so nothing is skipped: dropping .wp-loading resumes
+       every one of them from their true start. Inert on pages with no #top. */
+    html.wp-loading #top, html.wp-loading #top * { animation-play-state: paused !important; }
+    /* Exit: the loader lifts away, its visible band collapsing upward. */
+    #wp-ld.is-out { animation: wpld-wipe 0.5s cubic-bezier(0.65, 0, 0.35, 1) both; }
+    @keyframes wpld-wipe { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 100% 0); } }
+    #wp-ld.is-out .wp-ld-mark { animation: wpld-lift 0.5s cubic-bezier(0.65, 0, 0.35, 1) both; }
+    @keyframes wpld-lift { to { transform: translateY(-14px); opacity: 0; } }
+    .wp-ld-mark { display: flex; flex-direction: column; align-items: center; gap: clamp(10px, 1.6vw, 16px); width: min(76vw, 540px); color: #F4EEE1; will-change: transform, opacity; }
+    /* Negative right margin cancels the trailing letter-space so the word is
+       optically centred, not centred-plus-one-gap. */
+    .wp-ld-name { display: flex; justify-content: center; margin-right: -0.13em; font-family: 'New Baskerville FS', 'New Baskerville', 'Libre Baskerville', Baskerville, Georgia, serif; font-weight: 700; font-size: clamp(32px, 8.4vw, 76px); letter-spacing: 0.13em; line-height: 1; }
+    .wp-ld-name > span { display: block; overflow: hidden; padding-bottom: 0.1em; }
+    .wp-ld-name i { display: block; font-style: normal; animation: wpld-rise 0.62s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    @keyframes wpld-rise { from { transform: translateY(108%); } to { transform: none; } }
+    .wp-ld-name > span:nth-child(1) i { animation-delay: 0.05s; }
+    .wp-ld-name > span:nth-child(2) i { animation-delay: 0.092s; }
+    .wp-ld-name > span:nth-child(3) i { animation-delay: 0.134s; }
+    .wp-ld-name > span:nth-child(4) i { animation-delay: 0.176s; }
+    .wp-ld-name > span:nth-child(5) i { animation-delay: 0.218s; }
+    .wp-ld-name > span:nth-child(6) i { animation-delay: 0.26s; }
+    .wp-ld-name > span:nth-child(7) i { animation-delay: 0.302s; }
+    .wp-ld-name > span:nth-child(8) i { animation-delay: 0.344s; }
+    .wp-ld-name > span:nth-child(9) i { animation-delay: 0.386s; }
+    .wp-ld-sub { display: flex; align-items: center; gap: 12px; width: 100%; }
+    .wp-ld-rule { flex: 1; height: 1px; background: rgba(244, 238, 225, 0.6); transform-origin: center; animation: wpld-draw 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both; }
+    @keyframes wpld-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    /* letter-spacing is a layout property, so this one reflows a 3-element
+       flex row for 0.55s. Fine here and nowhere else: it runs once, on a
+       static screen, with no scroll loop attached. */
+    .wp-ld-tag { font-family: 'New Baskerville FS', 'New Baskerville', 'Libre Baskerville', Baskerville, Georgia, serif; font-size: clamp(9px, 1.5vw, 13px); font-weight: 400; letter-spacing: 0.34em; line-height: 1; white-space: nowrap; animation: wpld-tag 0.55s ease 0.56s both; }
+    @keyframes wpld-tag { from { opacity: 0; letter-spacing: 0.62em; } to { opacity: 1; letter-spacing: 0.34em; } }
+    .wp-ld-bar { display: block; width: 100%; max-width: 260px; height: 2px; background: rgba(244, 238, 225, 0.16); overflow: hidden; }
+    .wp-ld-bar i { display: block; width: 100%; height: 100%; background: #D9A441; transform-origin: left; animation: wpld-fill 1.15s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both; }
+    @keyframes wpld-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    @media (prefers-reduced-motion: reduce) {
+      /* Static wordmark on the green, a brief hold, then gone. No letter
+         rise, no drawn rules, no progress fill, no wipe. Every rule above is
+         authored so its resting state IS the finished state, so switching the
+         animations off leaves a correct, complete wordmark. */
+      .wp-ld-name i, .wp-ld-rule, .wp-ld-tag { animation: none !important; }
+      .wp-ld-bar { display: none; }
+      #wp-ld.is-out, #wp-ld.is-out .wp-ld-mark { animation: none !important; }
+      #wp-ld.is-out { display: none !important; }
+    }
+</style>
+<script>
+  /* Preloader controller — duplicated in all four pages with the CSS above.
+     Timing contract: the wordmark finishes animating at ~1.35s, so MIN holds
+     the loader until then and it is never cut off mid-flourish. MAX is the
+     hard cap AND the failsafe in one: it is an unconditional timer, so a
+     DOMContentLoaded that never arrives (stalled asset, hung parse) still
+     dismisses the loader. Total including the 0.5s exit wipe: 1.9s normally,
+     2.2s worst case. Deliberately under the 3s failsafe ceiling — this is a
+     marketing site and a visitor came here for directions and a menu. */
+  (function () {
+    var d = document, root = d.documentElement;
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var MIN = still ? 450 : 1400, MAX = still ? 700 : 1700, WIPE = still ? 0 : 500;
+    var t0 = Date.now(), done = false;
+    root.classList.add('wp-loading');
+    function exit() {
+      if (done) return;
+      done = true;
+      var el = d.getElementById('wp-ld');
+      if (el) el.classList.add('is-out');
+      setTimeout(function () {
+        /* Removed from the DOM, not just hidden: it is decorative and must
+           not be reachable by keyboard or a screen reader afterwards. */
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+        root.classList.remove('wp-loading');
+        /* app.js holds the scroll reveals until this fires, and dropping
+           .wp-loading above un-pauses the hero's intro. Both resume exactly
+           as they were, with no change to their own timing or triggers. */
+        window.dispatchEvent(new Event('wp:ready'));
+      }, WIPE);
+    }
+    function schedule() { setTimeout(exit, Math.max(0, MIN - (Date.now() - t0))); }
+    if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', schedule); else schedule();
+    setTimeout(exit, MAX);
+  })();
+</script>
 <script src="./app.js" defer></script>
 </head>
 <body>
+  <!-- Branded preloader. Decorative, so aria-hidden; it also deletes itself
+       from the DOM once it has lifted, so it can never take focus. Its CSS and
+       its controller are inlined at the end of the head, along with the note that
+       this block is duplicated across all four pages. -->
+  <div id="wp-ld" aria-hidden="true">
+    <div class="wp-ld-mark">
+      <span class="wp-ld-name"><span><i>W</i></span><span><i>I</i></span><span><i>D</i></span><span><i>E</i></span><span><i>P</i></span><span><i>L</i></span><span><i>A</i></span><span><i>T</i></span><span><i>E</i></span></span>
+      <span class="wp-ld-sub"><span class="wp-ld-rule"></span><span class="wp-ld-tag">RESTAURANT</span><span class="wp-ld-rule"></span></span>
+      <span class="wp-ld-bar"><i></i></span>
+    </div>
+  </div>
   <header class="wl-pp-head">
     <a class="wl-pp-mark" href="index.html" aria-label="Wideplate Restaurant home">
       <b>WIDEPLATE</b>
@@ -169,7 +284,7 @@
         </div>
         <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">
           <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(244,238,225,0.45);">Hours</p>
-          <p style="margin:0; font-size:14px; font-weight:600; color:rgba(244,238,225,0.8);">Open until 9PM</p>
+          <p style="margin:0; font-size:14px; font-weight:600; color:rgba(244,238,225,0.8);">Open 11AM until 9PM</p>
           <p style="margin:0; font-size:13.5px; color:rgba(244,238,225,0.6);">Dine-in · Curbside Pickup · Delivery</p>
         </div>
         <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">

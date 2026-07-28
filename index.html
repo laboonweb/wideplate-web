@@ -226,9 +226,124 @@
     .wl-mob[aria-expanded="true"] span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .wl-mob[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 </style>
+<style>
+    /* ===== Branded preloader =====
+       DUPLICATED IN FOUR FILES ON PURPOSE: index.html, gallery.html, faq.html
+       and privacy-policy.html each carry an identical copy of this <style>,
+       the <script> under it, and the #wp-ld markup at the top of the page.
+       There is no build step and no shared stylesheet on this site, so an
+       edit to one is an edit to all four.
+       Inline in <head> deliberately: served from an external sheet the page
+       would paint before the loader covered it, which is the exact flash the
+       loader exists to prevent.
+       The wordmark is the nav wordmark, scaled up: same type stack, same
+       0.13em tracking, same hairline-flanked RESTAURANT line. Keep it that
+       way rather than restyling it here. */
+    #wp-ld { display: none; }
+    /* Everything below is gated on .wp-loading, which the inline script adds.
+       With JS off, or if that script never runs at all, the loader simply
+       never appears — it can never seal a visitor behind a green screen. */
+    html.wp-loading, html.wp-loading body { overflow: hidden; }
+    html.wp-loading #wp-ld { display: flex; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; background: #0F362C; will-change: clip-path; }
+    /* Hold the page's own load-intro (hero headline mask-rise, scrim fade,
+       Ken Burns, slide crossfades) at frame 0 while the loader is up, so it
+       plays for someone who is actually looking at it. A paused animation
+       does not advance, so nothing is skipped: dropping .wp-loading resumes
+       every one of them from their true start. Inert on pages with no #top. */
+    html.wp-loading #top, html.wp-loading #top * { animation-play-state: paused !important; }
+    /* Exit: the loader lifts away, its visible band collapsing upward. */
+    #wp-ld.is-out { animation: wpld-wipe 0.5s cubic-bezier(0.65, 0, 0.35, 1) both; }
+    @keyframes wpld-wipe { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 100% 0); } }
+    #wp-ld.is-out .wp-ld-mark { animation: wpld-lift 0.5s cubic-bezier(0.65, 0, 0.35, 1) both; }
+    @keyframes wpld-lift { to { transform: translateY(-14px); opacity: 0; } }
+    .wp-ld-mark { display: flex; flex-direction: column; align-items: center; gap: clamp(10px, 1.6vw, 16px); width: min(76vw, 540px); color: #F4EEE1; will-change: transform, opacity; }
+    /* Negative right margin cancels the trailing letter-space so the word is
+       optically centred, not centred-plus-one-gap. */
+    .wp-ld-name { display: flex; justify-content: center; margin-right: -0.13em; font-family: 'New Baskerville FS', 'New Baskerville', 'Libre Baskerville', Baskerville, Georgia, serif; font-weight: 700; font-size: clamp(32px, 8.4vw, 76px); letter-spacing: 0.13em; line-height: 1; }
+    .wp-ld-name > span { display: block; overflow: hidden; padding-bottom: 0.1em; }
+    .wp-ld-name i { display: block; font-style: normal; animation: wpld-rise 0.62s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    @keyframes wpld-rise { from { transform: translateY(108%); } to { transform: none; } }
+    .wp-ld-name > span:nth-child(1) i { animation-delay: 0.05s; }
+    .wp-ld-name > span:nth-child(2) i { animation-delay: 0.092s; }
+    .wp-ld-name > span:nth-child(3) i { animation-delay: 0.134s; }
+    .wp-ld-name > span:nth-child(4) i { animation-delay: 0.176s; }
+    .wp-ld-name > span:nth-child(5) i { animation-delay: 0.218s; }
+    .wp-ld-name > span:nth-child(6) i { animation-delay: 0.26s; }
+    .wp-ld-name > span:nth-child(7) i { animation-delay: 0.302s; }
+    .wp-ld-name > span:nth-child(8) i { animation-delay: 0.344s; }
+    .wp-ld-name > span:nth-child(9) i { animation-delay: 0.386s; }
+    .wp-ld-sub { display: flex; align-items: center; gap: 12px; width: 100%; }
+    .wp-ld-rule { flex: 1; height: 1px; background: rgba(244, 238, 225, 0.6); transform-origin: center; animation: wpld-draw 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both; }
+    @keyframes wpld-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    /* letter-spacing is a layout property, so this one reflows a 3-element
+       flex row for 0.55s. Fine here and nowhere else: it runs once, on a
+       static screen, with no scroll loop attached. */
+    .wp-ld-tag { font-family: 'New Baskerville FS', 'New Baskerville', 'Libre Baskerville', Baskerville, Georgia, serif; font-size: clamp(9px, 1.5vw, 13px); font-weight: 400; letter-spacing: 0.34em; line-height: 1; white-space: nowrap; animation: wpld-tag 0.55s ease 0.56s both; }
+    @keyframes wpld-tag { from { opacity: 0; letter-spacing: 0.62em; } to { opacity: 1; letter-spacing: 0.34em; } }
+    .wp-ld-bar { display: block; width: 100%; max-width: 260px; height: 2px; background: rgba(244, 238, 225, 0.16); overflow: hidden; }
+    .wp-ld-bar i { display: block; width: 100%; height: 100%; background: #D9A441; transform-origin: left; animation: wpld-fill 1.15s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both; }
+    @keyframes wpld-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    @media (prefers-reduced-motion: reduce) {
+      /* Static wordmark on the green, a brief hold, then gone. No letter
+         rise, no drawn rules, no progress fill, no wipe. Every rule above is
+         authored so its resting state IS the finished state, so switching the
+         animations off leaves a correct, complete wordmark. */
+      .wp-ld-name i, .wp-ld-rule, .wp-ld-tag { animation: none !important; }
+      .wp-ld-bar { display: none; }
+      #wp-ld.is-out, #wp-ld.is-out .wp-ld-mark { animation: none !important; }
+      #wp-ld.is-out { display: none !important; }
+    }
+</style>
+<script>
+  /* Preloader controller — duplicated in all four pages with the CSS above.
+     Timing contract: the wordmark finishes animating at ~1.35s, so MIN holds
+     the loader until then and it is never cut off mid-flourish. MAX is the
+     hard cap AND the failsafe in one: it is an unconditional timer, so a
+     DOMContentLoaded that never arrives (stalled asset, hung parse) still
+     dismisses the loader. Total including the 0.5s exit wipe: 1.9s normally,
+     2.2s worst case. Deliberately under the 3s failsafe ceiling — this is a
+     marketing site and a visitor came here for directions and a menu. */
+  (function () {
+    var d = document, root = d.documentElement;
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var MIN = still ? 450 : 1400, MAX = still ? 700 : 1700, WIPE = still ? 0 : 500;
+    var t0 = Date.now(), done = false;
+    root.classList.add('wp-loading');
+    function exit() {
+      if (done) return;
+      done = true;
+      var el = d.getElementById('wp-ld');
+      if (el) el.classList.add('is-out');
+      setTimeout(function () {
+        /* Removed from the DOM, not just hidden: it is decorative and must
+           not be reachable by keyboard or a screen reader afterwards. */
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+        root.classList.remove('wp-loading');
+        /* app.js holds the scroll reveals until this fires, and dropping
+           .wp-loading above un-pauses the hero's intro. Both resume exactly
+           as they were, with no change to their own timing or triggers. */
+        window.dispatchEvent(new Event('wp:ready'));
+      }, WIPE);
+    }
+    function schedule() { setTimeout(exit, Math.max(0, MIN - (Date.now() - t0))); }
+    if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', schedule); else schedule();
+    setTimeout(exit, MAX);
+  })();
+</script>
 <script src="./app.js" defer></script>
 </head>
 <body>
+  <!-- Branded preloader. Decorative, so aria-hidden; it also deletes itself
+       from the DOM once it has lifted, so it can never take focus. Its CSS and
+       its controller are inlined at the end of the head, along with the note that
+       this block is duplicated across all four pages. -->
+  <div id="wp-ld" aria-hidden="true">
+    <div class="wp-ld-mark">
+      <span class="wp-ld-name"><span><i>W</i></span><span><i>I</i></span><span><i>D</i></span><span><i>E</i></span><span><i>P</i></span><span><i>L</i></span><span><i>A</i></span><span><i>T</i></span><span><i>E</i></span></span>
+      <span class="wp-ld-sub"><span class="wp-ld-rule"></span><span class="wp-ld-tag">RESTAURANT</span><span class="wp-ld-rule"></span></span>
+      <span class="wp-ld-bar"><i></i></span>
+    </div>
+  </div>
 <div style="--gutter:clamp(24px, 4vw, 96px); color:#14241D; font-family:'General Sans','Helvetica Neue',sans-serif; overflow-x:clip; background:#F4EEE1;">
 
   <!-- Sticky nav -->
@@ -308,7 +423,7 @@
       </div>
     <div class="wl-hero-scrim" aria-hidden="true" style="position:absolute; inset:0; background:linear-gradient(to top right, rgba(11,42,32,0.92) 0%, rgba(11,42,32,0.55) 38%, rgba(11,42,32,0) 74%), radial-gradient(120% 90% at 50% 45%, rgba(0,0,0,0) 55%, rgba(8,31,23,0.35) 100%); animation:wpfadein 1.1s ease both;"></div>
     <div class="wl-herowrap" style="position:relative; width:100%; max-width:none; margin:0 auto; padding:150px var(--gutter) 72px; display:flex; flex-direction:column; align-items:flex-start; gap:26px;">
-      <p class="wl-hero-badge" style="margin:0; display:flex; flex-wrap:wrap; align-items:center; gap:12px; color:#F4EEE1; font-size:11px; font-weight:600; letter-spacing:0.26em; text-transform:uppercase; animation:wpfadein 0.9s ease 0.5s both;"><span style="display:inline-flex; align-items:center; gap:8px; white-space:nowrap;"><span style="color:var(--gold); display:inline-flex; align-items:center; gap:5px;">4.8 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:0.95em; height:0.95em;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>198 Google Reviews</span><span class="wl-badge-sep" aria-hidden="true" style="width:36px; height:1px; background:rgba(244,238,225,0.4);"></span><span style="white-space:nowrap;">Open until 9PM</span></p>
+      <p class="wl-hero-badge" style="margin:0; display:flex; flex-wrap:wrap; align-items:center; gap:12px; color:#F4EEE1; font-size:11px; font-weight:600; letter-spacing:0.26em; text-transform:uppercase; animation:wpfadein 0.9s ease 0.5s both;"><span style="display:inline-flex; align-items:center; gap:8px; white-space:nowrap;"><span style="color:var(--gold); display:inline-flex; align-items:center; gap:5px;">4.8 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:0.95em; height:0.95em;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>198 Google Reviews</span><span class="wl-badge-sep" aria-hidden="true" style="width:36px; height:1px; background:rgba(244,238,225,0.4);"></span><span style="white-space:nowrap;">Open 11AM until 9PM</span></p>
       <h1 class="wl-hero-h1" style="margin:0; font-family:'Fraunces',Georgia,serif; font-weight:560; font-size:clamp(48px, 9.6vw, 136px); line-height:0.95; color:#F4EEE1; letter-spacing:-0.015em; max-width:11ch;">
         <span style="display:block; overflow:hidden; padding-bottom:0.06em;"><span style="display:block; animation:wpintro 0.9s cubic-bezier(0.16,1,0.3,1) 0.08s both;">Where Every</span></span>
         <span style="display:block; overflow:hidden; padding-bottom:0.06em;"><span style="display:block; animation:wpintro 0.9s cubic-bezier(0.16,1,0.3,1) 0.2s both;">Plate Is</span></span>
@@ -1492,7 +1607,7 @@
         <div style="display:flex; flex-direction:column; gap:22px;">
           <h2 style="margin:0; font-family:'Fraunces',Georgia,serif; font-weight:520; font-size:clamp(34px, 5vw, 64px); line-height:1; letter-spacing:-0.015em; color:#F4EEE1;">Find us in <em style="font-style:italic;">San Antonio.</em></h2>
           <p style="margin:0; font-size:16px; line-height:1.7; color:rgba(244,238,225,0.85);">Ground Floor, Balay Grace, R. Concepcion St,<br>Barangay Santiago, San Antonio, Zambales</p>
-          <p style="margin:0; display:inline-flex; align-self:flex-start; align-items:center; gap:10px; border:1px solid rgba(244,238,225,0.25); border-radius:999px; padding:9px 18px; font-size:11.5px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:#F4EEE1;"><span aria-hidden="true" style="width:7px; height:7px; border-radius:50%; background:var(--gold);"></span>Open until 9PM</p>
+          <p style="margin:0; display:inline-flex; align-self:flex-start; align-items:center; gap:10px; border:1px solid rgba(244,238,225,0.25); border-radius:999px; padding:9px 18px; font-size:11.5px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:#F4EEE1;"><span aria-hidden="true" style="width:7px; height:7px; border-radius:50%; background:var(--gold);"></span>Open 11AM until 9PM</p>
           <div style="display:flex; flex-direction:column; gap:4px;">
             <a href="tel:+639669659995" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:24px; font-weight:560; padding:4px 0; font-variant-numeric:tabular-nums;">0966 965 9995</a>
             <a href="tel:+639669659998" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:24px; font-weight:560; padding:4px 0; font-variant-numeric:tabular-nums;">0966 965 9998</a>
@@ -1535,7 +1650,7 @@
         </div>
         <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">
           <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(244,238,225,0.45);">Hours</p>
-          <p style="margin:0; font-size:14px; font-weight:600; color:rgba(244,238,225,0.8);">Open until 9PM</p>
+          <p style="margin:0; font-size:14px; font-weight:600; color:rgba(244,238,225,0.8);">Open 11AM until 9PM</p>
           <p style="margin:0; font-size:13.5px; color:rgba(244,238,225,0.6);">Dine-in · Curbside Pickup · Delivery</p>
         </div>
         <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">

@@ -9,6 +9,24 @@
      section renders fully visible with no reveal styling. */
   document.documentElement.classList.add('js');
 
+  /* ---- Run something once the preloader has lifted ----
+     The preloader is inlined in every page's <head>; it stamps .wp-loading on
+     <html> immediately and dispatches wp:ready when its exit wipe finishes.
+     This script is deferred, so it normally runs while the loader is still up
+     and simply waits.
+
+     No .wp-loading means either the loader already finished or the page has no
+     loader: run now. The 4s fallback covers the one bad case left, a loader
+     whose script threw before it could dispatch — without it every reveal
+     would stay stuck in its hidden pre-reveal state for good. */
+  function afterLoader(fn) {
+    if (!document.documentElement.classList.contains('wp-loading')) { fn(); return; }
+    var ran = false;
+    function go() { if (ran) return; ran = true; fn(); }
+    window.addEventListener('wp:ready', go);
+    setTimeout(go, 4000);
+  }
+
   /* ---- Shared trigger point for every one-time reveal ----
      ONE config for all [data-reveal] sections (Promise, Menu, Best Sellers,
      Combos, Story, Visit, the rating stat). Tune reveal timing here, not
@@ -45,6 +63,28 @@
      fires and the cards stay invisible forever. 0.3 keeps headroom on both.
      Raising rootMargin's inset lowers this ceiling further. */
   var BEST_SELLERS_TRIGGER = { threshold: 0.3, rootMargin: '0px 0px -32% 0px' };
+
+  /* The social-proof rating stat (.wl-rate) ONLY, isolated for the same reason
+     Best Sellers is: Promise, Best Sellers, Combos and Story are signed off and
+     must not move when this is tuned.
+
+     This one had the OPPOSITE problem to Best Sellers, so do not copy values
+     between the two. On the shared config it fired late: the shared -32% waits
+     until the element's top edge has climbed to 68% of viewport height, and
+     unlike every other reveal, .wl-rate has no heading above its animated
+     content — the giant 4.8 is the first thing in the box. So the visitor
+     watched a static 0 travel a third of the screen before the star-draw and
+     the count-up would start.
+
+     The threshold is already 0 and cannot go lower, so the fix is a POSITIVE
+     bottom margin: +20% grows the trigger box 20% of viewport height BELOW the
+     fold, firing the pair while the stat is still off-screen. It then arrives
+     already in motion, which is the point, and the 1.8s star-draw and 1.56s
+     count-up still start on the same callback, so they stay paired.
+
+     Tuning: raise toward 30% to start it earlier, drop toward 10% to start it
+     later. Below 0% it is late again. */
+  var RATING_TRIGGER = { threshold: 0, rootMargin: '0px 0px 20% 0px' };
 
   /* ---- Live --nav-height for anchor scroll offsets ----
      The fixed nav condenses (padding 18->8, i.e. -20px total) after scrolling
@@ -295,8 +335,13 @@
      immediately, so reveals play exactly once per page load and never replay
      on scroll-up (hard refresh resets). All visuals live in CSS; this only
      flips the class. Count-up numbers ([data-countup]) start when their
-     section fires. */
-  (function reveals() {
+     section fires.
+
+     Held until the preloader has finished lifting (see afterLoader): a section
+     sitting behind the green screen would otherwise burn its one and only
+     reveal where nobody could see it. Only the START is delayed — no trigger
+     config, duration or the play-once rule is touched by this. */
+  afterLoader(function reveals() {
     var els = $$('[data-reveal]');
     if (!els.length) return;
     function countUp(el) {
@@ -332,8 +377,14 @@
     }
     var ioShared = watcher(REVEAL_TRIGGER);
     var ioBest = watcher(BEST_SELLERS_TRIGGER);
-    els.forEach(function (el) { (el.id === 'best-sellers' ? ioBest : ioShared).observe(el); });
-  })();
+    var ioRate = watcher(RATING_TRIGGER);
+    els.forEach(function (el) {
+      var io = el.id === 'best-sellers' ? ioBest
+             : el.classList.contains('wl-rate') ? ioRate
+             : ioShared;
+      io.observe(el);
+    });
+  });
 
   /* ---- Reviews: 3 groups of 3, hero-carousel pattern retargeted ----
      Same mechanics as hero(): timed auto-advance + 1.2s opacity crossfade
