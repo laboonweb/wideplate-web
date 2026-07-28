@@ -110,6 +110,11 @@
     var MIN = still ? 450 : 1400, MAX = still ? 700 : 1700, WIPE = still ? 0 : 500;
     var t0 = Date.now(), done = false;
     root.classList.add('wp-loading');
+    /* Own the scroll position rather than racing the browser for it. Set here,
+    in the <head>, because the browser restores very early and 'manual' has
+    to be in place before it does. app.js does the actual saving and
+    restoring once the loader has lifted. */
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     function exit() {
       if (done) return;
       done = true;

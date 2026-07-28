@@ -415,6 +415,55 @@
     });
   });
 
+  /* ---- Reload lands where you left it ----
+     history.scrollRestoration is set to 'manual' in each page's <head>, so the
+     browser no longer restores anything by itself and nothing races us. We
+     save the position while scrolling and put it back once the loader has
+     lifted.
+
+     This exists because the browser's own restoration was not reliable here:
+     on a reload with a #section in the URL it has both a saved position and a
+     fragment to jump to, and which one wins is timing-dependent. Visit was
+     the section where that showed up, landing high enough to leave a strip of
+     the cream Word of Mouth section above it.
+
+     A fresh visit still honours the fragment: only a reload restores, so
+     someone opening /index.html#menu from a link lands on the menu. */
+  (function scrollMemory() {
+    var KEY = 'wp:y:' + location.pathname;
+    var entry = (performance.getEntriesByType && performance.getEntriesByType('navigation')[0]) || null;
+    var isReload = entry ? entry.type === 'reload'
+                         : !!(performance.navigation && performance.navigation.type === 1);
+    function read() { try { return sessionStorage.getItem(KEY); } catch (e) { return null; } }
+    function write(y) { try { sessionStorage.setItem(KEY, String(Math.round(y))); } catch (e) {} }
+
+    var saved = read();
+    afterLoader(function restore() {
+      if (isReload && saved !== null) {
+        /* 'instant' because html has scroll-behavior: smooth, and a smooth
+           scroll here would visibly slide the page after the loader lifts. */
+        window.scrollTo({ top: parseFloat(saved) || 0, left: 0, behavior: 'instant' });
+        return;
+      }
+      if (location.hash) {
+        var el = document.getElementById(location.hash.slice(1));
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - (parseFloat(getComputedStyle(el).scrollMarginTop) || 0), left: 0, behavior: 'instant' });
+      }
+    });
+
+    /* Throttled, not on pagehide: pagehide does not reliably fire. */
+    var last = 0, pending = 0;
+    window.addEventListener('scroll', function () {
+      var now = Date.now();
+      if (now - last < 350) {
+        if (!pending) pending = setTimeout(function () { pending = 0; last = Date.now(); write(window.pageYOffset); }, 350);
+        return;
+      }
+      last = now;
+      write(window.pageYOffset);
+    }, { passive: true });
+  })();
+
   /* ---- Map facade ----
      The Visit section ships a styled panel instead of the Google embed; the
      real iframe is built here on the first tap, from the URL held in the
