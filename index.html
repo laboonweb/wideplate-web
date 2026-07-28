@@ -15,252 +15,8 @@
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&amp;display=swap"><link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&amp;display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&amp;display=swap"></noscript>
 <link rel="preload" as="image" href="uploads/wideplatehero1.webp" media="(min-width: 701px)" fetchpriority="high">
 <link rel="preload" as="image" href="uploads/wideplateheromobile1.webp" media="(max-width: 700px)" fetchpriority="high">
-<style>
-    html { scroll-behavior: smooth; overflow-x: hidden; overscroll-behavior-y: none; background: #081F17; }
-    body { margin: 0; background: #F4EEE1; font-family: 'General Sans', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; overscroll-behavior-y: none; }
-    :root { --gold: #D9A441; --nav-height: 60px; }
-    /* Hero height: pure CSS, biased large and STABLE. 100lvh (largest
-       viewport, toolbar collapsed) is a static value — it never changes while
-       scrolling, so the hero never resizes mid-scroll. (The previous
-       JS-measured height DID resize with the collapsing toolbar, which
-       re-cropped the object-fit:cover images = the "zoom", shifted the
-       bottom-anchored text with it, and let cream peek when the viewport grew
-       faster than JS caught up.) 100lvh is also >= the visible height at
-       every toolbar state, so the next section can never peek. Do NOT swap
-       for dvh/svh or a JS var: dynamic height on this hero is the bug, not
-       the fix. Nav is position:fixed (an overlay, not in flow) so nothing is
-       subtracted; the hero's own top padding clears it. */
-    #top { min-height: 100vh; min-height: 100lvh; }
-    /* Keep the ever-running Ken Burns zoom + slide crossfades compositor-only
-       so scrolling doesn't repaint five viewport-sized images. */
-    #top .wl-slide { will-change: opacity; }
-    #top .wl-slide img { will-change: transform; }
-    a { color: #0F362C; }
-    /* <button> does not inherit font-family, and Chrome's UA default for it is
-       Arial — which is how the six Feast Combos "See what's inside" toggles
-       ended up rendering in Arial instead of General Sans. One rule at the
-       control level, rather than a font-family on each label that needs it. */
-    button { font-family: inherit; }
-    a:hover { color: #C9862B; }
-    @keyframes wpkb { from { transform: scale(1); } to { transform: scale(1.07); } }
-    @keyframes wpintro { from { transform: translateY(112%); } to { transform: translateY(0); } }
-    @keyframes wpfadein { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes wpmask { from { transform: translateY(112%); } to { transform: translateY(0); } }
-    @keyframes wprise { from { opacity: 0; translate: 0 30px; } to { opacity: 1; translate: 0 0; } }
-    @keyframes wpclip { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
-    @keyframes wpline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-    /* Four copies, shifted by one copy (-25%). With two copies the shift was a
-       full 50% and only ONE copy remained on screen after it: one copy measures
-       ~2535px, so any viewport wider than that ran out of content and showed
-       dead space at the tail. Three copies remain after the shift now, which
-       covers past 7600px. Content count and this percentage are a pair: change
-       one, change the other. */
-    @keyframes wpmarquee { from { transform: translateX(0); } to { transform: translateX(-25%); } }
-    @keyframes wpfill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-    @keyframes wpcard { 0% { transform: scale(0.94); opacity: 0.6; } 42% { transform: scale(1); opacity: 1; } 58% { transform: scale(1); opacity: 1; } 100% { transform: scale(0.94); opacity: 0.6; } }
-    @keyframes wpnav { to { padding-top: 8px; padding-bottom: 8px; } }
-    /* hover states (were style-hover) */
-    .wl-navlink:hover { color: var(--gold) !important; }
-    .wl-btn-gold:hover { box-shadow: 0 14px 38px rgba(217,164,65,0.4); }
-    .wl-btn-outline-light:hover { background: rgba(244,238,225,0.12); }
-    .wl-btn-seecombos:hover { background: #F4EEE1 !important; color: #0B2A20 !important; }
-    .wl-btn-fb:hover { background: #0F362C !important; color: #F4EEE1 !important; }
-    /* Map facade: the whole panel is the tap target, so the pill lights up on
-       hover anywhere over it, not just directly on the pill. */
-    .wl-map-load:hover .wl-map-cta, .wl-map-load:focus-visible .wl-map-cta { background: var(--gold); border-color: var(--gold); color: #1B1305; }
-    .wl-map-load:focus-visible { outline: 2px solid var(--gold); outline-offset: -4px; }
-    .wl-dish:hover { transform: scale(1.03) translateY(-4px); box-shadow: 0 24px 48px rgba(4,18,13,0.45); }
-    .wl-combo:hover { transform: translateY(-5px); background: rgba(244,238,225,0.08) !important; }
-    .wl-chip.is-active { background: var(--gold) !important; color: #1B1305 !important; border-color: var(--gold) !important; }
-    /* horizontal scrollers: hide scrollbar, contain overscroll */
-    [data-gallery], [data-chips] { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
-    [data-gallery]::-webkit-scrollbar, [data-chips]::-webkit-scrollbar { display: none; }
-    /* mobile nav */
-    .wl-mob { display: none; }
-    .wl-mobpanel { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1); }
-    /* Was 60vh, which clipped unreachably on short phones: the panel's content
-       is ~430px of fixed-px type, so a 667px-tall iPhone SE got a 400px budget
-       and the "Call 0966 965 9995" CTA was cut off with no way to scroll to it
-       (the base rule's overflow:hidden made it unreachable, not just hidden).
-       dvh instead of vh so browser chrome is accounted for, minus the bar's
-       real height so the panel ends exactly at the bottom of the screen, and
-       overflow-y:auto so content that outgrows the space scrolls instead of
-       disappearing -- that last part is what stops this recurring the next
-       time an item is added to the menu. */
-    .wl-mobpanel.open { max-height: calc(100dvh - var(--nav-bar-h, 60px)); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
-    /* Six desktop nav items since Gallery was added: the bar overflows just
-       above 900px, so hand over to the hamburger 100px earlier. Nav only, the
-       900px block below keeps owning everything else. */
-    @media (max-width: 1000px) {
-      .wl-desk { display: none !important; }
-      .wl-mob { display: flex !important; }
-    }
-    @media (max-width: 900px) {
-      .wl-desk { display: none !important; }
-      .wl-mob { display: flex !important; }
-      .wl-storypin { position: static !important; top: auto !important; }
-      .wl-herowrap { padding-top: 118px !important; padding-bottom: 56px !important; }
-    }
-    /* Visit: fill the viewport below the sticky nav on desktop so the footer
-       doesn't peek when landing on #visit (same pattern as the hero). */
-    @media (min-width: 901px) {
-      /* Visit fills the viewport below the nav so the footer never peeks on a
-         #visit anchor jump, but the content sits at the TOP-LEFT (not floated
-         in the vertical middle — justify-content:center was the "centered"
-         look). The inner block grows to fill and the map stretches with it, so
-         the tall section reads full instead of empty. */
-      .wl-visit { min-height: calc(100vh - var(--nav-height)); min-height: calc(100lvh - var(--nav-height)); box-sizing: border-box; display: flex; flex-direction: column; }
-      .wl-visit-inner { flex: 1 1 auto; display: flex; flex-direction: column; width: 100%; }
-      .wl-visit-grid { flex: 1 1 auto; align-content: stretch; }
-      .wl-visit h2 { font-size: clamp(40px, 5.6vw, 82px); }
-    }
-    @media (max-width: 600px) {
-      .wl-herowrap { padding-top: 104px !important; padding-bottom: 82px !important; }
-      .wl-drag-hint { display: none !important; }
-      /* Hero headline: keep the signature 3-line stagger but shrink it so it
-         reads comfortably and stops dominating the phone screen. */
-      .wl-hero-h1 { font-size: clamp(33px, 9vw, 46px) !important; }
-      /* Stronger bottom-up scrim: mobile crops sit tighter to the food, so
-         text needs more protection against all 5 rotating photos. */
-      .wl-hero-scrim { background: linear-gradient(to top, rgba(11,42,32,0.96) 0%, rgba(11,42,32,0.78) 26%, rgba(11,42,32,0.35) 55%, rgba(11,42,32,0) 82%) !important; }
-      /* Badge row: wrap predictably into two clean lines, drop the divider. */
-      .wl-hero-badge { font-size: 10px; letter-spacing: 0.2em; gap: 6px 12px; }
-      .wl-badge-sep { display: none !important; }
-      /* Slide indicators: smaller and centered on mobile. */
-      .wl-bars { left: 0 !important; right: 0 !important; justify-content: center !important; }
-      .wl-bars .wl-bar { width: 34px !important; }
-      .wl-bars .wl-bar > span { width: 22px !important; }
-      /* Footer: center the whole content block on phones (desktop untouched). */
-      .wl-foot-cols { justify-items: center !important; }
-      .wl-foot-col { align-items: center !important; text-align: center !important; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; animation-delay: 0s !important; transition-delay: 0s !important; }
-    }
-
-    /* ===== One-time scroll reveals (Round 5) =====
-       app.js stamps .js on <html>, then a one-shot IntersectionObserver adds
-       .is-in to each [data-reveal] section on FIRST entry and unobserves it —
-       so every reveal below plays exactly once per page load and never
-       replays on scroll-up. Pre-reveal hidden states are gated on html.js so
-       a no-JS visitor sees everything. Reduced motion: the global 0.01ms
-       rule above collapses all of these to instant appearance. Elements with
-       inline transition lists (.wl-chip/.wl-combo/.wl-dish) are animated with
-       KEYFRAMES on purpose — a stylesheet transition would lose to their
-       inline transition declaration. */
-    @keyframes wpdeal { from { opacity: 0; transform: translateX(var(--ddist, 110px)) rotate(var(--drot, -7deg)) scale(1.05); } to { opacity: 1; transform: none; } }
-    @keyframes wpchipin { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-    @keyframes wpfroml { from { opacity: 0; transform: translateX(calc(-1 * var(--cdist, 72px))); } to { opacity: 1; transform: none; } }
-    @keyframes wpfromr { from { opacity: 0; transform: translateX(var(--cdist, 72px)); } to { opacity: 1; transform: none; } }
-    @keyframes wpsweep { to { transform: translateX(130%); } }
-    @keyframes wpstar { 0% { stroke-dashoffset: 1; fill-opacity: 0; } 62% { stroke-dashoffset: 0; fill-opacity: 0; } 100% { stroke-dashoffset: 0; fill-opacity: 1; } }
-    /* 01 Promise: cloche reveal + hairline-drawn pillars */
-    /* Round 6: every duration and delay in this block was scaled by 1.2 so the
-       reveals play ~20% slower. Scale, do not flat-add, or the staggers and the
-       combos' converging timing stop lining up. */
-    .wl-cloche { transition: clip-path 1.26s cubic-bezier(0.3, 0, 0.2, 1); }
-    html.js .wl-promise:not(.is-in) .wl-cloche { clip-path: circle(6% at 50% 55%); }
-    .wl-promise.is-in .wl-cloche { clip-path: circle(125% at 50% 55%); }
-    .wl-pillar { position: relative; }
-    html.js .wl-pillar { border-top-color: transparent !important; }
-    .wl-pillar::before { content: ''; position: absolute; top: -1px; left: 0; width: 100%; height: 1px; background: rgba(20,36,29,0.16); transform: scaleX(0); transform-origin: left; transition: transform 0.84s cubic-bezier(0.16, 1, 0.3, 1); }
-    html:not(.js) .wl-pillar::before { display: none; }
-    .wl-pillar > * { transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-    html.js .wl-promise:not(.is-in) .wl-pillar > * { opacity: 0; transform: translateY(12px); }
-    .wl-promise.is-in .wl-pillar::before { transform: scaleX(1); }
-    .wl-promise.is-in .wl-pillar:nth-child(1)::before { transition-delay: 1.02s; }
-    .wl-promise.is-in .wl-pillar:nth-child(2)::before { transition-delay: 1.32s; }
-    .wl-promise.is-in .wl-pillar:nth-child(3)::before { transition-delay: 1.62s; }
-    .wl-promise.is-in .wl-pillar:nth-child(1) > * { transition-delay: 1.2s; }
-    .wl-promise.is-in .wl-pillar:nth-child(2) > * { transition-delay: 1.5s; }
-    .wl-promise.is-in .wl-pillar:nth-child(3) > * { transition-delay: 1.8s; }
-    /* last pillar's closing (bottom) hairline draws with the same choreography */
-    /* Below ~420px the pillar's three inline columns (48-90px number, 1fr
-       title, 150-300px copy, 20px gaps) cannot fit: the 1fr track's automatic
-       minimum is its own min-content, so the row overflowed the gutter and the
-       copy was clipped by the body's overflow-x. Measured 12px past a 360px
-       viewport and 52px past 320px. Number and title share the first row, the
-       copy takes the full width beneath. !important because the grid is
-       declared inline on all three pillars. */
-    @media (max-width: 420px) {
-      .wl-pillar { grid-template-columns: auto minmax(0, 1fr) !important; gap: 6px 14px !important; }
-      .wl-pillar > :last-child { grid-column: 1 / -1; }
-    }
-    html.js .wl-pillar:last-child { border-bottom-color: transparent !important; }
-    .wl-pillar:last-child::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 1px; background: rgba(20,36,29,0.16); transform: scaleX(0); transform-origin: left; transition: transform 0.84s cubic-bezier(0.16, 1, 0.3, 1); }
-    html:not(.js) .wl-pillar:last-child::after { display: none; }
-    .wl-promise.is-in .wl-pillar:last-child::after { transform: scaleX(1); transition-delay: 1.8s; }
-    /* 03 Best Sellers: cards dealt onto the table (lighter on phones) */
-    html.js #best-sellers:not(.is-in) .wl-dish { opacity: 0; }
-    /* Best Sellers only: scaled by 1.2 again this round (0.78s -> 0.94s), and
-       the stagger scaled with it so the cards keep their spacing. */
-    #best-sellers.is-in .wl-dish { animation: wpdeal 0.94s cubic-bezier(0.34, 1.56, 0.64, 1) backwards; }
-    #best-sellers.is-in [data-gallery] > div:nth-child(2) .wl-dish { animation-delay: 0.13s; }
-    #best-sellers.is-in [data-gallery] > div:nth-child(3) .wl-dish { animation-delay: 0.26s; }
-    #best-sellers.is-in [data-gallery] > div:nth-child(4) .wl-dish { animation-delay: 0.39s; }
-    #best-sellers.is-in [data-gallery] > div:nth-child(5) .wl-dish { animation-delay: 0.52s; }
-    #best-sellers.is-in [data-gallery] > div:nth-child(6) .wl-dish { animation-delay: 0.65s; }
-    #best-sellers.is-in [data-gallery] > div:nth-child(n+7) .wl-dish { animation-delay: 0.72s; }
-    @media (max-width: 600px) { #best-sellers { --ddist: 48px; --drot: -3deg; } }
-    /* 02 Menu: deliberately minimal — header fade-up + light chip stagger */
-    .wl-menuhead { transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1); }
-    html.js #menu:not(.is-in) .wl-menuhead { opacity: 0; transform: translateY(20px); }
-    html.js #menu:not(.is-in) .wl-chip { opacity: 0; }
-    #menu.is-in .wl-chip { animation: wpchipin 0.45s ease backwards; }
-    #menu.is-in .wl-chip:nth-child(2) { animation-delay: 0.04s; }
-    #menu.is-in .wl-chip:nth-child(3) { animation-delay: 0.08s; }
-    #menu.is-in .wl-chip:nth-child(4) { animation-delay: 0.12s; }
-    #menu.is-in .wl-chip:nth-child(5) { animation-delay: 0.16s; }
-    #menu.is-in .wl-chip:nth-child(6) { animation-delay: 0.2s; }
-    #menu.is-in .wl-chip:nth-child(7) { animation-delay: 0.24s; }
-    #menu.is-in .wl-chip:nth-child(8) { animation-delay: 0.28s; }
-    #menu.is-in .wl-chip:nth-child(n+9) { animation-delay: 0.32s; }
-    /* 04 Combos: converging rows — All-Meat from the left, Meat & Seafood
-       from the right, middle pair settles last so they "meet". */
-    html.js #combos:not(.is-in) .wl-combo { opacity: 0; }
-    #combos.is-in .wl-combo { animation: wpfroml 0.84s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
-    #combos.is-in .wl-combo:nth-child(n+4) { animation-name: wpfromr; }
-    #combos.is-in .wl-combo:nth-child(2) { animation-delay: 0.14s; }
-    #combos.is-in .wl-combo:nth-child(3) { animation-delay: 0.29s; }
-    #combos.is-in .wl-combo:nth-child(4) { animation-delay: 0.29s; }
-    #combos.is-in .wl-combo:nth-child(5) { animation-delay: 0.14s; }
-    @media (max-width: 600px) { #combos { --cdist: 40px; } }
-    /* 05 Story: one-time diagonal light sweep + pull-quote mask reveal */
-    .wl-storyimg { position: relative; }
-    .wl-storyimg::after { content: ''; position: absolute; inset: -25% -35%; background: linear-gradient(115deg, rgba(255,246,220,0) 42%, rgba(255,246,220,0.3) 50%, rgba(255,246,220,0) 58%); transform: translateX(-130%); pointer-events: none; }
-    #story.is-in .wl-storyimg::after { animation: wpsweep 1.8s cubic-bezier(0.4, 0, 0.2, 1) 0.36s both; }
-    .wl-squote { transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.42s; }
-    html.js #story:not(.is-in) .wl-squote { clip-path: inset(0 100% 0 0); }
-    #story.is-in .wl-squote { clip-path: inset(0 0 0 0); }
-    /* 06 Visit: deliberately minimal — single fade/slide-up */
-    #visit > div { transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-    html.js #visit:not(.is-in) > div { opacity: 0; transform: translateY(24px); }
-    /* Social proof stat: star outline draws itself, then fills gold */
-    html.js .wl-rate:not(.is-in) .wl-star-big path { fill-opacity: 0; }
-    /* Star draw and the 4.8/198 count-up are a pair: this duration and the
-       count-up's `dur` in app.js reveals() were both scaled by 1.2, so they
-       still finish in the same relationship to each other. Change one, change
-       the other. */
-    .wl-rate.is-in .wl-star-big path { stroke: var(--gold); stroke-width: 1.4; stroke-dasharray: 1; animation: wpstar 1.8s ease 0.12s both; }
-    /* Reviews: 3 groups stacked in one grid cell, opacity crossfade (JS).
-       ponytail: container height = tallest group; short groups leave some
-       whitespace — switch to measured-height animation only if it ever
-       bothers on mobile. Without JS the groups just stack, all 9 visible. */
-    html.js .wl-revstack { display: grid; }
-    html.js .wl-revstack .wl-revgroup { grid-area: 1 / 1; }
-    .wl-revgroup { display: flex; flex-direction: column; transition: opacity 1.2s ease; }
-    .wl-revgroup[aria-hidden="true"] { pointer-events: none; }
-    .wl-revbars { display: none; }
-    html.js .wl-revbars { display: flex; gap: 4px; padding-top: 14px; }
-    .wl-revbar span { display: block; width: 28px; height: 2px; background: rgba(20,36,29,0.22); transition: background 0.3s ease; }
-    .wl-revbar.is-on span { background: var(--gold); }
-    /* Hamburger -> X morph (snappy back-ease; reduced-motion handled above) */
-    .wl-mob span { transition: transform 0.34s cubic-bezier(0.34, 1.8, 0.5, 1), opacity 0.18s ease; }
-    .wl-mob[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-    .wl-mob[aria-expanded="true"] span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .wl-mob[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-</style>
+<link rel="stylesheet" href="./css/site.css">
+<link rel="stylesheet" href="./css/home.css">
 <style>
     /* ===== Branded preloader =====
        DUPLICATED IN FOUR FILES ON PURPOSE: index.html, gallery.html, faq.html
@@ -381,45 +137,47 @@
   </div>
 <div style="--gutter:clamp(24px, 4vw, 96px); color:#14241D; font-family:'General Sans','Helvetica Neue',sans-serif; overflow-x:clip; background:#F4EEE1;">
 
-  <!-- Sticky nav -->
-  <header style="position:fixed; top:0; left:0; right:0; z-index:60; background:rgba(11,42,32,0.96); backdrop-filter:blur(10px); border-bottom:1px solid rgba(244,238,225,0.14);">
-    <div style="max-width:none; margin:0 auto; padding:18px var(--gutter); display:flex; align-items:center; gap:32px; animation:wpnav linear both; animation-timeline:scroll(); animation-range:0px 160px;">
-      <a href="#top" aria-label="Wideplate Restaurant home" style="text-decoration:none; color:#F4EEE1; display:flex; flex-direction:column; align-items:center; gap:4px;">
-        <span style="font-family:'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-weight:700; font-size:19px; letter-spacing:0.13em; line-height:1; white-space:nowrap;">WIDEPLATE</span>
-        <span style="display:flex; align-items:center; gap:7px; width:100%;">
-          <span aria-hidden="true" style="flex:1; height:1px; background:rgba(244,238,225,0.6);"></span>
-          <span style="font-family:'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-size:7.5px; font-weight:400; letter-spacing:0.34em; line-height:1;">RESTAURANT</span>
-          <span aria-hidden="true" style="flex:1; height:1px; background:rgba(244,238,225,0.6);"></span>
+  <!-- Sticky nav. Link styling is .wl-nav-a, deliberately NOT the footer's
+       .wl-navlink: the two look different and only coexisted before because
+       these carried inline styles that outranked the shared class. -->
+  <header class="wl-nav">
+    <div class="wl-nav-bar">
+      <a class="wl-nav-mark" href="#top" aria-label="Wideplate Restaurant home">
+        <b>WIDEPLATE</b>
+        <span class="wl-nav-sub">
+          <span class="wl-nav-rule" aria-hidden="true"></span>
+          <span class="wl-nav-tag">RESTAURANT</span>
+          <span class="wl-nav-rule" aria-hidden="true"></span>
         </span>
       </a>
-      <nav class="wl-desk" aria-label="Sections" style="display:flex; gap:clamp(16px, 2.2vw, 26px);">
-        <a class="wl-navlink" href="#menu" style="color:rgba(244,238,225,0.8); text-decoration:none; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; transition:color 0.2s ease;">Menu</a>
-        <a class="wl-navlink" href="#best-sellers" style="color:rgba(244,238,225,0.8); text-decoration:none; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; transition:color 0.2s ease;">Best Sellers</a>
-        <a class="wl-navlink" href="#combos" style="color:rgba(244,238,225,0.8); text-decoration:none; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; transition:color 0.2s ease;">Combos</a>
-        <a class="wl-navlink" href="#story" style="color:rgba(244,238,225,0.8); text-decoration:none; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; transition:color 0.2s ease;">Our Story</a>
-        <a class="wl-navlink" href="gallery.html" style="color:rgba(244,238,225,0.8); text-decoration:none; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; transition:color 0.2s ease;">Gallery</a>
-        <a class="wl-navlink" href="#visit" style="color:rgba(244,238,225,0.8); text-decoration:none; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; transition:color 0.2s ease;">Visit</a>
+      <nav class="wl-desk wl-nav-links" aria-label="Sections">
+        <a class="wl-nav-a" href="#menu">Menu</a>
+        <a class="wl-nav-a" href="#best-sellers">Best Sellers</a>
+        <a class="wl-nav-a" href="#combos">Combos</a>
+        <a class="wl-nav-a" href="#story">Our Story</a>
+        <a class="wl-nav-a" href="gallery.html">Gallery</a>
+        <a class="wl-nav-a" href="#visit">Visit</a>
       </nav>
-      <div style="margin-left:auto; display:flex; align-items:center; gap:16px;">
-        <a class="wl-desk" href="tel:+639669659995" style="color:rgba(244,238,225,0.85); text-decoration:none; font-size:13px; font-weight:600; letter-spacing:0.04em; white-space:nowrap; font-variant-numeric:tabular-nums;">0966 965 9995</a>
-        <a class="wl-desk wl-btn-gold" data-magnet="true" href="https://www.google.com/maps/dir/?api=1&amp;destination=Wideplate%20Restaurant%2C%20R.%20Concepcion%20St%2C%20San%20Antonio%2C%20Zambales" target="_blank" rel="noopener" style="background:var(--gold); color:#1B1305; text-decoration:none; font-size:11.5px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; padding:12px 22px; border-radius:999px; white-space:nowrap; transition:transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s ease;">Get Directions</a>
-        <button class="wl-mob" data-navtoggle aria-label="Open menu" aria-expanded="false" style="background:none; border:0; cursor:pointer; padding:10px; flex-direction:column; gap:5px; min-width:44px; min-height:44px; justify-content:center; align-items:center;">
-          <span style="display:block; width:22px; height:1.5px; background:#F4EEE1;"></span>
-          <span style="display:block; width:22px; height:1.5px; background:#F4EEE1;"></span>
-          <span style="display:block; width:22px; height:1.5px; background:#F4EEE1;"></span>
+      <div class="wl-nav-actions">
+        <a class="wl-desk wl-nav-tel" href="tel:+639669659995">0966 965 9995</a>
+        <a class="wl-desk wl-btn-gold is-nav" data-magnet="true" href="https://www.google.com/maps/dir/?api=1&amp;destination=Wideplate%20Restaurant%2C%20R.%20Concepcion%20St%2C%20San%20Antonio%2C%20Zambales" target="_blank" rel="noopener">Get Directions</a>
+        <button class="wl-mob" data-navtoggle aria-label="Open menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
       </div>
     </div>
-    <nav class="wl-mobpanel" aria-label="Mobile sections" style="border-top:1px solid rgba(244,238,225,0.14);">
-      <div style="display:flex; flex-direction:column; padding:8px var(--gutter) 22px; gap:2px;">
-        <a class="wl-navclose" href="#menu" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Menu</a>
-        <a class="wl-navclose" href="#best-sellers" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Best Sellers</a>
-        <a class="wl-navclose" href="#combos" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Combos</a>
-        <a class="wl-navclose" href="#story" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Our Story</a>
-        <a class="wl-navclose" href="gallery.html" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Gallery</a>
-        <a class="wl-navclose" href="#visit" style="color:#F4EEE1; text-decoration:none; font-family:'Fraunces',serif; font-size:22px; font-weight:500; padding:12px 2px;">Visit</a>
-        <a class="wl-navclose" href="https://www.google.com/maps/dir/?api=1&amp;destination=Wideplate%20Restaurant%2C%20R.%20Concepcion%20St%2C%20San%20Antonio%2C%20Zambales" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; color:var(--gold); text-decoration:none; font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; padding:14px 2px;">Get Directions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:0.85em; height:0.85em;"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></a>
-        <a href="tel:+639669659995" style="color:var(--gold); text-decoration:none; font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; padding:14px 2px;">Call 0966 965 9995</a>
+    <nav class="wl-mobpanel" aria-label="Mobile sections">
+      <div class="wl-mobpanel-inner">
+        <a class="wl-navclose wl-mob-a" href="#menu">Menu</a>
+        <a class="wl-navclose wl-mob-a" href="#best-sellers">Best Sellers</a>
+        <a class="wl-navclose wl-mob-a" href="#combos">Combos</a>
+        <a class="wl-navclose wl-mob-a" href="#story">Our Story</a>
+        <a class="wl-navclose wl-mob-a" href="gallery.html">Gallery</a>
+        <a class="wl-navclose wl-mob-a" href="#visit">Visit</a>
+        <a class="wl-navclose wl-mob-dir" href="https://www.google.com/maps/dir/?api=1&amp;destination=Wideplate%20Restaurant%2C%20R.%20Concepcion%20St%2C%20San%20Antonio%2C%20Zambales" target="_blank" rel="noopener">Get Directions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></a>
+        <a class="wl-mob-call" href="tel:+639669659995">Call 0966 965 9995</a>
       </div>
     </nav>
   </header>
@@ -1686,46 +1444,48 @@
     <div aria-hidden="true" style="position:absolute; inset:0; pointer-events:none; opacity:0.045; background-image:url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27160%27%20height=%27160%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%270.85%27%20numOctaves=%272%27%20stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect%20width=%27160%27%20height=%27160%27%20filter=%27url(%23n)%27/%3E%3C/svg%3E');"></div>
   </section>
 
-  <!-- Footer -->
-  <footer style="position:relative; background:#081F17; padding:clamp(56px, 8vw, 90px) var(--gutter) 40px;">
-    <div style="max-width:1280px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(36px, 5vw, 56px); position:relative; z-index:1;">
-      <div style="display:flex; justify-content:center; border-bottom:1px solid rgba(244,238,225,0.14); padding-bottom:clamp(28px, 4vw, 44px);">
-        <div style="display:flex; flex-direction:column; align-items:center; gap:14px; max-width:640px; width:100%;">
-          <p style="margin:0; font-family:'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-weight:700; font-size:clamp(32px, 6vw, 68px); letter-spacing:0.12em; line-height:1; color:#F4EEE1; text-align:center;">WIDEPLATE</p>
-          <div style="display:flex; align-items:center; gap:12px; width:100%; max-width:480px;">
-            <span aria-hidden="true" style="flex:1; height:1px; background:rgba(244,238,225,0.6);"></span>
-            <span style="font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-size: clamp(11px, 1.4vw, 14px); font-weight: 400; letter-spacing: 0.42em; line-height: 1; color: #F4EEE1">RESTAURANT</span>
-            <span aria-hidden="true" style="flex:1; height:1px; background:rgba(244,238,225,0.6);"></span>
+  <!-- Footer markup is identical across all four pages; its styling lives in
+       css/site.css. The markup still has to be kept in sync by hand — there is
+       no include mechanism here — but the CSS no longer does. -->
+  <footer class="wl-foot">
+    <div class="wl-foot-inner">
+      <div class="wl-foot-top">
+        <div class="wl-foot-brand">
+          <p class="wl-foot-mark">WIDEPLATE</p>
+          <div class="wl-foot-sub">
+            <span class="wl-foot-rule" aria-hidden="true"></span>
+            <span class="wl-foot-tag">RESTAURANT</span>
+            <span class="wl-foot-rule" aria-hidden="true"></span>
           </div>
-          <p style="margin: 0; font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-style: italic; font-size: clamp(14px, 1.8vw, 17px); color: #F4EEE1; text-align: center">Home of your Favorite Filipino Flavors!</p>
+          <p class="wl-foot-tagline">Home of your Favorite Filipino Flavors!</p>
         </div>
       </div>
-      <div class="wl-foot-cols" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap:36px;">
-        <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">
-          <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(244,238,225,0.45);">Visit</p>
-          <p style="margin:0; font-size:14px; line-height:1.7; color:rgba(244,238,225,0.8);">Ground Floor, Balay Grace,<br>R. Concepcion St, Barangay Santiago,<br>San Antonio, Zambales</p>
+      <div class="wl-foot-cols">
+        <div class="wl-foot-col">
+          <p class="wl-foot-label">Visit</p>
+          <p class="wl-foot-text">Ground Floor, Balay Grace,<br>R. Concepcion St, Barangay Santiago,<br>San Antonio, Zambales</p>
         </div>
-        <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">
-          <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(244,238,225,0.45);">Hours</p>
-          <p style="margin:0; font-size:14px; font-weight:600; color:rgba(244,238,225,0.8);">Open 11AM until 9PM</p>
-          <p style="margin:0; font-size:13.5px; color:rgba(244,238,225,0.6);">Dine-in · Curbside Pickup · Delivery</p>
+        <div class="wl-foot-col">
+          <p class="wl-foot-label">Hours</p>
+          <p class="wl-foot-hours">Open 11AM until 9PM</p>
+          <p class="wl-foot-note">Dine-in · Curbside Pickup · Delivery</p>
         </div>
-        <div class="wl-foot-col" style="display:flex; flex-direction:column; gap:10px;">
-          <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(244,238,225,0.45);">Contact</p>
-          <a href="tel:+639669659995" style="font-size:14px; color:rgba(244,238,225,0.8); text-decoration:none; font-variant-numeric:tabular-nums;">0966 965 9995</a>
-          <a href="tel:+639669659998" style="font-size:14px; color:rgba(244,238,225,0.8); text-decoration:none; font-variant-numeric:tabular-nums;">0966 965 9998</a>
-          <a href="mailto:WideplateRestaurant@gmail.com" style="font-size:14px; color:rgba(244,238,225,0.8); text-decoration:none;">WideplateRestaurant@gmail.com</a>
-          <a href="https://facebook.com/wideplaterestaurant" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); text-decoration:none;">Facebook <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:0.85em; height:0.85em;"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></a>
+        <div class="wl-foot-col">
+          <p class="wl-foot-label">Contact</p>
+          <a class="wl-foot-link is-num" href="tel:+639669659995">0966 965 9995</a>
+          <a class="wl-foot-link is-num" href="tel:+639669659998">0966 965 9998</a>
+          <a class="wl-foot-link" href="mailto:WideplateRestaurant@gmail.com">WideplateRestaurant@gmail.com</a>
+          <a class="wl-foot-fb" href="https://facebook.com/wideplaterestaurant" target="_blank" rel="noopener">Facebook <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></a>
         </div>
       </div>
-      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px 20px; padding-top:22px; border-top:1px solid rgba(244,238,225,0.12);">
-        <p style="margin:0; font-size:12px; letter-spacing:0.06em; color:rgba(244,238,225,0.4);">© 2026 Wideplate Restaurant · San Antonio, Zambales</p>
-        <a class="wl-navlink" href="gallery.html" style="color:rgba(244,238,225,0.6); text-decoration:none; font-size:12px; letter-spacing:0.06em; transition:color 0.2s ease;">Gallery</a>
-        <a class="wl-navlink" href="faq.html" style="color:rgba(244,238,225,0.6); text-decoration:none; font-size:12px; letter-spacing:0.06em; transition:color 0.2s ease;">FAQ</a>
-        <a class="wl-navlink" href="privacy-policy.html" style="color:rgba(244,238,225,0.6); text-decoration:none; font-size:12px; letter-spacing:0.06em; transition:color 0.2s ease;">Privacy Policy</a>
+      <div class="wl-foot-bottom">
+        <p class="wl-foot-copy">© 2026 Wideplate Restaurant · San Antonio, Zambales</p>
+        <a class="wl-navlink" href="gallery.html">Gallery</a>
+        <a class="wl-navlink" href="faq.html">FAQ</a>
+        <a class="wl-navlink" href="privacy-policy.html">Privacy Policy</a>
       </div>
     </div>
-    <div aria-hidden="true" style="position:absolute; inset:0; pointer-events:none; opacity:0.045; background-image:url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27160%27%20height=%27160%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%270.85%27%20numOctaves=%272%27%20stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect%20width=%27160%27%20height=%27160%27%20filter=%27url(%23n)%27/%3E%3C/svg%3E');"></div>
+    <div class="wl-foot-noise" aria-hidden="true"></div>
   </footer>
 </div>
 </body>
