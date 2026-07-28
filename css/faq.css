@@ -1,0 +1,63 @@
+/* ===== FAQ — page-specific =====
+   Same simple structure as privacy-policy.html (no "01 ·" editorial numbering,
+   no scroll motion) but warmer: this is a helpful content page, not a legal
+   document. Base, header and footer come from site.css. */
+
+:root { --gold-ink: #a96c14; }
+
+main { max-width: 760px; margin: 0 auto; padding: clamp(56px, 8vw, 96px) var(--gutter) clamp(64px, 9vw, 110px); }
+main h1 { margin: 0 0 14px; font-family: "Fraunces", Georgia, serif; font-weight: 560; font-size: clamp(36px, 6vw, 60px); line-height: 1.05; letter-spacing: -0.015em; }
+.wl-faq-intro { margin: 0 0 clamp(36px, 5vw, 54px); font-size: 16.5px; line-height: 1.7; color: rgba(20, 36, 29, 0.72); max-width: 56ch; }
+
+/* ---- Accordion ---- */
+.wl-faq-group { margin: 0 0 clamp(40px, 6vw, 64px); }
+.wl-faq-group h2 { margin: 0 0 6px; font-family: "Fraunces", Georgia, serif; font-weight: 560; font-size: clamp(22px, 3vw, 30px); line-height: 1.2; letter-spacing: -0.01em; }
+.wl-faq-group > span { display: block; width: 44px; height: 2px; background: var(--gold); margin-bottom: 14px; }
+.wl-faq-item { border-top: 1px solid rgba(20, 36, 29, 0.16); transition: background 0.3s ease; }
+.wl-faq-group .wl-faq-item:last-of-type { border-bottom: 1px solid rgba(20, 36, 29, 0.16); }
+.wl-faq-item.is-open { background: rgba(217, 164, 65, 0.08); }
+.wl-faq-item h3 { margin: 0; font-size: inherit; font-weight: inherit; }
+.wl-faq-q { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: 100%; box-sizing: border-box; margin: 0; padding: 20px 4px; background: none; border: 0; text-align: left; cursor: pointer; font-family: "General Sans", "Helvetica Neue", sans-serif; font-size: 16.5px; font-weight: 600; line-height: 1.45; letter-spacing: 0.005em; color: #14241d; transition: color 0.2s ease; }
+.wl-faq-q:hover { color: var(--gold-ink); }
+.wl-faq-q:focus-visible { outline: 2px solid var(--gold-ink); outline-offset: -3px; }
+
+/* Plus that loses its vertical stroke when open. Transform only, no layout. */
+.wl-faq-icon { position: relative; flex: 0 0 auto; width: 14px; height: 14px; color: rgba(20, 36, 29, 0.5); transition: color 0.25s ease; }
+.wl-faq-icon::before, .wl-faq-icon::after { content: ""; position: absolute; background: currentColor; will-change: transform; transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1); }
+.wl-faq-icon::before { left: 0; right: 0; top: 6.25px; height: 1.5px; }
+.wl-faq-icon::after { top: 0; bottom: 0; left: 6.25px; width: 1.5px; }
+.wl-faq-item.is-open .wl-faq-icon { color: var(--gold-ink); }
+.wl-faq-item.is-open .wl-faq-icon::after { transform: scaleY(0); }
+
+/* 0fr -> 1fr grid row animates to the content's real height with no
+   max-height guessing. visibility keeps collapsed answers out of the tab
+   order and out of screen readers; it flips instantly open, delayed shut. */
+.wl-faq-a { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows 0.34s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.34s; }
+.wl-faq-a > div { overflow: hidden; }
+.wl-faq-item.is-open .wl-faq-a { grid-template-rows: 1fr; visibility: visible; transition: grid-template-rows 0.34s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s; }
+.wl-faq-a p { margin: 0 0 18px; padding-right: 32px; font-size: 15.5px; line-height: 1.75; color: rgba(20, 36, 29, 0.82); }
+.wl-faq-a p:first-child { padding-top: 2px; }
+
+.wl-faq-dir { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 20px; padding: 11px 20px; border-radius: 999px; background: var(--gold); color: #1b1305; text-decoration: none; font-size: 11.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+.wl-faq-dir:hover { color: #1b1305; transform: translateY(-2px); }
+.wl-faq-tel { color: #0f362c; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(15, 54, 44, 0.3); font-variant-numeric: tabular-nums; }
+
+/* No JS: every answer is open and readable, nothing is trapped behind a
+   button that cannot toggle. */
+html:not(.js) .wl-faq-a { grid-template-rows: 1fr; visibility: visible; }
+html:not(.js) .wl-faq-icon { display: none; }
+
+@media (max-width: 600px) {
+  .wl-faq-a p { padding-right: 0; }
+}
+/* Broader than site.css's reduced-motion rule on purpose: this page has the
+   accordion's grid-row and icon animations to suppress as well. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    transition-delay: 0s !important;
+  }
+}
