@@ -101,58 +101,17 @@ button { font-family: inherit; }
 .wl-foot-link, .wl-foot-fb, .wl-navlink, .wl-pp-back { transition: color 0.18s ease, opacity 0.18s ease; }
 .wl-foot-link:active, .wl-foot-fb:active, .wl-navlink:active, .wl-pp-back:active { opacity: 0.65; }
 
-/* ===== Persistent mobile action bar =====
-   Call and Get Directions were both behind the hamburger on a phone: two taps
-   for the only two things a visitor deciding whether to stop actually wants.
-
-   --wl-bottom-safe is the single number every bottom-anchored thing offsets by
-   — the bar's own height plus the home-indicator/browser-chrome inset. The
-   cookie card (built in js/app.js), the back-to-top button and the hero's slide
-   indicators all read it, which is what stops the four of them stacking on top
-   of each other. Change --wl-actbar-h and all of them follow.
-   On desktop --wl-actbar-h is 0, so --wl-bottom-safe is just the inset. */
-:root { --wl-actbar-h: 0px; --wl-bottom-safe: calc(var(--wl-actbar-h) + env(safe-area-inset-bottom, 0px)); }
-.wl-actbar { display: none; }
+/* --wl-bottom-safe is the one number every bottom-anchored element offsets by:
+   the home-indicator / browser-chrome inset. The cookie card (built in
+   js/app.js), the back-to-top button and the hero's slide indicators all read
+   it, so none of them land under the iOS home bar. It used to also carry a
+   fixed action bar's height; the bar is gone, the variable stays because the
+   inset still has to be respected in four places and one name beats four
+   copies of env(). */
+:root { --wl-bottom-safe: env(safe-area-inset-bottom, 0px); }
 /* The footer, not body, carries the clearance: index.html's body background is
    cream, so padding there would put a cream band under the dark footer. */
 .wl-foot { padding-bottom: calc(40px + var(--wl-bottom-safe)); }
-
-/* 1130px is the width where the nav's phone number drops out to make room for
-   seven links (css/home.css). Above it Call and Directions are both in the nav
-   bar and a fixed bar would be noise; at and below it Call has no other
-   one-tap home, so the bar takes over. The two breakpoints are a pair — moving
-   this one without moving that one leaves a band with no visible phone number.
-   Note the hamburger is lower still (1023px): 1024-1130 is tablet landscape,
-   desktop nav AND action bar, deliberately. */
-@media (max-width: 1130px) {
-  /* 58px = 44px minimum tap target + 7px of padding top and bottom. If this
-     changes, nothing else needs to: everything derives from the variable. */
-  :root { --wl-actbar-h: 58px; }
-  .wl-actbar {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 65;
-    display: flex; gap: 10px; box-sizing: border-box;
-    padding: 7px 12px calc(7px + env(safe-area-inset-bottom, 0px));
-    background: rgba(11,42,32,0.97); backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(244,238,225,0.14);
-    --wl-ring: var(--gold);
-  }
-  .wl-actbar-btn {
-    flex: 1 1 0; min-width: 0; min-height: 44px; box-sizing: border-box;
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    border-radius: 999px; text-decoration: none;
-    font-size: 11.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, translate 0.18s ease;
-  }
-  .wl-actbar-btn svg { flex: 0 0 auto; width: 15px; height: 15px; }
-  .wl-actbar-btn.is-gold { background: var(--gold); color: #1B1305; border: 1px solid var(--gold); }
-  .wl-actbar-btn.is-gold:hover { background: #E3B45C; border-color: #E3B45C; }
-  .wl-actbar-btn.is-gold:active { background: #C08F33; border-color: #C08F33; translate: 0 1px; }
-  .wl-actbar-btn.is-ghost { background: none; color: #F4EEE1; border: 1px solid rgba(244,238,225,0.6); }
-  .wl-actbar-btn.is-ghost:hover { background: rgba(244,238,225,0.08); border-color: #F4EEE1; }
-  .wl-actbar-btn.is-ghost:active { background: rgba(244,238,225,0.14); translate: 0 1px; }
-  /* 340px and under, the two labels plus icons stop fitting side by side. */
-  @media (max-width: 340px) { .wl-actbar-btn { letter-spacing: 0.08em; gap: 6px; } }
-}
 
 /* ===== Back to top =====
    The wordmark already goes to #top, but nothing says so. Built in js/app.js
@@ -166,7 +125,7 @@ button { font-family: inherit; }
    asked to be. Same delayed-visibility pattern as the FAQ accordion. */
 .wl-totop {
   /* z-index 55: above the page, deliberately BELOW the nav (60) so it does not
-     float over the open mobile panel, and below the action bar (65). */
+     float over the open mobile panel. */
   position: fixed; right: 16px; bottom: calc(16px + var(--wl-bottom-safe)); z-index: 55;
   width: 46px; height: 46px; display: flex; align-items: center; justify-content: center;
   padding: 0; border-radius: 999px; cursor: pointer;
@@ -191,5 +150,5 @@ html.wl-cookie-open .wl-totop { opacity: 0; visibility: hidden; translate: 0 12p
   * { transition-duration: 0.01ms !important; }
   /* Colour feedback stays, the movement goes. The hover shadows are static, not
      motion, so they are deliberately left alone. */
-  .wl-actbar-btn:active, .wl-totop, .wl-totop.is-in, .wl-totop:active { translate: none !important; }
+  .wl-totop, .wl-totop.is-in, .wl-totop:active { translate: none !important; }
 }

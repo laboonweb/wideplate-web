@@ -545,10 +545,9 @@
 
     var css = document.createElement('style');
     css.textContent =
-      /* --wl-bottom-safe (css/site.css) is the mobile action bar's height plus
-         the home-indicator inset, and 0 + the inset on desktop where the bar
-         is not shown. Reading it here is what stops the card and the bar
-         sitting on top of each other, with no measurement on either side. */
+      /* --wl-bottom-safe (css/site.css) is the home-indicator inset, 0 on a
+         device without one. Reading the variable rather than env() directly
+         keeps every bottom-anchored element on one number. */
       ".wl-cookie{position:fixed;left:24px;bottom:calc(24px + var(--wl-bottom-safe, 0px));z-index:70;" +
       "width:min(380px,calc(100vw - 48px));box-sizing:border-box;padding:20px 22px 22px;border-radius:16px;" +
       "background:rgba(11,42,32,0.97);backdrop-filter:blur(10px);border:1px solid rgba(244,238,225,0.18);" +
@@ -632,7 +631,7 @@
      the kind of layout query that has to be cached.
 
      Collisions are handled in CSS, not here: the button offsets by
-     --wl-bottom-safe so it sits above the action bar, and stands down entirely
+     --wl-bottom-safe so it clears the home indicator, and stands down entirely
      while the cookie card is up (html.wl-cookie-open). */
   (function backToTop() {
     var btn = document.createElement('button');

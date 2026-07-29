@@ -29,7 +29,18 @@
     .wl-slide[data-slide="0"] { opacity: 1; }
     .wl-slide img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transform-origin: 50% 45%; filter: saturate(1.06) sepia(0.05) contrast(1.03) brightness(0.92); animation: wpkb 28s ease-in-out infinite alternate; }
     .wl-hero-scrim { position: absolute; inset: 0; background: linear-gradient(to top right, rgba(11,42,32,0.92) 0%, rgba(11,42,32,0.55) 38%, rgba(11,42,32,0) 74%), radial-gradient(120% 90% at 50% 45%, rgba(0,0,0,0) 55%, rgba(8,31,23,0.35) 100%); animation: wpfadein 1.1s ease both; }
-    .wl-herowrap { position: relative; width: 100%; max-width: none; margin: 0 auto; padding: 150px var(--gutter) 72px; display: flex; flex-direction: column; align-items: flex-start; gap: 26px; }
+    /* --wl-bars-band is the space the absolutely-positioned slide indicators
+       occupy at the bottom of the hero: their own 32px height plus the 30px
+       they sit above the bottom edge plus the home-indicator inset they are
+       pushed up by. The hero's bottom padding is that band plus 20px, so the
+       CTA row clears the indicators by the same 20px at EVERY viewport instead
+       of by whatever a per-breakpoint number happened to leave.
+
+       This is what was overlapping on an iPhone 14 Pro Max: the indicators
+       move up by the 34px inset, the padding did not, so a 20px gap became a
+       14px overlap. It cannot be seen in a desktop browser, where the inset is
+       0 — which is exactly why the number is derived here rather than typed. */
+    .wl-herowrap { --wl-bars-band: calc(62px + var(--wl-bottom-safe)); position: relative; width: 100%; max-width: none; margin: 0 auto; padding: 150px var(--gutter) calc(var(--wl-bars-band) + 20px); display: flex; flex-direction: column; align-items: flex-start; gap: 26px; }
     .wl-hero-badge { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; color: #F4EEE1; font-size: 11px; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; animation: wpfadein 0.9s ease 0.5s both; }
     .wl-hero-rating { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
     .wl-hero-score { color: var(--gold); display: inline-flex; align-items: center; gap: 5px; }
@@ -48,11 +59,11 @@
     .wl-hero-lede { margin: 0; max-width: 560px; font-size: clamp(15.5px, 1.9vw, 18px); line-height: 1.65; color: rgba(244,238,225,0.88); animation: wpfadein 0.9s ease 0.7s both; }
     .wl-hero-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 6px; animation: wpfadein 0.9s ease 0.85s both; }
     .wl-btn-outline-light { border: 1px solid rgba(244,238,225,0.6); color: #F4EEE1; text-decoration: none; font-size: 12.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 17px 32px; border-radius: 999px; transition: background 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1); }
-    /* bottom is offset by --wl-bottom-safe (css/site.css) so the indicators
-       clear the fixed mobile action bar. On desktop that variable is just the
-       safe-area inset, i.e. 0 on anything without a home indicator, so this
-       resolves back to the original 30px. The cookie card's separate lift is a
-       transform on top of this and still composes. */
+    /* bottom is offset by --wl-bottom-safe (css/site.css) — the home-indicator
+       inset, 0 on anything without one, so this is the original 30px on a
+       desktop. The cookie card's separate lift is a transform on top and still
+       composes. See the hero-CTA clearance rule further down for why the
+       indicators also need the CTA row to stop short of them on a phone. */
     .wl-bars { position: absolute; right: 24px; bottom: calc(30px + var(--wl-bottom-safe)); z-index: 2; display: flex; gap: 4px; }
     .wl-bar { width: 44px; height: 32px; background: none; border: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
     .wl-bar-track { position: relative; display: block; width: 36px; height: 2px; background: rgba(244,238,225,0.28); overflow: hidden; }
@@ -262,11 +273,10 @@
        disappearing -- that last part is what stops this recurring the next
        time an item is added to the menu.
 
-       --wl-bottom-safe is subtracted for the same reason the bar's own height
-       was: the fixed action bar sits at z-index 65, above this panel's header
-       (60), so without it the panel's last item goes back under something
-       unreachable — which is exactly the bug this rule already exists to fix,
-       and FAQ has just made the panel one item taller. */
+       --wl-bottom-safe is subtracted so the last item clears the iOS home
+       indicator rather than sitting under it, which is the same class of bug
+       this rule already exists to fix, and FAQ has made the panel one item
+       taller. */
     .wl-mobpanel.open { max-height: calc(100dvh - var(--nav-bar-h, 60px) - var(--wl-bottom-safe)); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
     /* ---- Seven desktop nav items: two compaction steps, then the hamburger ----
        MEASURED in a browser at 1920 with fonts loaded, not modelled. The parts
@@ -285,9 +295,10 @@
          <= 1130  the nav phone number leaves (fits to 1024 with 27.8 spare)
          <= 1023  hamburger
 
-       Hiding the tel is what buys 1024, and it is safe at exactly that width
-       because the persistent action bar's Call button starts at 1130 — the two
-       breakpoints are a pair, do not move one alone.
+       Hiding the tel is what buys 1024: seven links plus the number need
+       1131px, so on a tablet the number gives way to the links. It is still in
+       the footer, the Visit section and FAQ on every page, and the nav keeps
+       its Get Directions pill throughout.
 
        iPad landscape (1024) keeps the desktop nav deliberately. Re-measure with
        b=document.querySelector('.wl-nav-bar'); b.scrollWidth - b.clientWidth
@@ -308,7 +319,11 @@
       .wl-desk { display: none !important; }
       .wl-mob { display: flex !important; }
       .wl-storypin { position: static !important; top: auto !important; }
-      .wl-herowrap { padding-top: 118px !important; padding-bottom: 56px !important; }
+      /* padding-bottom is deliberately NOT overridden here any more: the base
+         rule derives it from the indicators' own band. The old 56px was 6px
+         less than the indicators occupy, which put the CTA row under them on
+         an iPad in portrait. */
+      .wl-herowrap { padding-top: 118px !important; }
     }
     /* Visit: fill the viewport below the sticky nav on desktop so the footer
        doesn't peek when landing on #visit (same pattern as the hero). */
@@ -328,7 +343,8 @@
       .wl-visit h2 { font-size: clamp(40px, 5.6vw, 82px); }
     }
     @media (max-width: 600px) {
-      .wl-herowrap { padding-top: 104px !important; padding-bottom: 82px !important; }
+      /* Same as the 900px block: the bottom is the base rule's derived band. */
+      .wl-herowrap { padding-top: 104px !important; }
       .wl-drag-hint { display: none !important; }
       /* Hero headline: keep the signature 3-line stagger but shrink it so it
          reads comfortably and stops dominating the phone screen. */

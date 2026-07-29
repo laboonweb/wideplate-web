@@ -405,9 +405,20 @@ depending on viewport width.
   keeps the desktop nav. Tightest measured clearance between the links and the
   actions is 27.5px, at 1131 where the phone number comes back. See the nav
   breakpoint ladder above.
-- **1024–1130 shows the desktop nav AND the fixed mobile action bar** at the
-  same time, deliberately: the nav's phone number is hidden in that band and
-  the bar's Call button is what replaces it.
+- **The nav's phone number is hidden from 1130px down**, because seven links
+  plus the number need 1131px. It is still in the footer, Visit and FAQ, and
+  the nav keeps its Get Directions pill at every width.
+- **A persistent Call / Get Directions bar was built and then removed** on the
+  client's call: let a visitor explore without being pushed to call. Do not
+  re-propose it. `--wl-bottom-safe` survives it and is now just
+  `env(safe-area-inset-bottom)`.
+- **The hero's bottom padding is derived, never typed:**
+  `--wl-bars-band` = the slide indicators' 32px height + their 30px offset +
+  `--wl-bottom-safe`, and the padding is that band + 20px. The indicators are
+  pushed up by the home-indicator inset, so a hard-coded padding that looks
+  fine in a desktop browser (inset 0) overlaps the CTA buttons by 14px on an
+  iPhone 14 Pro Max (inset 34px). **Simulate the inset when testing:**
+  `document.documentElement.style.setProperty('--wl-bottom-safe','34px')`.
 - Story sticky pin is `static` ≤900px, `sticky` ≥1000px.
 
 ### Still needed before pitch
