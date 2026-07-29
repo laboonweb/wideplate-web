@@ -397,6 +397,16 @@ depending on viewport width.
 ### Known gotchas / tight widths
 
 - **320px** is the tightest supported width and where things break first.
+- **`a:hover` is a TEXT-link rule and is scoped away from buttons.** Both
+  `site.css` and `home.css` carry
+  `a:not([class*="wl-btn"]):not([class*="-dir"]):hover { color: #C9862B }`.
+  The pills are `<a>` elements, so the unscoped version repainted a gold
+  button's label amber on gold (~1.6:1, effectively invisible). Any new filled
+  button should still declare its own `:hover` colour. On gold, the label stays
+  `#1B1305` (~10:1) — white on gold is under 2:1 and is not an option.
+- **Chrome's auto-dark-mode is ON in the test browser and rewrites the
+  buttons' computed colours**, so colour work cannot be verified there — even
+  `color-scheme: light` did not opt out. Check colour on a real browser.
 - **Phone landscape (e.g. 667x375): the hero is ~566px of content in a 375px
   viewport, so it scrolls instead of filling.** Nothing clips or overlaps.
   Left alone deliberately: the fix wants a `max-height` media query, which is

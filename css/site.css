@@ -16,7 +16,13 @@
 html { background: #081F17; }
 body { margin: 0; background: #F4EEE1; color: #14241D; font-family: 'General Sans', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; }
 a { color: #0F362C; }
-a:hover { color: #C9862B; }
+/* Amber is the hover colour for a TEXT link. Pill buttons are <a> elements
+   too, and they own their label colour: repainting a gold pill's label amber
+   put amber on gold, which is roughly 1.6:1 and effectively unreadable. The
+   :not() is what keeps a global text-link rule from reaching into buttons —
+   without it, every filled button ever added has to remember to override this
+   one declaration, and the first one that forgets ships an invisible label. */
+a:not([class*="wl-btn"]):not([class*="-dir"]):hover { color: #C9862B; }
 /* <button> does not inherit font-family and Chrome's UA default for it is
    Arial. Without this, any button with visible text silently falls off the
    type system. */
