@@ -353,10 +353,17 @@ noticed. Instead the nav/subpage WIDEPLATE is **21.5px**, chosen so that
 0.35 lands RESTAURANT on 7.53px — the same size it rendered at before, so
 nothing became less legible in the process of becoming accurate.
 
-**That is why the hamburger handover is 1030px, not 1000px.** The wider mark
-means the six desktop links stop clearing the gutter below about 1012px.
-Measured at 21.5px: 1001px overflows by 9px, 1010px by 1px, 1030px has 16px
-spare. Do not lower this breakpoint without re-measuring the nav's gutter.
+**Nav breakpoints — remeasured in a browser 2026-07-30, seven items.** FAQ was
+added to the nav, and iPad landscape (1024) must keep the desktop nav, so the
+handover is now a three-step ladder rather than one number: **>1240** full
+spacing · **≤1240** link gap 14 / bar gap 24 · **≤1130** the nav phone number
+drops out (the action bar's Call takes over at exactly the same width — they
+are a pair) · **≤1023** hamburger. Measured parts at 21.5px, fonts loaded:
+wordmark 175.55, seven links 442.43 of text, tel 93.52, Get Directions pill
+164.3. At default spacing seven items need 1213px before they fit at all,
+which is why an intermediate 1130 handover was wrong. Re-measure with
+`b=document.querySelector('.wl-nav-bar'); b.scrollWidth - b.clientWidth` at
+1024, 1131 and 1241 after any nav item, wordmark or pill-label change.
 Nav bar height is unchanged at 72px desktop / 80px mobile, so `--nav-height`,
 the hero and Visit fill math, the anchor offsets and the mobile panel's
 max-height are all untouched.
@@ -394,8 +401,13 @@ depending on viewport width.
   viewport, so it scrolls instead of filling.** Nothing clips or overlaps.
   Left alone deliberately: the fix wants a `max-height` media query, which is
   exactly the height-dependent pattern that caused the mid-scroll resize bug.
-- Nav hands over to the hamburger at **≤1000px**; at 1001px the six desktop
-  items clear the gutter by only 24px.
+- Nav hands over to the hamburger at **≤1023px**, so 1024 tablet landscape
+  keeps the desktop nav. Tightest measured clearance between the links and the
+  actions is 27.5px, at 1131 where the phone number comes back. See the nav
+  breakpoint ladder above.
+- **1024–1130 shows the desktop nav AND the fixed mobile action bar** at the
+  same time, deliberately: the nav's phone number is hidden in that band and
+  the bar's Call button is what replaces it.
 - Story sticky pin is `static` ≤900px, `sticky` ≥1000px.
 
 ### Still needed before pitch

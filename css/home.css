@@ -48,7 +48,12 @@
     .wl-hero-lede { margin: 0; max-width: 560px; font-size: clamp(15.5px, 1.9vw, 18px); line-height: 1.65; color: rgba(244,238,225,0.88); animation: wpfadein 0.9s ease 0.7s both; }
     .wl-hero-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 6px; animation: wpfadein 0.9s ease 0.85s both; }
     .wl-btn-outline-light { border: 1px solid rgba(244,238,225,0.6); color: #F4EEE1; text-decoration: none; font-size: 12.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 17px 32px; border-radius: 999px; transition: background 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1); }
-    .wl-bars { position: absolute; right: 24px; bottom: 30px; z-index: 2; display: flex; gap: 4px; }
+    /* bottom is offset by --wl-bottom-safe (css/site.css) so the indicators
+       clear the fixed mobile action bar. On desktop that variable is just the
+       safe-area inset, i.e. 0 on anything without a home indicator, so this
+       resolves back to the original 30px. The cookie card's separate lift is a
+       transform on top of this and still composes. */
+    .wl-bars { position: absolute; right: 24px; bottom: calc(30px + var(--wl-bottom-safe)); z-index: 2; display: flex; gap: 4px; }
     .wl-bar { width: 44px; height: 32px; background: none; border: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
     .wl-bar-track { position: relative; display: block; width: 36px; height: 2px; background: rgba(244,238,225,0.28); overflow: hidden; }
     .wl-bar-fill { position: absolute; inset: 0; transform: scaleX(0); transform-origin: left; background: var(--gold); }
@@ -140,13 +145,92 @@
     .wl-mob-call { color: var(--gold); text-decoration: none; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 14px 2px; }
     /* No !important needed now that nothing inline is being fought. */
     .wl-nav-a:hover, .wl-navlink:hover { color: var(--gold); }
+
+    /* ===== Interaction states (index) =====
+       The shared focus ring and the :active vocabulary live in css/site.css;
+       this block is the index-only controls. Two ground rules carried over:
+
+       1. `translate`, never `transform`, for a press or a lift. The gold CTAs
+          carry data-magnet, which writes an INLINE transform on mousemove, and
+          inline beats a stylesheet — a transform here would be dead code on
+          every desktop pointer. `translate` composes with it instead.
+       2. `!important` where an element's own inline style declares the same
+          property. The chips and the combo toggles both do (they are part of
+          the ~900 inline attributes index.html deliberately still carries), and
+          this is the same reason .wl-chip.is-active already needs it.
+
+       Timing is ~180ms across the board, deliberately snappier than the house
+       cubic-bezier(0.16,1,0.3,1) used for scroll reveals. A button should feel
+       like it answered, not like it eased. */
+    #top, #best-sellers, #combos, .wl-visit, .wl-nav, .wl-mobpanel { --wl-ring: var(--gold); }
+
+    /* The gold pill's own states are NOT here — they live with its base rule
+       below, because that rule re-declares `transition` and a later equal
+       specificity declaration wins. Split across the two blocks, the new
+       background and translate transitions were being dropped and the press
+       shadow lost to the base :hover. One block, one cascade. */
+
+    /* Ghost pills: outline-light (hero), seecombos (dark section), fb (cream
+       section, and Facebook blue is deliberately NOT used here — this one is a
+       cream-on-green outline that belongs to the site, not a brand button). */
+    .wl-btn-outline-light { transition: background 0.18s ease, border-color 0.18s ease, translate 0.18s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1); }
+    .wl-btn-outline-light:hover { background: rgba(244,238,225,0.12); border-color: #F4EEE1; }
+    .wl-btn-outline-light:active { background: rgba(244,238,225,0.2); translate: 0 1px; }
+    .wl-btn-seecombos:active { background: #E6DFCE !important; color: #0B2A20 !important; translate: 0 1px; }
+    .wl-btn-fb:active { background: #082018 !important; color: #F4EEE1 !important; translate: 0 1px; }
+
+    /* Nav + mobile panel links. The panel had no states at all, which on a
+       phone meant a tap gave no confirmation it had registered. */
+    .wl-nav-a:active, .wl-navlink:active { color: #C08F33; }
+    .wl-nav-mark, .wl-nav-tel, .wl-mob-a, .wl-mob-dir, .wl-mob-call { transition: color 0.18s ease, opacity 0.18s ease; }
+    .wl-nav-mark:hover, .wl-nav-tel:hover, .wl-mob-dir:hover, .wl-mob-call:hover { color: var(--gold); }
+    .wl-mob-a:hover { color: var(--gold); }
+    .wl-nav-mark:active, .wl-nav-tel:active, .wl-mob-a:active, .wl-mob-dir:active, .wl-mob-call:active { opacity: 0.6; }
+    .wl-mob:active span { background: var(--gold); }
+
+    /* Menu filter chips. Inline background/color/border-color on all 15, hence
+       !important — the same fight .wl-chip.is-active already had to win. The
+       active chip keeps its gold and only presses. */
+    .wl-chip:hover { background: rgba(20,36,29,0.06) !important; border-color: rgba(20,36,29,0.55) !important; }
+    .wl-chip:active { background: rgba(20,36,29,0.12) !important; translate: 0 1px; }
+    .wl-chip.is-active:hover { background: #E3B45C !important; border-color: #E3B45C !important; }
+    .wl-chip.is-active:active { background: #C08F33 !important; border-color: #C08F33 !important; }
+
+    /* Combo "See what's inside" toggles: inline color, so !important again. */
+    .wl-combo-toggle { transition: color 0.18s ease, border-color 0.18s ease; }
+    .wl-combo-toggle:hover { color: var(--gold) !important; border-top-color: rgba(217,164,65,0.5) !important; }
+    .wl-combo-toggle:active { color: #C08F33 !important; }
+    .wl-combo-toggle:focus-visible { outline-offset: -2px; }
+
+    /* Visit contact links and the hero's slide indicators. The bars are
+       <button>s with no visual state whatsoever before this. */
+    .wl-visit-tel, .wl-visit-email { transition: color 0.18s ease, opacity 0.18s ease; }
+    .wl-visit-tel:hover, .wl-visit-email:hover { color: var(--gold); }
+    .wl-visit-tel:active, .wl-visit-email:active { opacity: 0.6; }
+    .wl-bar-track { transition: background 0.18s ease; }
+    .wl-bar:hover .wl-bar-track { background: rgba(244,238,225,0.55); }
+    .wl-bar:active .wl-bar-track { background: rgba(217,164,65,0.7); }
+
+    /* Map facade: hover and focus already lit the pill. This is the press. */
+    .wl-map-load:active .wl-map-cta { background: #C08F33; border-color: #C08F33; color: #1B1305; }
+
+    /* Movement off, colour kept. The hover shadows are static, not motion. */
+    @media (prefers-reduced-motion: reduce) {
+      .wl-btn-gold:hover, .wl-btn-gold:active, .wl-btn-outline-light:active,
+      .wl-btn-seecombos:active, .wl-btn-fb:active, .wl-chip:active,
+      .wl-chip.is-active:active, .wl-map-load:active .wl-map-cta { translate: none !important; }
+    }
+
     /* Gold pill. Four instances existed inline, identical except for their
        type size and padding, so the shared look is the base rule and the two
        that differ carry a modifier. */
-    .wl-btn-gold { background: var(--gold); color: #1B1305; text-decoration: none; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 17px 32px; border-radius: 999px; transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s ease; }
+    .wl-btn-gold { background: var(--gold); color: #1B1305; text-decoration: none; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 17px 32px; border-radius: 999px; transition: background 0.18s ease, translate 0.18s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.18s ease; }
     .wl-btn-gold.is-nav { font-size: 11.5px; padding: 12px 22px; white-space: nowrap; }
     .wl-btn-gold.is-hero { font-size: 12.5px; padding: 18px 34px; }
-    .wl-btn-gold:hover { box-shadow: 0 14px 38px rgba(217,164,65,0.4); }
+    /* Hover and press: the deep shadow was already the house look for this
+       button, so the lift keeps it and only the press steps it down. */
+    .wl-btn-gold:hover { background: #E3B45C; translate: 0 -2px; box-shadow: 0 14px 38px rgba(217,164,65,0.4); }
+    .wl-btn-gold:active { background: #C08F33; translate: 0 1px; box-shadow: 0 4px 12px rgba(217,164,65,0.28); }
     .wl-btn-outline-light:hover { background: rgba(244,238,225,0.12); }
     .wl-btn-seecombos:hover { background: #F4EEE1 !important; color: #0B2A20 !important; }
     .wl-btn-fb:hover { background: #0F362C !important; color: #F4EEE1 !important; }
@@ -171,15 +255,47 @@
        real height so the panel ends exactly at the bottom of the screen, and
        overflow-y:auto so content that outgrows the space scrolls instead of
        disappearing -- that last part is what stops this recurring the next
-       time an item is added to the menu. */
-    .wl-mobpanel.open { max-height: calc(100dvh - var(--nav-bar-h, 60px)); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
-    /* Six desktop nav items since Gallery was added: the bar overflows just
-       above 900px, so hand over to the hamburger 100px earlier. Nav only, the
-       900px block below keeps owning everything else. */
-    /* 1030px, not 1000px: the wordmark is wider now that RESTAURANT sits at the
-       logo's true proportion, and the six desktop links stop clearing the
-       gutter below about 1012px. 1030 leaves 16px of real margin. */
-    @media (max-width: 1030px) {
+       time an item is added to the menu.
+
+       --wl-bottom-safe is subtracted for the same reason the bar's own height
+       was: the fixed action bar sits at z-index 65, above this panel's header
+       (60), so without it the panel's last item goes back under something
+       unreachable — which is exactly the bug this rule already exists to fix,
+       and FAQ has just made the panel one item taller. */
+    .wl-mobpanel.open { max-height: calc(100dvh - var(--nav-bar-h, 60px) - var(--wl-bottom-safe)); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+    /* ---- Seven desktop nav items: two compaction steps, then the hamburger ----
+       MEASURED in a browser at 1920 with fonts loaded, not modelled. The parts
+       are all fixed px and only the gutter and the link gap scale with vw:
+
+         wordmark 175.55 · links text 442.43 (7 items, "FAQ" 29.86)
+         nav tel 93.52 · Get Directions pill 164.3 · nav-bar gaps 2 x 32
+
+       At default spacing that needs 0.212w + 955.79 <= w, i.e. 1213px before it
+       fits at all, and ~1225 with a real margin. The old 1130 value came from
+       arithmetic off six-item measurements and was simply wrong — it would have
+       shipped an overflowing nav on every 1152 and 1200px laptop. Hence:
+
+         > 1240   full spacing
+         <= 1240  link gap 14, bar gap 24     (7 items fit to ~1131 with 16 spare)
+         <= 1130  the nav phone number leaves (fits to 1024 with 27.8 spare)
+         <= 1023  hamburger
+
+       Hiding the tel is what buys 1024, and it is safe at exactly that width
+       because the persistent action bar's Call button starts at 1130 — the two
+       breakpoints are a pair, do not move one alone.
+
+       iPad landscape (1024) keeps the desktop nav deliberately. Re-measure with
+       b=document.querySelector('.wl-nav-bar'); b.scrollWidth - b.clientWidth
+       at 1024, 1131 and 1241 after ANY change to a nav item, the wordmark size
+       or the pill's label. Anything above 0 overflows. */
+    @media (max-width: 1240px) {
+      .wl-nav-bar { gap: 24px; }
+      .wl-nav-links { gap: 14px; }
+    }
+    @media (max-width: 1130px) {
+      .wl-nav-tel { display: none; }
+    }
+    @media (max-width: 1023px) {
       .wl-desk { display: none !important; }
       .wl-mob { display: flex !important; }
     }

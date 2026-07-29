@@ -109,12 +109,37 @@
     var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var MIN = still ? 450 : 1400, MAX = still ? 700 : 1700, WIPE = still ? 0 : 500;
     var t0 = Date.now(), done = false;
-    root.classList.add('wp-loading');
     /* Own the scroll position rather than racing the browser for it. Set here,
     in the <head>, because the browser restores very early and 'manual' has
     to be in place before it does. app.js does the actual saving and
-    restoring once the loader has lifted. */
+    restoring once the loader has lifted.
+    ABOVE the session check below on purpose: this has to run on EVERY load,
+    including the ones that skip the loader, or app.js's scroll memory is
+    fighting the browser again on every page after the first. */
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    /* ---- Once per session, not once per load ----
+       sessionStorage, not localStorage: it survives a reload and a navigation
+       to another page in the same tab, and clears when the tab closes. A new
+       tab is a new visit and sees the loader again, which is the point.
+
+       The skip is "never add .wp-loading", and that one fact is what keeps the
+       animation gate honest, with nothing to un-pause and no event to fake:
+         - app.js's afterLoader() runs its callback immediately when the class
+           is absent, so the scroll reveals, the hero's deferred slides and the
+           scroll restore all fire exactly as they do after a completed load.
+           app.js is deferred, so this line has already run when it looks.
+         - the hero's `html.wp-loading #top { animation-play-state: paused }`
+           gate never engages, so the intro plays from frame 0 on its own.
+       Dispatching wp:ready here would be dispatching into an empty room —
+       nothing is listening yet — and it is not needed.
+
+       Storage blocked (private mode, an in-app webview): the catch falls
+       through and the loader plays. That is the old behaviour, not a break. */
+    try {
+      if (sessionStorage.getItem('wp:seen') === '1') return;
+      sessionStorage.setItem('wp:seen', '1');
+    } catch (e) { /* no storage to remember with: show the loader */ }
+    root.classList.add('wp-loading');
     function exit() {
       if (done) return;
       done = true;
@@ -172,6 +197,11 @@
         <a class="wl-nav-a" href="#story">Our Story</a>
         <a class="wl-nav-a" href="gallery.html">Gallery</a>
         <a class="wl-nav-a" href="#visit">Visit</a>
+        <!-- FAQ was footer-only, which is the one place a visitor looking for
+             parking, pets or wheelchair access will not look. Seventh item:
+             the hamburger handover moved 1030 -> 1130 to pay for it. See the
+             derivation in css/home.css. -->
+        <a class="wl-nav-a" href="faq.html">FAQ</a>
       </nav>
       <div class="wl-nav-actions">
         <a class="wl-desk wl-nav-tel" href="tel:+639669659995">0966 965 9995</a>
@@ -191,6 +221,7 @@
         <a class="wl-navclose wl-mob-a" href="#story">Our Story</a>
         <a class="wl-navclose wl-mob-a" href="gallery.html">Gallery</a>
         <a class="wl-navclose wl-mob-a" href="#visit">Visit</a>
+        <a class="wl-navclose wl-mob-a" href="faq.html">FAQ</a>
         <a class="wl-navclose wl-mob-dir" href="https://www.google.com/maps/dir/?api=1&amp;destination=Wideplate%20Restaurant%2C%20R.%20Concepcion%20St%2C%20San%20Antonio%2C%20Zambales" target="_blank" rel="noopener">Get Directions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></a>
         <a class="wl-mob-call" href="tel:+639669659995">Call 0966 965 9995</a>
       </div>
@@ -1307,7 +1338,11 @@
         </article>
       </div>
       <div style="margin-top:clamp(32px, 4vw, 48px); display:flex; flex-wrap:wrap; align-items:center; gap:20px;">
-        <a class="wl-btn-gold" data-magnet="true" href="tel:+639669659995" style="background:var(--gold); color:#1B1305; text-decoration:none; font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; padding:17px 32px; border-radius:999px; transition:transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s ease;">Call to Order a Combo</a>
+        <!-- Inline style removed: it repeated .wl-btn-gold declaration for
+             declaration, and inline beats a stylesheet, so it was quietly
+             blocking the class's new :hover/:active background and transition.
+             The class alone renders this identically. -->
+        <a class="wl-btn-gold" data-magnet="true" href="tel:+639669659995">Call to Order a Combo</a>
         <p style="margin:0; font-size:13.5px; color:rgba(244,238,225,0.6);">Ask the team for this month's platter line-up.</p>
       </div>
     </div>
@@ -1503,5 +1538,28 @@
     <div class="wl-foot-noise" aria-hidden="true"></div>
   </footer>
 </div>
+
+  <!-- Persistent mobile action bar. Duplicated in all four pages for the same
+       reason the footer above it is: there is no include mechanism here. Its
+       styling, its 1130px breakpoint and the --wl-bottom-safe offset every
+       other bottom-anchored element reads all live in css/site.css.
+
+       Deliberately OUTSIDE the wrapper div above, which carries overflow-x:clip
+       — a clipping ancestor is not something to hand a position:fixed element
+       and hope. Same reason the cookie card is appended to <body>.
+
+       Both actions are also still in the nav, the mobile panel and the footer.
+       This is a shortcut for someone standing outside deciding whether to walk
+       in, not their only home. -->
+  <nav class="wl-actbar" aria-label="Quick actions">
+    <a class="wl-actbar-btn is-ghost" href="tel:+639669659995">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      Call
+    </a>
+    <a class="wl-actbar-btn is-gold" href="https://www.google.com/maps/dir/?api=1&amp;destination=Wideplate%20Restaurant%2C%20R.%20Concepcion%20St%2C%20San%20Antonio%2C%20Zambales" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21.5c4.5-5 7-8.4 7-11.5a7 7 0 1 0-14 0c0 3.1 2.5 6.5 7 11.5z"/><circle cx="12" cy="10" r="2.6"/></svg>
+      Directions
+    </a>
+  </nav>
 </body>
 </html>

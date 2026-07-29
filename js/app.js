@@ -545,7 +545,11 @@
 
     var css = document.createElement('style');
     css.textContent =
-      ".wl-cookie{position:fixed;left:24px;bottom:calc(24px + env(safe-area-inset-bottom));z-index:70;" +
+      /* --wl-bottom-safe (css/site.css) is the mobile action bar's height plus
+         the home-indicator inset, and 0 + the inset on desktop where the bar
+         is not shown. Reading it here is what stops the card and the bar
+         sitting on top of each other, with no measurement on either side. */
+      ".wl-cookie{position:fixed;left:24px;bottom:calc(24px + var(--wl-bottom-safe, 0px));z-index:70;" +
       "width:min(380px,calc(100vw - 48px));box-sizing:border-box;padding:20px 22px 22px;border-radius:16px;" +
       "background:rgba(11,42,32,0.97);backdrop-filter:blur(10px);border:1px solid rgba(244,238,225,0.18);" +
       "box-shadow:0 20px 50px rgba(4,18,13,0.4);color:#F4EEE1;" +
@@ -570,7 +574,7 @@
          transform, not bottom, so it stays compositor-only. */
       ".wl-bars{transition:transform .45s cubic-bezier(0.16,1,0.3,1)}" +
       "@media (max-width:600px){.wl-cookie{left:16px;right:16px;width:auto;" +
-      "bottom:calc(16px + env(safe-area-inset-bottom))}" +
+      "bottom:calc(16px + var(--wl-bottom-safe, 0px))}" +
       "html.wl-cookie-open .wl-bars{transform:translateY(calc(-1 * (var(--wl-cookie-h,200px) + 14px)))}}";
     document.head.appendChild(css);
 
@@ -612,6 +616,48 @@
        ~1.75s: 0.85s delay + 0.9s fade) so the two don't compete. */
     if (reduced) { show(); return; }
     setTimeout(function () { requestAnimationFrame(show); }, 2200);
+  })();
+
+  /* ---- Back to top ----
+     The wordmark already goes to #top, but nothing about it says so. BUILT
+     HERE rather than in the four HTML files, on the same reasoning as the
+     cookie card: it is pure affordance with nothing to do when JS is off, and
+     one copy cannot drift from three others. Its styling is in css/site.css,
+     where it is cacheable, rather than a string in this file.
+
+     No rAF loop and no DOM geometry read: one passive scroll listener that
+     compares a number and writes a class only when the answer changes.
+     visualViewport.height rather than innerHeight because the mobile toolbar
+     changes innerHeight live while scrolling; it is a cheap property read, not
+     the kind of layout query that has to be cached.
+
+     Collisions are handled in CSS, not here: the button offsets by
+     --wl-bottom-safe so it sits above the action bar, and stands down entirely
+     while the cookie card is up (html.wl-cookie-open). */
+  (function backToTop() {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'wl-totop';
+    btn.setAttribute('aria-label', 'Back to top');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>';
+    btn.addEventListener('click', function () {
+      /* 'instant' under reduced motion, and note that html has
+         scroll-behavior:smooth on index only — passing it explicitly means the
+         subpages behave the same as the home page. */
+      window.scrollTo({ top: 0, left: 0, behavior: reduced ? 'instant' : 'smooth' });
+    });
+    document.body.appendChild(btn);
+
+    var on = false;
+    function check() {
+      var vh = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+      var want = window.pageYOffset > vh * 0.9;
+      if (want === on) return; // diff first: never write a class every scroll event
+      on = want;
+      btn.classList.toggle('is-in', want);
+    }
+    check();
+    window.addEventListener('scroll', check, { passive: true });
   })();
 
   /* ---- Magnetic buttons (desktop pointer only) ---- */

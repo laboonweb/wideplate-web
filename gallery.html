@@ -114,12 +114,21 @@
     var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var MIN = still ? 450 : 1400, MAX = still ? 700 : 1700, WIPE = still ? 0 : 500;
     var t0 = Date.now(), done = false;
-    root.classList.add('wp-loading');
     /* Own the scroll position rather than racing the browser for it. Set here,
     in the <head>, because the browser restores very early and 'manual' has
     to be in place before it does. app.js does the actual saving and
-    restoring once the loader has lifted. */
+    restoring once the loader has lifted.
+    ABOVE the session check below on purpose: this has to run on EVERY load,
+    including the ones that skip the loader. */
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    /* Once per session, not once per load. The skip is "never add
+       .wp-loading", which is what keeps the animation gate honest — see the
+       full note in index.html, this block is duplicated in all four pages. */
+    try {
+      if (sessionStorage.getItem('wp:seen') === '1') return;
+      sessionStorage.setItem('wp:seen', '1');
+    } catch (e) { /* no storage to remember with: show the loader */ }
+    root.classList.add('wp-loading');
     function exit() {
       if (done) return;
       done = true;
@@ -248,5 +257,18 @@
     </div>
     <div class="wl-foot-noise" aria-hidden="true"></div>
   </footer>
+
+  <!-- Persistent mobile action bar — identical copy in all four pages, styled
+       from css/site.css. See index.html for the full note. -->
+  <nav class="wl-actbar" aria-label="Quick actions">
+    <a class="wl-actbar-btn is-ghost" href="tel:+639669659995">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      Call
+    </a>
+    <a class="wl-actbar-btn is-gold" href="https://www.google.com/maps/dir/?api=1&amp;destination=Wideplate%20Restaurant%2C%20R.%20Concepcion%20St%2C%20San%20Antonio%2C%20Zambales" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21.5c4.5-5 7-8.4 7-11.5a7 7 0 1 0-14 0c0 3.1 2.5 6.5 7 11.5z"/><circle cx="12" cy="10" r="2.6"/></svg>
+      Directions
+    </a>
+  </nav>
 </body>
 </html>
