@@ -345,14 +345,21 @@ glyph; what is matched is the ratio (0.35) and the width proportion (0.635),
 which are font-independent. RESTAURANT's tracking of `0.785em` is the value
 that hits 0.635 with our stack; it is not the logo's own tracking.
 
-**Nav and subpage marks carry a deliberate optical exception: ratio 0.395,
-not 0.35.** At their 19px WIDEPLATE the true ratio puts RESTAURANT at 6.65px,
-below comfortable legibility, so they hold it at 7.5px instead. This was a
-decision, not an oversight — do not "fix" it to 0.35. The alternative was
-growing the nav wordmark to 26px, which measured out at nav bar 72 -> 78px and
-the mark 158 -> 216px, overflowing the nav's gutter at 1001px (9px -> -49px)
-and forcing the hamburger breakpoint up. Preloader and footer use the true
-0.35. Tracking is standardised at 0.785em everywhere including the exception.
+**The ratio is 0.35 everywhere — there is no optical exception.** An earlier
+pass gave the nav and subpage marks 0.395 to keep RESTAURANT legible at a 19px
+WIDEPLATE; that was reverted because the client will read the lockup against
+the real logo and a 13% discrepancy is exactly the kind of thing that gets
+noticed. Instead the nav/subpage WIDEPLATE is **21.5px**, chosen so that
+0.35 lands RESTAURANT on 7.53px — the same size it rendered at before, so
+nothing became less legible in the process of becoming accurate.
+
+**That is why the hamburger handover is 1030px, not 1000px.** The wider mark
+means the six desktop links stop clearing the gutter below about 1012px.
+Measured at 21.5px: 1001px overflows by 9px, 1010px by 1px, 1030px has 16px
+spare. Do not lower this breakpoint without re-measuring the nav's gutter.
+Nav bar height is unchanged at 72px desktop / 80px mobile, so `--nav-height`,
+the hero and Visit fill math, the anchor offsets and the mobile panel's
+max-height are all untouched.
 
 **Never size RESTAURANT with its own `clamp()`.** Each lockup carries ONE size
 (the WIDEPLATE size) on the shared parent, and RESTAURANT, the gaps and the
