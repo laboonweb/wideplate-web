@@ -183,8 +183,13 @@
        phone meant a tap gave no confirmation it had registered. */
     .wl-nav-a:active, .wl-navlink:active { color: #C08F33; }
     .wl-nav-mark, .wl-nav-tel, .wl-mob-a, .wl-mob-dir, .wl-mob-call { transition: color 0.18s ease, opacity 0.18s ease; }
-    .wl-nav-mark:hover, .wl-nav-tel:hover, .wl-mob-dir:hover, .wl-mob-call:hover { color: var(--gold); }
+    .wl-nav-mark:hover, .wl-nav-tel:hover { color: var(--gold); }
     .wl-mob-a:hover { color: var(--gold); }
+    /* These two are ALREADY gold, so hovering them to gold was a dead rule --
+       nothing changed on hover. They step to the lighter gold instead, the same
+       #E3B45C the gold pill uses, so the feedback is visible and the change
+       still reads as the same button. Never hover a gold thing to gold. */
+    .wl-mob-dir:hover, .wl-mob-call:hover { color: #E3B45C; }
     .wl-nav-mark:active, .wl-nav-tel:active, .wl-mob-a:active, .wl-mob-dir:active, .wl-mob-call:active { opacity: 0.6; }
     .wl-mob:active span { background: var(--gold); }
 

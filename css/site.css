@@ -93,7 +93,11 @@ button { font-family: inherit; }
 .wl-foot, .wl-pp-head { --wl-ring: var(--gold); }
 :focus-visible { outline: 2px solid var(--wl-ring); outline-offset: 3px; }
 
-.wl-foot-link:hover, .wl-foot-fb:hover { color: var(--gold); }
+.wl-foot-link:hover { color: var(--gold); }
+/* .wl-foot-fb is gold already, so gold-on-gold hover would be a dead state.
+   It steps to the lighter gold, matching .wl-mob-dir / .wl-mob-call in
+   css/home.css and the gold pill's own hover. */
+.wl-foot-fb:hover { color: #E3B45C; }
 .wl-foot-link, .wl-foot-fb, .wl-navlink, .wl-pp-back { transition: color 0.18s ease, opacity 0.18s ease; }
 .wl-foot-link:active, .wl-foot-fb:active, .wl-navlink:active, .wl-pp-back:active { opacity: 0.65; }
 
