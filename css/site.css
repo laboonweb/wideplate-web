@@ -12,6 +12,30 @@
    each page's <head> so it paints before anything else can. */
 
 /* ---- Base ---- */
+/* ===== General Sans, self-hosted =====
+   Was loaded from api.fontshare.com. That host resolves to two IPs and one of
+   them is a blackhole: curl timed out 3/3 at 20s with the connection never
+   completing, and Chrome (which races both) took 285ms / 1184ms / 300ms /
+   339ms / 4235ms across five cold loads, against 40-105ms for Google Fonts on
+   the same connection. Since General Sans is the body and UI face on every
+   page, that is the whole site's text sitting in Arial for up to four seconds,
+   and indefinitely on any client that does not retry the dead IP.
+
+   Same origin now, so it cannot stall independently of the page itself, and it
+   costs one fewer DNS + TLS handshake. Four weights, 90KB total, already Latin
+   subsets from Fontshare's own webfont kit — no further subsetting needed.
+
+   Licence: ITF Free Font License. Free for commercial use, self-hosting is an
+   explicitly supported distribution route; reselling or redistributing the
+   font files is not. We do neither.
+
+   The .woff format is deliberately not carried: every browser that supports
+   :focus-visible and 100lvh, which this site already requires, supports woff2. */
+@font-face { font-family: 'General Sans'; src: url('../fonts/general-sans-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'General Sans'; src: url('../fonts/general-sans-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'General Sans'; src: url('../fonts/general-sans-600.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'General Sans'; src: url('../fonts/general-sans-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+
 :root { --gold: #D9A441; --gutter: clamp(24px, 4vw, 96px); }
 html { background: #081F17; }
 body { margin: 0; background: #F4EEE1; color: #14241D; font-family: 'General Sans', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; }

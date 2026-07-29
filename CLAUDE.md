@@ -314,6 +314,18 @@ Three roles, three faces. They are **not** meant to match:
 
 - **Fraunces is genuinely in use.** It is NOT dead weight and must not be
   removed. ~204KB across 3 files is the price of the editorial headline face.
+- **General Sans is self-hosted** from `fonts/general-sans-{400,500,600,700}.woff2`
+  (90KB total, `@font-face` at the top of `css/site.css`), NOT from
+  api.fontshare.com. That host resolves to two IPs and one is a blackhole:
+  curl timed out 3/3 at 20s, Chrome took 285ms to 4235ms across five cold
+  loads against 40-105ms for Google Fonts on the same connection. Do not put
+  the CDN link back. Licence is the ITF Free Font License: free commercially,
+  self-hosting explicitly supported, no reselling or redistributing the files.
+  Rendering is byte-identical to what the CDN served — all four weights
+  measured to 0.00px difference.
+- **Fraunces and Libre Baskerville still come from Google Fonts** and are
+  healthy (40-105ms). Self-hosting them is the remaining perf lever, not a
+  reliability one.
 - **What visitors actually see for the wordmark is Libre Baskerville.**
   `'New Baskerville FS'` and `'New Baskerville'` are not installed on ordinary
   machines — measured by canvas text width, the full stack renders identically
