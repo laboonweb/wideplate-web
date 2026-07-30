@@ -386,6 +386,36 @@ rule spacing all derive from it in `em`. Parallel clamps with different `vw`
 coefficients is what made the ratio drift from 0.169 to 0.395 across the site
 depending on viewport width.
 
+### Mobile performance — measured 2026-07-30, don't redo the dead ends
+
+- **`index.html` carries a GENERATED critical-CSS block** (`<style id="wp-critical">`,
+  ~11KB, penthouse at 412x823) and loads `site.css` + `home.css` non-blocking.
+  `css/*` stays the source of truth — **regenerate the block after editing
+  either file**; the command is in a comment above it. The preloader will not
+  lift until both sheets have applied, and `MAX` is still the failsafe.
+- **Deferring those stylesheets WITHOUT the critical block measured CLS 1.179**
+  (from 0.008) and LCP 3.6s -> 5.4s. Never do that.
+- **The LCP element is the nav wordmark `<b>`, not an image.** Its phases are
+  TTFB + Render Delay with Load Delay/Time at 0, so image work does not move
+  LCP; render-blocking CSS does.
+- **Font preloading made things WORSE and is not to be re-added:** preloading
+  General Sans 400 alone left FCP flat and pushed SI out; self-hosting Libre
+  Baskerville *and* preloading it took the score 83 -> 68 (FCP 2.6 -> 4.4s),
+  because preloads outrank the render-blocking CSS on a throttled link.
+  Self-hosting Baskerville alone was also negative (83 -> 79) — Google's copy
+  loads in parallel on its own connection.
+- **Killing the preloader's 1.4s hold does not change LCP at all** (identical
+  3.9s), but it is worth 1.1s of Speed Index. If the loader ever needs
+  justifying against a perf number, that is the real trade.
+- Mobile hero images are **789x1402** (not 4:5 any more) at webp q68, centre-
+  cropped to the widest measured phone hero-box ratio, 0.563. Do not "restore"
+  them to 1122 wide: those columns were being discarded by `object-fit: cover`.
+  Their 1402px height is already *below* what a DPR-2 phone wants, so never
+  reduce the height.
+- **Local Lighthouse reads ~15 points higher than PSI from here.** Use it for
+  A/B deltas only; the authoritative number is PSI, and the Japan region is the
+  closest proxy for the PH audience.
+
 ### Locked decisions (don't re-litigate)
 
 - Wordmark is Baskerville, headlines are Fraunces. Settled. See above.
