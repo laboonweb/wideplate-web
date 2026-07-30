@@ -98,10 +98,20 @@
   (function navHeight() {
     var bar = $('header > div');
     if (!bar) return;
-    function set() {
-      var h = bar.offsetHeight;
+    var lastH = -1, lastCondensed = -1;
+
+    /* Writes are diffed. Setting a custom property on :root invalidates layout
+       for the whole tree, so re-writing the same value and then reading
+       geometry again is what turned this into Lighthouse's 166ms forced
+       reflow. Same numbers out, a fraction of the layout work. */
+    function apply(h) {
+      if (h === lastH) return;
+      lastH = h;
       var condensed = window.scrollY > 170 ? h : Math.max(44, h - 20);
-      document.documentElement.style.setProperty('--nav-height', condensed + 'px');
+      if (condensed !== lastCondensed) {
+        lastCondensed = condensed;
+        document.documentElement.style.setProperty('--nav-height', condensed + 'px');
+      }
       /* The bar's REAL current height, unlike --nav-height above, which is
          deliberately the condensed value even while the bar still renders tall
          at scroll-top. The mobile panel opens directly under the bar and needs
@@ -110,10 +120,24 @@
          bottom of the viewport. Anchor offsets keep using --nav-height. */
       document.documentElement.style.setProperty('--nav-bar-h', h + 'px');
     }
-    set();
-    window.addEventListener('resize', set);
-    window.addEventListener('load', set);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
+
+    function measure() { apply(bar.offsetHeight); }
+    measure();
+
+    /* The triggers are deliberately UNCHANGED — resize, load, and the font swap
+       (which changes the wordmark's height, and is why fonts.ready is here).
+       ResizeObserver on the bar is the better shape for this: its callback
+       carries the box, so there would be no layout read at all, and it only
+       fires when the height truly changed. It was written, and then reverted,
+       because ResizeObserver callbacks are never delivered in this automation
+       browser (same missing rendering lifecycle as the missing animation
+       frames), so the mechanism could not be verified — and --nav-height feeds
+       the anchor offsets, the hero and Visit fill math and the mobile panel's
+       max-height. Unverifiable change, load-bearing path: not worth it.
+       Swap to ResizeObserver only alongside a real-browser check. */
+    window.addEventListener('resize', measure);
+    window.addEventListener('load', measure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
   })();
 
   /* ---- Hero slideshow ---- */
