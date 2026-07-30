@@ -596,8 +596,14 @@
          under the card. Lift them by the card's measured height while it's up.
          transform, not bottom, so it stays compositor-only. */
       ".wl-bars{transition:transform .45s cubic-bezier(0.16,1,0.3,1)}" +
+      /* Phone: the same card trimmed, not redesigned. Every value below is a
+         reduction of the desktop one. min-height keeps the buttons on a 44px
+         touch target once their padding comes down from 13px to 11px. */
       "@media (max-width:600px){.wl-cookie{left:16px;right:16px;width:auto;" +
-      "bottom:calc(16px + var(--wl-bottom-safe, 0px))}" +
+      "bottom:calc(16px + var(--wl-bottom-safe, 0px));padding:16px 18px 18px}" +
+      ".wl-cookie h2{margin:0 0 6px;font-size:17px}" +
+      ".wl-cookie p{margin:0 0 12px;font-size:13px;line-height:1.5}" +
+      ".wl-cookie button{padding:11px 20px;min-height:44px}" +
       "html.wl-cookie-open .wl-bars{transform:translateY(calc(-1 * (var(--wl-cookie-h,200px) + 14px)))}}";
     document.head.appendChild(css);
 
@@ -608,8 +614,10 @@
     card.setAttribute('aria-label', 'Cookie notice');
     card.innerHTML =
       '<h2>A quick note</h2>' +
-      '<p>We use cookies to make this site work well for you. Read our ' +
-      '<a href="privacy-policy.html">Privacy Policy</a> to learn more.</p>' +
+      /* Kept to one line at 390px (13px/1.5 in a 322px content box). Any
+         longer and the card grows a whole 19px line on every phone. */
+      '<p>Cookies help this site work well. See our ' +
+      '<a href="privacy-policy.html">Privacy Policy</a>.</p>' +
       '<div class="wl-cookie-btns">' +
       '<button type="button" class="wl-cookie-yes">Accept</button>' +
       '<button type="button" class="wl-cookie-no">Reject</button>' +
