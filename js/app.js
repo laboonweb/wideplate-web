@@ -611,12 +611,17 @@
     card.className = 'wl-cookie';
     card.setAttribute('role', 'dialog');
     card.setAttribute('aria-live', 'polite');
-    card.setAttribute('aria-label', 'Cookie notice');
+    card.setAttribute('aria-label', 'Privacy notice');
     card.innerHTML =
       '<h2>A quick note</h2>' +
       /* Kept to one line at 390px (13px/1.5 in a 322px content box). Any
-         longer and the card grows a whole 19px line on every phone. */
-      '<p>Cookies help this site work well. See our ' +
+         longer and the card grows a whole 19px line on every phone. Measured,
+         not guessed: this string renders 20px tall in that box and the obvious
+         rewrites ("This site stores a little on your device", "We keep a few
+         settings on your device") all render 39px. Re-measure before changing
+         it. It says storage rather than cookies because the site sets no
+         cookies at all, which is what privacy-policy.html now states. */
+      '<p>We store a little on your device. See our ' +
       '<a href="privacy-policy.html">Privacy Policy</a>.</p>' +
       '<div class="wl-cookie-btns">' +
       '<button type="button" class="wl-cookie-yes">Accept</button>' +

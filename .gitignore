@@ -1,1 +1,5 @@
 .vercel
+.claude/
+.mcp.json
+graphify-out/
+handoff.md
