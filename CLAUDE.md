@@ -296,10 +296,16 @@ don't ship placeholder as if it's final:
   St, Barangay Santiago, San Antonio, Zambales. 0966 965 9995 / 0966 965 9998.
   WideplateRestaurant@gmail.com. facebook.com/wideplaterestaurant.
   **Hours: open 11AM until 9PM** — this string appears in the footer of all
-  four pages, the hero badge, the Visit pill, the FAQ answer AND the FAQPage
-  JSON-LD. Change one, change all six.
+  five pages, the hero badge, the Visit pill, the FAQ answer, the Accessibility
+  page's closing line AND the FAQPage JSON-LD. Change one, change all seven.
 - **Live / repo:** https://wideplate-web.vercel.app · github.com/laboonweb/wideplate-web
 - **Deploy branch:** `master`. Push = publish. No separate deploy step.
+- **Pages (FIVE, not four):** `index.html`, `gallery.html`, `faq.html`,
+  `privacy-policy.html`, `accessibility.html`. The accessibility statement was
+  added 2026-07-31 and is modelled on the privacy page — it reuses
+  `css/privacy.css` rather than adding a sixth stylesheet. Anything this file
+  describes as "duplicated across all four pages" now means **five**: the
+  preloader block, the footer markup and the skip link.
 
 ### Type system — CONFIRMED LIVE 2026-07-28, do not re-litigate
 
@@ -416,6 +422,79 @@ depending on viewport width.
   A/B deltas only; the authoritative number is PSI, and the Japan region is the
   closest proxy for the PH audience.
 
+### Security headers — added 2026-07-31, `vercel.json` exists now
+
+`vercel.json` exists for exactly one reason: a `headers` block. Section 2 of
+this guide says only add it for a concrete reason — this is the reason.
+It ships `X-Content-Type-Options`, `X-Frame-Options: DENY`, `Referrer-Policy`,
+`Permissions-Policy` and a CSP. **HSTS already comes from Vercel** and is not
+in the file.
+
+- The CSP keeps `'unsafe-inline'` on `script-src` because the preloader is
+  inlined in all five pages and there is no build step to nonce it. Its real
+  value here is `frame-ancestors`, `object-src` and pinning where scripts,
+  styles, fonts and frames may come from — **not** XSS defence. Don't oversell
+  it and don't add a build step for it.
+- `frame-src` lists **both** `maps.google.com` and `www.google.com`: the map
+  facade's URL is the former and it redirects to the latter.
+- **Test header changes locally before pushing.** A throwaway Python server
+  that replays `vercel.json`'s headers is the way; a plain `npx serve` sends
+  none of them, so a CSP that breaks the site looks fine locally. A
+  CSP-blocked iframe renders same-origin `about:blank`, so
+  `f.contentWindow.location.href` **not** throwing is the tell that it was
+  blocked.
+- The site's own code was audited the same day: no user input reaches the DOM
+  anywhere, both `innerHTML` writes in `js/app.js` are static literals, and
+  every `target="_blank"` already carries `rel="noopener"`. There is no form,
+  no `fetch`, no secret in the repo.
+- `.gitignore` now covers `.claude/`, `.mcp.json`, `graphify-out/` and
+  `handoff.md`. **`.mcp.json` must never be committed** — it would deploy and
+  be publicly fetchable at `/.mcp.json`, and it configures a shadcn MCP server
+  that has nothing to do with this vanilla stack.
+
+### Accessibility — measured 2026-07-31, `accessibility.html` makes claims
+
+The site now **publishes** an accessibility statement, so anything that stops
+being true on this list makes a live page a lie. Re-measure before changing a
+colour, and update the page in the same commit.
+
+- **Contrast is measured from the CSS source, never from the browser** —
+  Chrome's auto-dark rewrites computed colours here. A ten-line Python
+  relative-luminance script is the tool; blend alpha against the section
+  background before comparing.
+- Current text ratios: footer body 9.9:1 · cream page text ~10:1 · nav links
+  6.1:1 · gold button label `#1B1305` on gold 8.2:1 · footer labels and
+  copyright 4.6:1 · `.wl-pp-date` 4.8:1. **All above 4.5:1. Keep it that way.**
+- **`--wl-link-hover` is a two-value variable and has to stay one.** `#C9862B`
+  is 5.69:1 on the dark green but only 2.62:1 on the cream; the cream-safe
+  `#8F5E1E` is 2.85:1 on the dark. So `:root` carries the cream value and
+  `.wl-foot, .wl-pp-head, #top, .wl-visit, .wl-nav, .wl-mobpanel, #combos`
+  re-declare the lighter one. Same shape as `--wl-ring`. A single literal
+  amber cannot be correct on both backgrounds — don't "simplify" it back.
+- `#C08F33` is **never text on cream** (`#combos` is `#0B2A20`), so the
+  pressed states measure 5.28:1 and are fine. Check the section background
+  before calling a colour a failure.
+- **Skip link: the target is each page's `<h1>` (`#wl-content`), NOT `<main>`.**
+  This was a real bug. `<main>` starts at document offset 0 on the home page
+  because the nav is `position: fixed` and overlays the hero, so activating
+  the link moved focus correctly and scrolled zero pixels — with
+  `outline: none` on the target, the honest report was "nothing happened".
+  A skip link on this site cannot rely on scrolling for feedback. It uses
+  **`:focus`, not `:focus-visible`**, because the link gets clicked as well as
+  tabbed to and `:focus-visible` does not match a mouse-driven focus move.
+- `#top` re-declares `--wl-ring` to gold along with `.wl-foot` and
+  `.wl-pp-head`, or the skip ring would be `#0F362C` on dark green, i.e.
+  invisible.
+- `index.html` repeats the skip link's hidden state in an inline `<style>`
+  because it is the one page that loads `site.css` non-blocking. Without it an
+  unstyled link paints above the nav and pushes down the wordmark — **which is
+  this page's LCP element**. Keep the inline copy in sync with `site.css`.
+- All five pages have `<main id="wl-main">`. Verified safe before wrapping
+  index: no stylesheet carries a `main` rule that reaches it, and there is not
+  one `body >` child or sibling selector in any of the five sheets.
+- **Not done, and the page says so:** no screen reader test (VoiceOver, NVDA,
+  TalkBack) and no real Android pass. Don't quietly upgrade that wording.
+
 ### Locked decisions (don't re-litigate)
 
 - Wordmark is Baskerville, headlines are Fraunces. Settled. See above.
@@ -427,8 +506,9 @@ depending on viewport width.
   without touching the others. Read the comments before raising a `threshold`:
   these sections are taller than the viewport, so a high threshold can be
   mathematically unreachable and the section then never reveals at all.
-- The preloader block (CSS + controller + markup) is **duplicated in all four
-  pages**. No build step exists. Edit one, edit all four.
+- The preloader block (CSS + controller + markup) is **duplicated in all five
+  pages**. No build step exists. Edit one, edit all five. Same for the footer
+  markup and the skip link.
 - `repeat(auto-fit, minmax(Npx, 1fr))` is always written as
   `minmax(min(Npx, 100%), 1fr)` here. The bare form overflowed the gutter on
   320px phones.
@@ -472,6 +552,20 @@ depending on viewport width.
   iPhone 14 Pro Max (inset 34px). **Simulate the inset when testing:**
   `document.documentElement.style.setProperty('--wl-bottom-safe','34px')`.
 - Story sticky pin is `static` ≤900px, `sticky` ≥1000px.
+- **The cookie card's one-line paragraph is a measured constraint.** At 390px
+  it renders in a 322px box at 13px/1.5. The current string is 20px tall; the
+  obvious rewrites ("This site stores a little on your device", "We keep a few
+  settings on your device") are all 39px, i.e. one whole extra line on every
+  phone. Measure in a browser before editing that string. It says storage, not
+  cookies, because the site sets no cookies and `privacy-policy.html` now says
+  so.
+- **The privacy policy describes what the site actually does** as of
+  2026-07-31: no contact form exists, so it no longer claims to collect form
+  submissions. It names hosting logs, the three browser-storage items and
+  Google Fonts seeing an IP. If a form is ever added, that page changes in the
+  same commit.
+- **`:focus` vs `:focus-visible` matters for anything clickable-and-tabbable.**
+  `:focus-visible` does not match when focus arrives from a mouse click.
 
 ### Still needed before pitch
 
