@@ -152,13 +152,25 @@ button { font-family: inherit; }
    :focus-visible would be one more thing that has to agree for it to appear. */
 .wl-skip:focus { transform: none; }
 .wl-skip:hover { color: #1B1305; }
-/* The skip target is a landmark, not a control. It takes focus so the next
-   Tab continues inside the content, but the page having jumped is the
-   feedback — a ring drawn around the whole page is not. */
-#wl-main:focus { outline: none; }
+/* The skip link targets the page's H1, NOT the <main> wrapper, and this was
+   a real bug first: <main> starts at document offset 0 on the home page (the
+   nav is position:fixed and overlays the hero), so activating the link moved
+   focus correctly and scrolled by exactly zero pixels. With no ring on the
+   target either, the honest report was "nothing happened". The mechanism was
+   working and nothing about it was perceivable.
+   The H1 fixes both halves: it sits ~294px down on the home page, so the page
+   visibly moves, and a ring around one headline is a real focus indicator
+   where a ring around an 11,000px wrapper is not.
+   :focus, not :focus-visible — a skip link gets clicked as well as tabbed to,
+   and :focus-visible does not match a mouse-driven focus move, which is
+   exactly the case that got reported. */
+#wl-content { scroll-margin-top: calc(var(--nav-height, 0px) + 24px); }
+#wl-content:focus { outline: 2px solid var(--wl-ring); outline-offset: 6px; }
 
 :root { --wl-ring: #0F362C; }
-.wl-foot, .wl-pp-head { --wl-ring: var(--gold); }
+/* #top is on the list because the hero is dark green and the default ring is
+   #0F362C, i.e. the ring the skip link draws there would be invisible. */
+.wl-foot, .wl-pp-head, #top { --wl-ring: var(--gold); }
 :focus-visible { outline: 2px solid var(--wl-ring); outline-offset: 3px; }
 
 .wl-foot-link:hover { color: var(--gold); }

@@ -209,7 +209,7 @@
        regression, not a cosmetic one. The other four pages load site.css
        render-blocking and need no inline copy. Keep the two in sync. -->
   <style>.wl-skip{position:absolute;top:12px;left:12px;z-index:200;transform:translateY(-250%)}</style>
-  <a class="wl-skip" href="#wl-main">Skip to content</a>
+  <a class="wl-skip" href="#wl-content">Skip to content</a>
 
   <!-- Sticky nav. Link styling is .wl-nav-a, deliberately NOT the footer's
        .wl-navlink: the two look different and only coexisted before because
@@ -270,7 +270,7 @@
        cascade. tabindex="-1" is what lets it receive focus from the skip
        link — without it the page scrolls but focus stays on the link, and the
        next Tab goes back into the nav. -->
-  <main id="wl-main" tabindex="-1">
+  <main id="wl-main">
 
   <!-- Hero -->
   <section id="top">
@@ -307,7 +307,7 @@
     <div class="wl-hero-scrim" aria-hidden="true"></div>
     <div class="wl-herowrap">
       <p class="wl-hero-badge"><span class="wl-hero-rating"><span class="wl-hero-score">4.8 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>198 Google Reviews</span><span class="wl-badge-sep" aria-hidden="true"></span><span class="wl-hero-hours">Open 11AM until 9PM</span></p>
-      <h1 class="wl-hero-h1">
+      <h1 class="wl-hero-h1" id="wl-content" tabindex="-1">
         <span><span>Where Every</span></span>
         <span><span>Plate Is</span></span>
         <span><span>a Feast.</span></span>
