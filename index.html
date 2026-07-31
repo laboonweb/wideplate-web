@@ -201,6 +201,16 @@
   </div>
 <div style="--gutter:clamp(24px, 4vw, 96px); color:#14241D; font-family:'General Sans','Helvetica Neue',sans-serif; overflow-x:clip; background:#F4EEE1;">
 
+  <!-- Skip link. Styled in css/site.css, but the hidden state is repeated
+       inline because THIS page loads that sheet non-blocking: without the
+       rule below, the link would paint as ordinary text above the nav for as
+       long as the sheet takes to arrive, pushing the wordmark down. The
+       wordmark is this page's LCP element, so that would be an LCP and CLS
+       regression, not a cosmetic one. The other four pages load site.css
+       render-blocking and need no inline copy. Keep the two in sync. -->
+  <style>.wl-skip{position:absolute;top:12px;left:12px;z-index:200;transform:translateY(-250%)}</style>
+  <a class="wl-skip" href="#wl-main">Skip to content</a>
+
   <!-- Sticky nav. Link styling is .wl-nav-a, deliberately NOT the footer's
        .wl-navlink: the two look different and only coexisted before because
        these carried inline styles that outranked the shared class. -->
@@ -251,6 +261,16 @@
       </div>
     </nav>
   </header>
+
+  <!-- <main> wraps the hero through Visit, ending before the footer. It is
+       the skip link's target and the landmark a screen reader's "jump to main
+       content" uses; the other four pages already had one. Purely a wrapper:
+       no stylesheet here carries a `main` rule and none of the five use a
+       `body >` child or sibling selector, so nesting the sections changes no
+       cascade. tabindex="-1" is what lets it receive focus from the skip
+       link — without it the page scrolls but focus stays on the link, and the
+       next Tab goes back into the nav. -->
+  <main id="wl-main" tabindex="-1">
 
   <!-- Hero -->
   <section id="top">
@@ -1517,6 +1537,7 @@
     </div>
     <div class="wl-noise" aria-hidden="true"></div>
   </section>
+  </main>
 
   <!-- Footer markup is identical across all four pages; its styling lives in
        css/site.css. The markup still has to be kept in sync by hand — there is
@@ -1557,6 +1578,7 @@
         <a class="wl-navlink" href="gallery.html">Gallery</a>
         <a class="wl-navlink" href="faq.html">FAQ</a>
         <a class="wl-navlink" href="privacy-policy.html">Privacy Policy</a>
+        <a class="wl-navlink" href="accessibility.html">Accessibility</a>
       </div>
     </div>
     <div class="wl-foot-noise" aria-hidden="true"></div>

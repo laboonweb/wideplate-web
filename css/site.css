@@ -46,7 +46,16 @@ a { color: #0F362C; }
    :not() is what keeps a global text-link rule from reaching into buttons —
    without it, every filled button ever added has to remember to override this
    one declaration, and the first one that forgets ships an invisible label. */
-a:not([class*="wl-btn"]):not([class*="-dir"]):hover { color: #C9862B; }
+/* --wl-link-hover, not a literal, because ONE amber cannot serve both
+   backgrounds: measured, #C9862B is 5.69:1 on the dark green but only 2.62:1
+   on the cream, and darkening it far enough to pass on cream (#8F5E1E, 4.80:1)
+   drops it to 2.85:1 on the dark. So the cream value is the default and the
+   dark sections re-declare the lighter one, exactly the way --wl-ring already
+   works two rules down. Both are text-link hover colours only; the pills own
+   their label colour. Re-measure before changing either. */
+:root { --wl-link-hover: #8F5E1E; }
+.wl-foot, .wl-pp-head, #top, .wl-visit, .wl-nav, .wl-mobpanel, #combos { --wl-link-hover: #C9862B; }
+a:not([class*="wl-btn"]):not([class*="-dir"]):hover { color: var(--wl-link-hover); }
 /* <button> does not inherit font-family and Chrome's UA default for it is
    Arial. Without this, any button with visible text silently falls off the
    type system. */
@@ -81,7 +90,9 @@ button { font-family: inherit; }
 .wl-foot-tagline { margin: 0; font-family: 'New Baskerville FS','New Baskerville','Libre Baskerville',Baskerville,Georgia,serif; font-style: italic; font-size: clamp(14px, 1.8vw, 17px); color: #F4EEE1; text-align: center; }
 .wl-foot-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 36px; }
 .wl-foot-col { display: flex; flex-direction: column; gap: 10px; }
-.wl-foot-label { margin: 0; font-size: 10.5px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(244,238,225,0.45); }
+/* 0.50, not 0.45: at 0.45 this measured 3.97:1 on #081F17 and 10.5px text
+   needs 4.5:1. 0.50 is 4.59:1 and is the smallest step that clears it. */
+.wl-foot-label { margin: 0; font-size: 10.5px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(244,238,225,0.5); }
 .wl-foot-text { margin: 0; font-size: 14px; line-height: 1.7; color: rgba(244,238,225,0.8); }
 .wl-foot-hours { margin: 0; font-size: 14px; font-weight: 600; color: rgba(244,238,225,0.8); }
 .wl-foot-note { margin: 0; font-size: 13.5px; color: rgba(244,238,225,0.6); }
@@ -90,7 +101,8 @@ button { font-family: inherit; }
 .wl-foot-fb { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); text-decoration: none; }
 .wl-foot-fb svg { width: 0.85em; height: 0.85em; }
 .wl-foot-bottom { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; padding-top: 22px; border-top: 1px solid rgba(244,238,225,0.12); }
-.wl-foot-copy { margin: 0; font-size: 12px; letter-spacing: 0.06em; color: rgba(244,238,225,0.4); }
+/* 0.50, not 0.4: 3.42:1 -> 4.59:1 on #081F17, same reason as .wl-foot-label. */
+.wl-foot-copy { margin: 0; font-size: 12px; letter-spacing: 0.06em; color: rgba(244,238,225,0.5); }
 /* The hover used to need !important purely to beat an inline color on these
    links. With the colour in this file that fight is gone — do not put it back. */
 .wl-navlink { color: rgba(244,238,225,0.6); text-decoration: none; font-size: 12px; letter-spacing: 0.06em; transition: color 0.2s ease; }
@@ -119,6 +131,32 @@ button { font-family: inherit; }
    declaration beats any rule in this file, so a transform here would silently
    do nothing on desktop. `translate` is its own property and composes with
    transform instead of losing to it. */
+/* ===== Skip to content =====
+   WCAG 2.4.1. Seven nav links, a phone number and a pill stand between the
+   top of every page and its content, and a keyboard visitor walked all of
+   them on every page. This is the bypass.
+
+   No JS and no extra request: the rule ships in this sheet, which is already
+   loaded, and the link is absolutely positioned so it is OUT OF FLOW at all
+   times. It cannot shift the nav — which matters more here than usual,
+   because the nav wordmark is this site's LCP element.
+
+   translateY, not display:none or visibility:hidden: the link has to stay
+   focusable to be reachable by Tab at all. Hiding it either of those ways
+   removes it from the focus order and the feature quietly does nothing.
+
+   index.html repeats the hidden state inline (see the note there) because it
+   is the one page that loads this sheet non-blocking. */
+.wl-skip { position: absolute; top: 12px; left: 12px; z-index: 200; transform: translateY(-250%); padding: 12px 20px; border-radius: 999px; background: var(--gold); color: #1B1305; font-size: 11.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; }
+/* :focus, not :focus-visible — a skip link is reached ONLY by keyboard, and
+   :focus-visible would be one more thing that has to agree for it to appear. */
+.wl-skip:focus { transform: none; }
+.wl-skip:hover { color: #1B1305; }
+/* The skip target is a landmark, not a control. It takes focus so the next
+   Tab continues inside the content, but the page having jumped is the
+   feedback — a ring drawn around the whole page is not. */
+#wl-main:focus { outline: none; }
+
 :root { --wl-ring: #0F362C; }
 .wl-foot, .wl-pp-head { --wl-ring: var(--gold); }
 :focus-visible { outline: 2px solid var(--wl-ring); outline-offset: 3px; }

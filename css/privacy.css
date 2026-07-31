@@ -9,5 +9,8 @@ main h2 { margin: clamp(36px, 5vw, 52px) 0 12px; font-family: 'Fraunces', Georgi
 main p { margin: 0 0 16px; font-size: 16px; line-height: 1.75; color: rgba(20,36,29,0.86); }
 main ul { margin: 0 0 16px; padding-left: 20px; }
 main li { font-size: 16px; line-height: 1.75; color: rgba(20,36,29,0.86); margin-bottom: 8px; }
-.wl-pp-date { margin: 0 0 clamp(32px, 5vw, 48px); font-size: 13px; letter-spacing: 0.06em; color: rgba(20,36,29,0.55); }
+/* 0.65, not 0.55: at 0.55 this 13px line measured 3.56:1 on the cream and
+   needs 4.5:1. 0.65 is 4.78:1. Used by the Privacy Policy and Accessibility
+   pages, which both link this sheet. */
+.wl-pp-date { margin: 0 0 clamp(32px, 5vw, 48px); font-size: 13px; letter-spacing: 0.06em; color: rgba(20,36,29,0.65); }
 .wl-pp-rule { height: 1px; background: rgba(20,36,29,0.18); border: 0; margin: clamp(40px, 6vw, 60px) 0 0; }

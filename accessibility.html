@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <!--
-  NOTE TO THE SITE OWNER: the policy text below is STARTER / PLACEHOLDER legal
-  content. It is not a certified compliance document and has not been reviewed
-  by a lawyer or by the National Privacy Commission. Before treating it as
-  final, have it checked against current Philippine Data Privacy Act (RA 10173)
-  and NPC requirements, and against what this site actually collects.
+  NOTE TO THE SITE OWNER: every claim on this page was measured against the
+  code on 31 July 2026, not assumed. The "Where this site still falls short"
+  section is deliberate and honest — an accessibility statement that only
+  lists wins is worth nothing, and the shortfalls listed there are all small
+  CSS values that can be fixed. Two things are NOT yet done and are named as
+  such on the page: no testing with a real screen reader (VoiceOver, NVDA,
+  TalkBack) and no real Android device pass. Re-measure before editing any
+  number here. This is not a legal certification and has not been reviewed by
+  a lawyer.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Privacy Policy · Wideplate Restaurant</title>
-<meta name="description" content="How Wideplate Restaurant collects, uses, and protects information through this website.">
-<meta name="robots" content="noindex">
+<title>Accessibility · Wideplate Restaurant</title>
+<meta name="description" content="How this website works with screen readers, keyboards, and low vision, what we have measured, and where it still falls short.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%230B2A20'/%3E%3Ctext%20x='16'%20y='24'%20font-family='Georgia,serif'%20font-size='21'%20font-weight='700'%20fill='%23D9A441'%20text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
@@ -173,39 +176,61 @@
   </header>
 
   <main id="wl-main" tabindex="-1">
-    <h1>Privacy Policy</h1>
+    <h1>Accessibility</h1>
     <p class="wl-pp-date">Last updated: 31 July 2026</p>
 
-    <p>Wideplate Restaurant ("we," "us," "our") respects your privacy. This policy explains what information this website handles, how it is used, and your choices.</p>
+    <p>Wideplate Restaurant wants everyone to be able to read our menu, find our hours and get directions to us, whatever they use to browse. This page explains what we have built into this website, what we have measured, and where it still falls short. We would rather tell you the gaps than pretend they are not there.</p>
 
-    <h2>Information We Collect</h2>
-    <p>This website has no contact form, no sign-up and no account. We do not ask you for your name, your email address or your phone number anywhere on it.</p>
+    <h2>The Standard We Aim For</h2>
+    <p>We build to the Web Content Accessibility Guidelines (WCAG) 2.2, Level AA. That is the standard used internationally, and it is what accessibility rules point to in most countries. This site is <strong>partially conformant</strong>: most of it meets that level, and the specific places it does not are listed further down.</p>
+    <p>No outside auditor has certified this site, and this page is not a legal compliance certificate. It is an honest account of the work.</p>
+
+    <h2>Screen Readers</h2>
     <ul>
-      <li>Basic usage and log data collected automatically by our hosting provider, such as your IP address, the page requested and your browser type</li>
-      <li>A small amount of information stored by your browser on your own device (see below)</li>
-      <li>Anything you choose to send us yourself, if you email or call us using the details on this site</li>
+      <li>Every page declares its language, has one main heading, and runs headings in order, so a screen reader can build a proper outline and jump between sections.</li>
+      <li>Every page marks its content as a main landmark, so "jump to main content" lands where it should instead of dropping you at the top of the navigation.</li>
+      <li>Buttons are real buttons and links are real links. Nothing on this site is a clickable box pretending to be a control, so anything a screen reader announces is something it can actually operate.</li>
+      <li>Controls that change something say so. The menu combo panels and the FAQ answers report whether they are open or closed, and the opening animation is marked as decoration so it is skipped entirely.</li>
+      <li>Icons that carry no meaning of their own are hidden from screen readers instead of being read aloud as shapes.</li>
     </ul>
 
-    <h2>Cookies and Browser Storage</h2>
-    <p>This site sets no advertising or tracking cookies. It stores three things in your browser, on your device only, and none of them are sent to us or to anyone else: your answer to the notice below, so we do not ask again; whether the opening animation has already played in this tab; and your scroll position, so a reload puts you back where you were. Clearing your browser's site data removes all three, and the notice will appear again on your next visit.</p>
+    <h2>Alt Text</h2>
+    <p>Every photograph on this site carries a written description, and they describe the dish rather than repeating its name. "Sizzling pork sisig topped with egg, calamansi on the side" tells you what is on the plate; "sisig photo" would not. Decorative textures and rules carry no description at all, which is correct: they would only add noise.</p>
 
-    <h2>Third-Party Services</h2>
-    <p>This site loads its typefaces from Google Fonts, which means Google receives your IP address when a page loads. The map in the Visit section is not loaded until you tap it, so no request reaches Google Maps unless you ask for the map. Links to Facebook and to Google Maps directions open on those services, which have their own privacy practices. We encourage you to review them.</p>
+    <h2>Keyboard Navigation</h2>
+    <ul>
+      <li>Every page opens with a "skip to content" link. It stays out of the way until you press Tab, and taking it jumps you past the whole navigation, straight into the page, with the keyboard focus landing there rather than snapping back to the top.</li>
+      <li>Everything you can click, you can reach with the Tab key and operate with Enter or Space. There is no mouse-only control anywhere on the site.</li>
+      <li>Whatever you have landed on is visibly outlined. The outline sits outside the control and changes colour on dark sections so it stays readable against the background rather than disappearing into it.</li>
+      <li>The gallery photo viewer is a real dialog: it takes focus when it opens, closes on Escape, and hands focus back where you left it.</li>
+      <li>The map is not loaded until you ask for it, and once loaded, focus moves into it rather than dropping you back at the top of the page.</li>
+    </ul>
 
-    <h2>How We Use Information</h2>
-    <p>We use log data to operate and secure this website. If you email or call us directly, we use what you send only to reply to you. We do not sell your personal information, and we run no analytics or advertising on this site.</p>
+    <h2>Colour and Contrast</h2>
+    <p>Contrast was measured from the site's own colour values, not judged by eye. Every piece of text on this site meets Level AA. Body text on the dark sections measures 9.9:1, page text on the cream sections about 10:1, navigation links 6.1:1 and the smallest text on the site, the footer labels and the copyright line, 4.6:1, against the 4.5:1 that Level AA asks for. The gold buttons carry near-black labels at 8.2:1, because white on gold would have been under 2:1 and unreadable.</p>
+    <p>Hover and pressed states were measured too, not just the resting ones. A text link turns amber when you point at it, and because no single amber can pass against both the cream and the dark green, the site carries two: a deeper one on the cream sections at 4.8:1 and a lighter one on the dark at 5.7:1.</p>
+    <p>Colour is never the only signal. Anything marked by colour is also marked by text, position or an icon, so nothing is lost if you do not see colour the way the design assumes.</p>
 
-    <h2>Data Retention</h2>
-    <p>Hosting log data is retained by our hosting provider under its own schedule. Messages you send us by email are kept only as long as reasonably needed to answer you, unless a longer period is required by law.</p>
+    <h2>Motion</h2>
+    <p>This site animates a fair amount. If your device is set to reduce motion, that setting is respected in fifteen separate places across the site: the opening animation shortens, scroll effects become simple fades, and the moving strip of dishes stops. You get the whole site, not a stripped-down version of it.</p>
 
-    <h2>Your Rights</h2>
-    <p>Under the Philippine Data Privacy Act of 2012 (RA 10173), you have rights regarding your personal information, including the right to access, correct, or request deletion of data we hold about you. To exercise these rights, contact us using the details below.</p>
+    <h2>Text Size and Zoom</h2>
+    <p>Text is set in relative units and the layout is fluid, so browser zoom and larger default text sizes reflow the page instead of cutting it off. The site is built and checked down to a 320px-wide screen.</p>
 
-    <h2>Changes to This Policy</h2>
-    <p>We may update this policy from time to time. Changes will be posted on this page with an updated "last updated" date.</p>
+    <h2>Where This Site Still Falls Short</h2>
+    <p>Measured on 31 July 2026. All of these are real and none of them are hidden:</p>
+    <ul>
+      <li><strong>The embedded map is Google's</strong>, and its accessibility is not something we control. The address is written out in plain text in the Visit section and in the footer of every page, so you never need the map to find us.</li>
+    </ul>
 
-    <h2>Contact Us</h2>
-    <p><a href="mailto:WideplateRestaurant@gmail.com">WideplateRestaurant@gmail.com</a></p>
+    <h2>How This Was Tested</h2>
+    <p>Structure, keyboard operation and contrast were checked directly against the code and in a desktop browser. Two things have <em>not</em> been done yet, and we are not going to claim otherwise: this site has not been tested with a real screen reader such as VoiceOver, NVDA or TalkBack, and it has not had a pass on a real Android phone. Until both happen, treat the screen reader notes above as built-with-care rather than verified-in-use.</p>
+
+    <h2>Tell Us What Does Not Work</h2>
+    <p>If something on this site blocked you, we want to know, and you should not have to explain the technical reason. Tell us the page and what happened, and we will fix it and reply.</p>
+    <p><a href="mailto:WideplateRestaurant@gmail.com">WideplateRestaurant@gmail.com</a><br>
+    <a href="tel:+639669659995">0966 965 9995</a> or <a href="tel:+639669659998">0966 965 9998</a></p>
+    <p>If the website is in your way, the restaurant is not. Call either number during opening hours, 11AM until 9PM, and we will read you the menu, take your order or give you directions ourselves.</p>
 
     <hr class="wl-pp-rule">
   </main>
@@ -249,7 +274,7 @@
         <a class="wl-navlink" href="index.html">Home</a>
         <a class="wl-navlink" href="gallery.html">Gallery</a>
         <a class="wl-navlink" href="faq.html">FAQ</a>
-        <a class="wl-navlink" href="accessibility.html">Accessibility</a>
+        <a class="wl-navlink" href="privacy-policy.html">Privacy Policy</a>
       </div>
     </div>
     <div class="wl-foot-noise" aria-hidden="true"></div>

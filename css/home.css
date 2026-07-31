@@ -109,8 +109,11 @@
     button { font-family: inherit; }
     /* Duplicate of site.css's rule, and it carries the same exclusion for the
        same reason: text links go amber on hover, pill buttons keep their own
-       label colour. Amber on gold is unreadable. Change one, change both. */
-    a:not([class*="wl-btn"]):not([class*="-dir"]):hover { color: #C9862B; }
+       label colour. Amber on gold is unreadable. Change one, change both.
+       The colour is --wl-link-hover: one amber cannot pass on both the cream
+       and the dark green, so site.css sets the cream value on :root and the
+       dark sections re-declare the lighter one. See the note there. */
+    a:not([class*="wl-btn"]):not([class*="-dir"]):hover { color: var(--wl-link-hover); }
     @keyframes wpkb { from { transform: scale(1); } to { transform: scale(1.07); } }
     @keyframes wpintro { from { transform: translateY(112%); } to { transform: translateY(0); } }
     @keyframes wpfadein { from { opacity: 0; } to { opacity: 1; } }
