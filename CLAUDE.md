@@ -151,6 +151,26 @@ each time (toolbar simulation, GPU paint cost, sustained CPU load).
 - **When you see a device-specific pattern, verify the hardware fact before
   theorizing.** ("The jittery ones must be ProMotion" was wrong — one of them was
   a 60Hz iPad.) Confirm the device actually has the feature you're blaming.
+- **NEVER batch-regex HTML structure across files.** Both defects shipped on
+  2026-07-31 came from this. A `re.subn` was meant to reinsert a captured
+  `<header>` via `\1`; one backslash was lost crossing the shell layers, so
+  Python read `\1` as an **octal escape** and wrote `chr(1)` — the SOH control
+  character — where the tag belonged. It deleted the header from four pages
+  and **printed success on every one**, because `subn` returned 1. Use one
+  Edit per file: same effort, visible in the diff, structurally incapable of
+  eating a tag. If a batch really is unavoidable, assert on the *result*
+  (`'<header' in text`), never on the substitution count.
+- **A structural edit is not verified until the page has been looked at.**
+  Checking `document.activeElement`, a rule count or a substitution count
+  proves a mechanism and proves nothing about what a visitor sees. Screenshot
+  after any markup change, and open every page the change touched — not just
+  the one being worked on. Both 2026-07-31 defects were one screenshot away
+  and neither was caught, because every automated check that ran came back
+  green.
+- **Grep the whole page set after a shared-markup edit.** The footer, the
+  preloader and the header are hand-duplicated across five files, so a
+  structural mistake is always plural. `grep -c '<header'` over `*.html`
+  would have caught it in one command.
 
 ---
 
@@ -566,6 +586,15 @@ colour, and update the page in the same commit.
   same commit.
 - **`:focus` vs `:focus-visible` matters for anything clickable-and-tabbable.**
   `:focus-visible` does not match when focus arrives from a mouse click.
+- **The four subpages have a header, and it has gone missing once.** The
+  structure is `<a class="wl-skip">` → `<header class="wl-pp-head">` →
+  `.wl-pp-mark` + `.wl-pp-back` → `</header>` → `<main id="wl-main">`. It is
+  NOT the home page's `.wl-nav`; the subpages have never had the full nav.
+  `.wl-pp-head` is what supplies the bar's flex layout, background and border,
+  so losing the opening tag leaves an orphan `</header>` and renders the
+  wordmark as bare unstyled text — which is what shipped on 2026-07-31 and
+  reads as "the navigation bar is gone". `grep -c '<header' *.html` should
+  return 1 for each of the four subpages and 1 for `index.html`.
 
 ### Still needed before pitch
 
