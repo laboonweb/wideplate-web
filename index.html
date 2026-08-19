@@ -378,7 +378,7 @@
   </section>
 
   <!-- Kinetic marquee -->
-  <div aria-hidden="true" style="background:#0B2A20; overflow:hidden; padding:clamp(20px, 3vw, 34px) 0; border-top:1px solid rgba(244,238,225,0.12);">
+  <div id="wl-marquee" aria-hidden="true" style="background:#0B2A20; overflow:hidden; padding:clamp(20px, 3vw, 34px) 0; border-top:1px solid rgba(244,238,225,0.12);">
     <div style="display:flex; align-items:baseline; gap:52px; width:max-content; white-space:nowrap; animation:wpmarquee 34s linear infinite;">
       <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:#F4EEE1;">SISIG</span><span style="color:var(--gold); font-size:32px;">·</span>
       <span style="font-family:'Fraunces',serif; font-weight:560; font-size:clamp(44px, 6vw, 84px); color:transparent; -webkit-text-stroke:1px rgba(244,238,225,0.75);">KARE-KARE</span><span style="color:var(--gold); font-size:32px;">·</span>
@@ -1277,7 +1277,10 @@
         <h2 style="margin:0; font-family:'Fraunces',Georgia,serif; font-weight:520; font-size:clamp(34px, 5.6vw, 76px); line-height:0.98; letter-spacing:-0.015em; color:#F4EEE1;">The whole table, <em style="font-style:italic;">sorted.</em></h2>
         <p style="margin:0 0 10px; max-width:420px; font-size:14.5px; line-height:1.6; color:rgba(244,238,225,0.68);">Group platters built for families, barkadas, and beach-day crews headed to the coves. One order, everyone eats well.</p>
       </div>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap:18px;">
+      <!-- align-items:start is load-bearing: without it the grid stretches every card to
+           the tallest in its row, so expanding one combo grew all its neighbours and pushed
+           their prices down (the price carries margin-top:auto and absorbs the surplus). -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap:18px; align-items:start;">
         <article class="wl-combo" style="background:rgba(244,238,225,0.04); border:1px solid rgba(244,238,225,0.16); padding:28px 28px 30px; display:flex; flex-direction:column; gap:14px; transition:transform 0.4s cubic-bezier(0.16,1,0.3,1), background 0.3s ease;">
           <p style="margin:0; align-self:flex-start; font-size:10.5px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:rgba(244,238,225,0.65); border:1px solid rgba(244,238,225,0.28); border-radius:999px; padding:6px 13px;">All-Meat</p>
           <h3 style="margin:0; font-family:'Fraunces',serif; font-size:28px; font-weight:560; color:#F4EEE1;">Combo 1</h3>
@@ -1412,8 +1415,11 @@
           </h2>
           <p style="margin:0; font-size:16.5px; line-height:1.75; color:#3C4A43; animation:wprise 0.8s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 35%;">Wideplate started with a simple habit of home: when guests arrive in San Antonio, you feed them well. We're a women-owned kitchen with deep Zambales roots, serving the classics we grew up on: cooked slow, seasoned with confidence, and served on plates that live up to the name.</p>
           <blockquote class="wl-squote" style="margin:0; padding-left:26px; border-left:2px solid var(--gold); font-family:'Fraunces',serif; font-style:italic; font-weight:500; font-size:clamp(24px, 3.4vw, 38px); line-height:1.25; color:#14241D;">"When guests arrive, you feed them well."</blockquote>
-          <div role="img" aria-label="Photo placeholder: the women behind Wideplate, candid, in the kitchen" style="height:300px; background:#123B2F; background-image:repeating-linear-gradient(135deg, rgba(244,238,225,0.05) 0 14px, rgba(244,238,225,0) 14px 30px); display:flex; align-items:center; justify-content:center; padding:18px; animation:wpclip 1s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 40%;">
-            <span style="font-family:ui-monospace, 'SF Mono', Menlo, monospace; font-size:11px; line-height:1.55; color:rgba(244,238,225,0.68); text-align:center;">photo: owners behind wideplate, candid</span>
+          <div style="height:clamp(300px, 34vw, 420px); overflow:hidden; animation:wpclip 1s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 40%;">
+            <picture>
+              <source media="(max-width: 700px)" srcset="uploads/wideplateownersmob.webp">
+              <img src="uploads/wideplateownersdesk.webp" alt="The owners of Wideplate Restaurant on a boat off the Zambales coast" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; object-position:50% 85%; display:block; filter:saturate(1.06) sepia(0.05) contrast(1.03);">
+            </picture>
           </div>
           <p style="margin:0; font-size:16.5px; line-height:1.75; color:#3C4A43; animation:wprise 0.8s cubic-bezier(0.16,1,0.3,1) both; animation-timeline:view(); animation-range:entry 0% entry 35%;">Come before the boat to Anawangin, or after a long day on the sand at Pundaquit. Either way, arrive hungry.</p>
         </div>

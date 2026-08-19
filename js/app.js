@@ -272,8 +272,22 @@
            dumped the visitor into Feast Combos. Re-anchor on the category that
            is now showing. Legacy scrollTo(x, y) so CSS scroll-behavior (and its
            reduced-motion override) decides smooth vs instant. */
-        var land = $('.wl-cat[data-catsec="' + (filter === 'all' ? scrollCat : filter) + '"]') || cats[0];
-        if (land) window.scrollTo(0, land.getBoundingClientRect().top + window.pageYOffset - 150);
+        if (filter === 'all') {
+          var land = $('.wl-cat[data-catsec="' + scrollCat + '"]') || cats[0];
+          if (land) window.scrollTo(0, land.getBoundingClientRect().top + window.pageYOffset - 150);
+          return;
+        }
+        /* Picking a category leaves one short block, so anchoring on the category
+           itself scrolled the menu's own header off the top. Anchor on the marquee
+           above the section instead: it lands under the nav and the header, chips
+           and category all follow below it. Height comes from the nav's own custom
+           property, not a second magic number. */
+        var head = $('#wl-marquee') || $('#menu');
+        if (!head) return;
+        var cs = getComputedStyle(document.documentElement);
+        var navH = parseFloat(cs.getPropertyValue('--nav-bar-h')) ||
+                   parseFloat(cs.getPropertyValue('--nav-height')) || 60;
+        window.scrollTo(0, head.getBoundingClientRect().top + window.pageYOffset - navH);
       });
     });
     if ('IntersectionObserver' in window) {
