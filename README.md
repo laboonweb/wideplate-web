@@ -108,6 +108,16 @@ Before publishing a website change, check the actual visitor result at desktop a
 
 The gallery route is intentionally prepared for real restaurant photography and currently contains labeled placeholders. The replacement pattern is documented in `gallery.html` so a new image can be added without changing the gallery interaction or accessibility behavior.
 
+## Usage
+
+This project is published publicly for portfolio and code-review purposes.
+
+© 2026 Briann Arcala / Arc Web Works. All rights reserved.
+
+The design, visual system, branding implementation, and source code may not
+be redistributed, resold, rebranded, or presented as original work without
+written permission.
+
 ## Credits and use
 
 Designed and developed by [Arc Web Works](https://arcwebworks.com). Wideplate's name, business content, imagery, and customer-review content belong to Wideplate Restaurant and are included here as part of a portfolio project. They are not licensed as reusable template assets.
